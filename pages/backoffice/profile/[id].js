@@ -29,6 +29,7 @@ import Guest from '../../../models/Guest'
 import Wishlist from '../../../models/Wishlist'
 import ProductComment from '../../../models/ProductComment'
 import PayLogo from '../../../src/assets/PayLogo'
+import Cookies from 'js-cookie'
 
 export async function getServerSideProps(context) {
   const { params } = context;

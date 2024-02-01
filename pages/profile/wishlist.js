@@ -18,7 +18,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function ProfileWishlist() {
   const { state } = useContext(Store);
-  const { cart: { cartItems }, wishlist: {wishItems} } = state;
+  const { cart: { cartItems }, wishlist: { wishItems } } = state;
   const [userWishlist, setUserWishlist] = useState([]);
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export default function ProfileWishlist() {
   return (
     <ProfileLayout>
       <BreadcrumbNav />
-      <WishTable wishlist={userWishlist.length !== 0 ? userWishlist : wishItems} cartItems={cartItems} />
+      <WishTable cartItems={cartItems} />
     </ProfileLayout>
   )
 }
