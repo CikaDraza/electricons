@@ -311,7 +311,7 @@ export default function Header() {
       <MenuItem>My account</MenuItem>
     </Menu>
   );
-
+console.log(options);
   return (
     <React.Fragment>
       <CssBaseline />
@@ -454,9 +454,9 @@ export default function Header() {
                   </Grid>
                   <Grid item xs={3} sx={{ display: { xs: 'flex', md: 'none' }, justifyContent: 'flex-end', alignItems: 'end' }}>
                     <Box sx={{ flexGrow: 0 }}>
-                      <Tooltip title={userInf0 ? userInf0.name : "Open user menu"}>
+                      <Tooltip title={userInf0 ? userInf0?.name : "Open user menu"}>
                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                          <Avatar alt={userInf0 ? userInf0.name : ''} src={ userInf0 && (userInf0.image === '' ? '/images/fake.jpg' : userInf0.image)} />
+                          <Avatar alt={userInf0 ? userInf0?.name : ''} src={ userInf0 && (userInf0.image === '' ? '/images/fake.jpg' : userInf0.image)} />
                         </IconButton>
                       </Tooltip>
                       <Menu
@@ -644,28 +644,28 @@ export default function Header() {
                         <Box>
                           {
                             matches ?
-                            <Box key={option.title} component="li" sx={{ '& > img': { flexShrink: 1 }, width: '100%' }} {...props}>
+                            <Box key={option._id} component="li" sx={{ '& > img': { flexShrink: 1 }, width: '100%' }} {...props}>
                               <Box sx={{ minWidth: '40px', width: '40px', height: '40px', position: 'relative', '& > img': {objectFit: 'contain'}, position: 'relative', mr: .25}}>
                                 <Image
                                   loading="lazy"
                                   fill
                                   sizes="(max-width: 768px) 50vw, (min-width: 1200px) 50vw, 33vw"
-                                  src={option.images[1].image ? option.images[1].image : '/images/no-image.jpg'}
-                                  alt={option.title}
+                                  src={option?.images[1].image ? option?.images[1].image : '/images/no-image.jpg'}
+                                  alt={option?.title}
                                 />
                               </Box>
                               <Typography component="span" variant='caption' sx={{ p: 0, mr: .25, felxGrow: 1 }} color="primary">
-                                <Link href={`product/${option.slug}`} passHref> {option.title}</Link>
+                                <Link href={`product/${option?.slug}`} passHref> {option.title}</Link>
                               </Typography>      
                               <Typography sx={{ p: 0, mr: .25, felxGrow: 1 }} color="secondary" component="span" variant='caption'>
                               | brand:
-                                <Typography color="primary" component="span" variant='caption'>{option.brand}</Typography>
+                                <Typography color="primary" component="span" variant='caption'>{option?.brand}</Typography>
                               </Typography>
                               <Typography sx={{ p: 0, mr: .25 }} color="secondary" component="span" variant='caption'>
                               | category: 
-                                <Link href={`category/${option.categoryUrl}`} passHref> {option.category}</Link>
+                                <Link href={`category/${option?.categoryUrl}`} passHref> {option?.category}</Link>
                                 /
-                                <Link href={`category/${option.categoryUrl}/${option.subCategoryUrl}`} passHref> {option.subCategory}</Link>
+                                <Link href={`category/${option.categoryUrl}/${option?.subCategoryUrl}`} passHref> {option?.subCategory}</Link>
                               </Typography>
                               <Typography sx={{ p: 0, mr: .25 }} color="secondary" component="span" variant='caption'>
                                 | price:  
@@ -676,22 +676,22 @@ export default function Header() {
                               </Typography>
                             </Box>
                             :
-                            <Box key={option.title} component="li" sx={{ '& > img': { flexShrink:  1 }, display: 'flex', position: 'relative' }} {...props}>
+                            <Box key={option._id} component="li" sx={{ '& > img': { flexShrink:  1 }, display: 'flex', position: 'relative' }} {...props}>
                               <Box sx={{ minWidth: '40px', width: '40px', height: '40px', position: 'relative', '& > img': {objectFit: 'contain'} }}>
                                 <Image
                                   loading="lazy"
                                   fill
                                   sizes="(max-width: 768px) 80vw, (max-width: 1200px) 50vw, 33vw"
-                                  src={option.images[1].image ? option.images[1].image : '/images/no-image.jpg'}
-                                  alt={option.title}
+                                  src={option?.images[1].image ? option?.images[1].image : '/images/no-image.jpg'}
+                                  alt={option?.title}
                                 />
                               </Box>
                               <Typography sx={{px: 1, flex: 1, fontSize: '10px', overflow: 'hidden' }} color="primary" component="span">
-                                <Link sx={{overflow: 'hidden'}} href={`product/${option.slug}`} passHref> {option.title}</Link>
+                                <Link sx={{overflow: 'hidden'}} href={`product/${option?.slug}`} passHref> {option.title}</Link>
                               </Typography>
-                              <Typography sx={{px: 1, fontSize: '12px', overflow: 'hidden' }} color="secondary" component="span">     {"$"}{option.price}
+                              <Typography sx={{px: 1, fontSize: '12px', overflow: 'hidden' }} color="secondary" component="span">     {"$"}{option?.price}
                               </Typography>
-                              <Typography sx={{ p: 0, mr: .25 }} color={option.inStock > 0 ? "secondary" : "error"} component="span" variant='caption'> {option.inStock > 0 ? "- in stock" : "- out of stock"}
+                              <Typography sx={{ p: 0, mr: .25 }} color={option.inStock > 0 ? "secondary" : "error"} component="span" variant='caption'> {option?.inStock > 0 ? "- in stock" : "- out of stock"}
                               </Typography>
                             </Box>
                           }

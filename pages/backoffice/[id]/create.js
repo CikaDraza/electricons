@@ -213,7 +213,7 @@ function CreateNewItems() {
   const handleClickOpenBrand = () => {
     setOpenBrand(true);
   };
-  console.log(state_office);
+
   return (
     <Box>
       {
