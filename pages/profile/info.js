@@ -32,7 +32,7 @@ const LabelButton = styled(Button)(({ theme }) => ({
 
 export default function ProfileInfo() {
   const { state, dispatch } = useContext(Store);
-  const userInf0 = JSON.parse(Cookies.get('userInfo'));
+  const userInf0 = Cookies.get('userInfo') ? JSON.parse(Cookies.get('userInfo')) : {};
   const { snack, cart: {cartItems, personalInfo}, uploadImage } = state;
   const [errors, setErrors] = useState({
     name: false,
