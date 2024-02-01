@@ -48,7 +48,7 @@ export default function ProfileAddresses() {
   });
   const pattern = /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/i;
 
-  const userInf0 = JSON.parse(Cookies.get('userInfo'));
+  const userInf0 = Cookies.get('userInfo') ? JSON.parse(Cookies.get('userInfo')) : {};
 
   const emptyAddresses = userInfo?.addresses && userInfo?.addresses === 0;
   const emptyUserInfo = userInf0 && Object.keys(userInf0).length === 0;
