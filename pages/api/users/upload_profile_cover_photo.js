@@ -9,7 +9,7 @@ const handler = nc();
 handler.put(async (req, res) => {
   try {
 
-    db.connect();
+   await db.connect();
     const { image_name, cover_photo, email } = req.body;
 
     if (!cover_photo) {
@@ -35,7 +35,7 @@ handler.put(async (req, res) => {
         cover_photo: updatedUser.cover_photo,
       };
       
-      db.disconnect();
+     await db.disconnect();
       
       res.status(200).json(responseData);
 

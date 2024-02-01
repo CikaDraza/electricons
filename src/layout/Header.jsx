@@ -211,13 +211,13 @@ export default function Header() {
       return undefined;
     }
 
-    (async () => {
-      const { data } = await axios.get('/api/products');
+    async function fetchProductsData() {
+      const { data } = await axios.get('/api/products/fetch_all_products');
       if(active) {
-        setOptions([...data.products]);
+        setOptions(data);
       }
-    })();
-
+    };
+    fetchProductsData();
     return () => {
       active = false;
     };
@@ -311,7 +311,7 @@ export default function Header() {
       <MenuItem>My account</MenuItem>
     </Menu>
   );
-console.log(options);
+
   return (
     <React.Fragment>
       <CssBaseline />

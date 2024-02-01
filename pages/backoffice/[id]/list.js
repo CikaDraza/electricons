@@ -303,12 +303,12 @@ export default function ProductsListTable() {
   const [totalProducts, setTotalProducts] = React.useState([]);
 
   React.useEffect(() => {
-    async function fetchingData() {
-      const { data } = await axios.get('/api/products');
-      setRows(data?.products);
-      setTotalProducts(data?.totalProducts)
-    }
-    fetchingData();
+    async function fetchProductsData() {
+      const { data } = await axios.get('/api/products/fetch_all_products');
+      setRows(data);
+      setTotalProducts(data?.lenght);
+    };
+    fetchProductsData();
   }, [])
 
   React.useEffect(() => {

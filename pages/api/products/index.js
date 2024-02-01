@@ -1,14 +1,17 @@
 
+import nc from 'next-connect';
 import db from '../../../src/utils/db';
 import Product from '../../../models/Product';
 import Order from '../../../models/Order';
 import Guest from '../../../models/Guest';
 
-const handler = async (req, res) => {
+const handler = nc();
+
+handler.get(async (req, res) => {
   const { query } = req;
 
   try {
-    db.connect();
+   await db.connect();
 
     const page = parseInt(query.page) || 1;
     const pageSize = parseInt(query.pageSize) || 10;
@@ -54,15 +57,15 @@ const handler = async (req, res) => {
       return { ...product.toObject(), orderCount };
     });
 
-    db.disconnect();
-
     res.send({products: productOrderCounts, totalProducts, totalPages, searchProducts: products});
 
   } catch (error) {
     console.error('Error fetching data:', error);
     res.status(500).send('Internal Server Error');
+  }finally {
+   await db.disconnect();
   }
-};
+});
 
 
 export default handler;

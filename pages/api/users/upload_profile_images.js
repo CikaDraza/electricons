@@ -9,7 +9,7 @@ const handler = nc();
 handler.put(async (req, res) => {
   try {
 
-    db.connect();
+    await db.connect();
     const { image_name, image, email } = req.body;
 
     if (!image) {
@@ -34,7 +34,7 @@ handler.put(async (req, res) => {
         image: updatedUser.image,
       };
       
-      db.disconnect();
+     await db.disconnect();
       
       res.status(200).json(responseData);
 

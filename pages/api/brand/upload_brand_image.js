@@ -9,7 +9,7 @@ const handler = nc();
 handler.post(async (req, res) => {
   try {
 
-    db.connect();
+    await db.connect();
     const { brandImg, brandUrl } = req.body;
 
     if (!brandUrl) {
@@ -25,7 +25,7 @@ handler.post(async (req, res) => {
       image: brandUrl,
     };
 
-    db.disconnect();
+    await db.disconnect();
     
     res.status(200).json(responseData);
 
