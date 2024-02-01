@@ -172,7 +172,7 @@ export default function Header() {
   const isNotBlog = router.pathname !== '/blog';
   const isNotPost = router.pathname !== '/blog/post/[slug]';
   const isNotCat = router.pathname !== '/blog/category/[[...slug]]';
-  const userInf0 = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('userInfo')) : null;
+  const userInf0 = Cookies.get('userInfo') && JSON.parse(Cookies.get('userInfo'));
   const [userInfo, setUserInfo] = useState(null);
 
   function toggleVisibility() {
@@ -282,8 +282,8 @@ export default function Header() {
     Cookies.remove('payment');
     Cookies.remove('shipping');
     Cookies.remove('forInvoice');
-    localStorage.removeItem('userInfo');
-    router.push('/');
+    Cookies.remove('userInfo');
+    router.push('/login');
   };  
 
   const openDropdown = Boolean(anchorElDropdown);

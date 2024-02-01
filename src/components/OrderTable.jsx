@@ -19,6 +19,7 @@ import Image from 'next/image';
 import theme from '../theme';
 import { useRouter } from 'next/router';
 import { Store } from '../utils/Store';
+import Cookies from 'js-cookie';
 
 const MyTableContainer = styled(TableContainer)({
   overflowY: "auto",
@@ -170,7 +171,7 @@ export default function OrderTable(props) {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [rows, setRows] = React.useState([]);
   const [userOrders, setUserOrders] = React.useState([]);
-  const userInf0 = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null;
+  const userInf0 = JSON.parse(Cookies.get('userInfo'));
 
     const total = [];
     rows?.map((row) => row?.orderItems.map(item => total.push(Number(item?.price * item?.quantity))));

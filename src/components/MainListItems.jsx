@@ -12,10 +12,10 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import Link from '../Link';
 import { Divider, Tooltip } from '@mui/material';
 import ButtonAccordion from '../assets/ButtonAccordion';
+import Cookies from 'js-cookie';
 
 const MainListItems = () => {
-  const userInf0 = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('userInfo')) : null;
-
+  const userInf0 = Cookies.get('userInfo') && JSON.parse(Cookies.get('userInfo'));
   return (
     <React.Fragment>
       <Link href={`/backoffice/${userInf0?._id}/dashboard`}>

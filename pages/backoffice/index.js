@@ -9,8 +9,8 @@ import Cookies from 'js-cookie';
 
 const BackofficeIndex = () => {
   const router = useRouter();
-  const { state, dispatch} = useContext(Store);
-  const userInf0 = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('userInfo')) : null;
+  const { state, dispatch, snack } = useContext(Store);
+  const userInf0 = JSON.parse(Cookies.get('userInfo'));
   const status = userInf0?.isAdmin;
   const [loading, setLoading] = useState(true);
   const [success, setSuccess] = useState(false);
@@ -46,7 +46,6 @@ const BackofficeIndex = () => {
         Cookies.remove('payment');
         Cookies.remove('shipping');
         Cookies.remove('forInvoice');
-        localStorage.removeItem('userInfo');
         dispatch({ type: 'SNACK_MESSAGE', payload: { ...state.snack, message: 'you are denied and logged out', severity: 'warning'}});
       }
       setLoading(true);

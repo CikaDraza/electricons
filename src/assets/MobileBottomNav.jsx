@@ -10,9 +10,10 @@ import SwipeableCartDrawer from '../components/SwipeableCartDrawer';
 import { Store } from '../utils/Store';
 import { Badge } from '@mui/material';
 import Link from '../Link';
+import Cookies from 'js-cookie';
 
 export default function MobileBottomNav({ isVisible }) {
-  const userInf0 = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('userInfo')) : null;
+  const userInf0 = Cookies.get('userInfo') && JSON.parse(Cookies.get('userInfo'));
   const ref = React.useRef(null);
   const { state } = React.useContext(Store);
   const { cart, comparasion:{compareItems}, wishlist: {wishItems} } = state;

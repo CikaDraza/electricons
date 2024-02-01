@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { Box, Button, Divider, Grid, Paper, Stack, TextField, TextareaAutosize, Typography } from '@mui/material';
 import styled from '@emotion/styled';
 import dynamic from 'next/dynamic';
@@ -15,6 +15,17 @@ import ChipsImages from '../../../src/components/ChipsImages';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CategoryCreate from '../../../src/assets/CategoryCreate';
 import BrandCreate from '../../../src/assets/BrandCreate';
+import Cookies from 'js-cookie';
+import { BackofficeStateContext } from '../../../src/utils/BackofficeState';
+import { Store } from '../../../src/utils/Store';
+import ProductPrice from '../../../src/assets/ProductPrice';
+import Rating from '@mui/material/Rating';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
+import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
+import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
+import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
+
 const Quill = dynamic(() => import('react-quill'), { ssr: false });
 
 const modules = {
@@ -52,8 +63,34 @@ const LabelButton = styled(Button)(({ theme }) => ({
   borderLeft: '5px solid black',
 }));
 
+const customIcons = {
+  1: {
+    icon: <SentimentVeryDissatisfiedIcon color="error" />,
+    label: 'Very Dissatisfied',
+  },
+  2: {
+    icon: <SentimentDissatisfiedIcon color="error" />,
+    label: 'Dissatisfied',
+  },
+  3: {
+    icon: <SentimentSatisfiedIcon color="warning" />,
+    label: 'Neutral',
+  },
+  4: {
+    icon: <SentimentSatisfiedAltIcon color="success" />,
+    label: 'Satisfied',
+  },
+  5: {
+    icon: <SentimentVerySatisfiedIcon color="success" />,
+    label: 'Very Satisfied',
+  },
+};
+
 function CreateNewItems() {
-  const userInf0 = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('userInfo')) : null;
+  const userInf0 = Cookies.get('userInfo') && JSON.parse(Cookies.get('userInfo'));
+  const { state_office, dispatch_office } = useContext(BackofficeStateContext);
+  const { state, dispatch,  } = useContext(Store);
+  const { snack } = state;
   const [description, setDescription] = React.useState('');
   const [error, setError] = React.useState('');
   const [imgFile, setImgFile] = React.useState([]);
@@ -84,6 +121,7 @@ function CreateNewItems() {
             imageUrl: reader.result
           }
         ]);
+        dispatch_office({ type: 'CREATE_PRODUCT', payload: { images:  [...imgFile, {image: file, imageUrl: reader.result}] } });
         e.target.value = ''
     }
     reader.readAsDataURL(file);
@@ -107,48 +145,53 @@ function CreateNewItems() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const formOutput = new FormData(e.currentTarget);
     const formData = {
       title: formOutput.get('title'),
       slug: formOutput.get('slug'),
       shortDescription: formOutput.get('short-description'),
       description: description,
-      details: specifications
+      details: specifications,
+      images: [
+        { image: imgFile.map((item) => item?.imageUrl)}
+      ],
+      widgetImages: [
+        { image: imgWidgetFile?.map((item) => item?.imageUrl) }
+      ],
+      category: '',
+      categoryUrl: '',
+      subCategory: '',
+      subCategoryUrl: '',
+      brand: '',
+      brandImg: '',
+      price: 0,
+      oldPrice: 0,
+      rating: 0,
+      reviews: 0,
+      inStock: 0,
+      inWidget: '',
+      online: false,
+      stores: [
+        { store: ''}
+      ]
+    }
+
+    if (formOutput.get('title') === '') {
+      console.log('please add title');
+      dispatch({ type: 'SNACK_MESSAGE', payload: { ...snack, message: 'please add title', severity: 'warning'} });
+      return;
+    }
+    if (formData.price === 0) {
+      console.log('please add price');
+      dispatch({ type: 'SNACK_MESSAGE', payload: { ...snack, message: 'please add price', severity: 'warning'} });
+      return;
     }
     try {
-    console.log(formData);
-      
+    dispatch_office({ type: 'CREATE_PRODUCT', payload: formData }); 
+    dispatch({ type: 'SNACK_MESSAGE', payload: { ...snack, message: 'product added successfuly', severity: 'success'} });
     } catch (error) {
       console.log(error);
-    }
-  }
-
-  const handleImageSubmit = async (e) => {
-    e.preventDefault();
-
-    const formData = {
-      images: imgFile?.map(item => item),
-    }
-    try {
-    console.log(formData);
-      
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  const handleWidgetImageSubmit = async (e) => {
-    e.preventDefault();
-
-    const formData = {
-      widgetImages: imgWidgetFile?.map(item => item?.imageUrl),
-    }
-    try {
-    console.log(formData);
-      
-    } catch (error) {
-      console.log(error);
+      dispatch({ type: 'SNACK_MESSAGE', payload: { ...snack, message: 'please add all fields', severity: 'warning'} });
     }
   }
 
@@ -160,6 +203,7 @@ function CreateNewItems() {
     const updatedSpecifications = [...specifications];
     updatedSpecifications[index][field] = value;
     setSpecifications(updatedSpecifications);
+    dispatch_office({ type: 'CREATE_PRODUCT', payload: { details: updatedSpecifications } });
   };
 
   const handleClickOpen = () => {
@@ -169,7 +213,7 @@ function CreateNewItems() {
   const handleClickOpenBrand = () => {
     setOpenBrand(true);
   };
-  
+  console.log(state_office);
   return (
     <Box>
       {
@@ -279,14 +323,13 @@ function CreateNewItems() {
                         ))
                       }
                     </Box>
-                    <Button variant='contained' type='submit'>Submit</Button>
                   </Box>
                 </Paper>
               </Grid>
                {/* Additional Informations */}
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
-                
+                  <ProductPrice />
                 </Paper>
               </Grid>
               <Grid item xs={12}>
@@ -298,6 +341,35 @@ function CreateNewItems() {
           </Grid>
           <Grid item xs={12} md={4} lg={3}>
             <Grid container spacing={3}>
+              {/* Publish Product */}
+              <Grid item xs={12}>
+                <Paper
+                  sx={{
+                    py: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}
+                >
+                  <Typography component="p" variant='p' sx={{px: 2, py: 1, fontWeight: 'bold'}}>Publish</Typography>
+                  <Divider />
+                  <Box sx={{p: 2, display: 'flex', alignItems: 'center'}}>
+                    <Typography sx={{display: 'flex', alignItems: 'center'}} component="span" variant='span'>{customIcons[4].icon}</Typography>
+                    <Typography sx={{pl: 1}} component="span" variant='span'>SEO score</Typography>
+                  </Box>
+                  <Divider />
+                  <Box sx={{p: 2}}>
+                    <Box sx={{display: 'flex', justifyContent: 'space-between', pb: 2}}>
+                      <Button sx={{mr: 1}} fullWidth variant='outlined'>
+                        Preview
+                      </Button>
+                      <Button sx={{ml: 1, color: 'whitesmoke'}} color='dashboard' fullWidth variant='contained'>
+                        Save Draft
+                      </Button>
+                    </Box>
+                    <Button fullWidth variant='contained'>Publish</Button>
+                  </Box>
+                </Paper>
+              </Grid>
               {/* Upload Product Images */}
               <Grid item xs={12}>
                 <Paper
@@ -309,7 +381,7 @@ function CreateNewItems() {
                 >
                   <Typography component="p" variant='p' sx={{px: 2, py: 1, fontWeight: 'bold'}}>Product Images</Typography>
                   <Divider />
-                  <Box component="form" method='POST' onSubmit={handleImageSubmit}>
+                  <Box>
                     <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
                       <Box sx={{width: '100%', p: 2}}>
                         <Button component="label" onChange={handleImageChoose} htmlFor="file" sx={{border: 'thin dashed grey', width: '100%', height: '100px', display: 'flex', justifyContent: 'center'}} startIcon={<CloudUploadIcon />}>
@@ -318,7 +390,6 @@ function CreateNewItems() {
                         </Button>
                       </Box>
                     </Stack>
-                    <Button type='submit' size='small'>submit</Button>
                   </Box>
                   <ChipsImages selectedFile={imgFile} setImgFile={setImgFile} />
                 </Paper>
@@ -334,7 +405,7 @@ function CreateNewItems() {
                 >
                   <Typography component="p" variant='p' sx={{px: 2, py: 1, fontWeight: 'bold'}}>Widget Images</Typography>
                   <Divider />
-                  <Box component="form" method='POST' onSubmit={handleWidgetImageSubmit}>
+                  <Box>
                     <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
                       <Box sx={{width: '100%', p: 2}}>
                         <Button component="label" onChange={handleWidgetImageChoose} htmlFor="file-widget" sx={{border: 'thin dashed grey', width: '100%', height: '100px', display: 'flex', justifyContent: 'center'}} startIcon={<CloudUploadIcon />}>
@@ -343,7 +414,6 @@ function CreateNewItems() {
                         </Button>
                       </Box>
                     </Stack>
-                    <Button type='submit' size='small'>submit</Button>
                   </Box>
                   <ChipsImages selectedFile={imgWidgetFile} setImgFile={setImgWidgetFile} />
                 </Paper>
@@ -394,4 +464,4 @@ function CreateNewItems() {
   )
 }
 
-export default dynamic(() => Promise.resolve(CreateNewItems), { ssr: false });
+export default dynamic(() => Promise.resolve(CreateNewItems), { ssr: true });

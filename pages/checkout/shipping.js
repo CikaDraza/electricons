@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -64,7 +63,7 @@ export default function Shipping() {
   const shippingCost = 5;
   const emptyShipping = cart.shipping && Object.keys(cart.shipping).length === 0;
   const emptyCartItems = Object.keys(cartItems).length === 0;
-  const userInf0 = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('userInfo')) : null;
+  const userInf0 = JSON.parse(Cookies.get('userInfo'));
 
   const handleSubmit = async (event) => {
     event.preventDefault();

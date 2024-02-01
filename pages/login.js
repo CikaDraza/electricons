@@ -80,12 +80,12 @@ export default function LogIn() {
       };
       const { data } = await axios.post('/api/users/login', formData);
       dispatch({ type: 'SNACK_MESSAGE', payload: { ...state.snack, message: 'successfully logedin', severity: 'success'}});
-      localStorage.setItem('userInfo', JSON.stringify(data));
-      dispatch({ type: 'PERSONAL_INFO', payload: {}});
+      Cookies.set('userInfo', JSON.stringify(data));
+      dispatch({ type: 'PERSONAL_INFO', payload: {} });
       dispatch({ type: 'CART_CLEAR' });
       dispatch({ type: 'ADDRESSES_CLEAR' });
       dispatch({ type: 'SHIPPING_REMOVE' });
-      dispatch({ type: 'PAYMENT', payload: {}});
+      dispatch({ type: 'PAYMENT', payload: {} });
       Cookies.remove('cartItems');
       Cookies.remove('payment');
       Cookies.remove('forInvoice');

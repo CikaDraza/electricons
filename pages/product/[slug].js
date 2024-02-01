@@ -35,6 +35,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useRouter } from 'next/router';
 import theme from '../../src/theme';
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
+import Cookies from 'js-cookie';
 
 export async function getServerSideProps(context) {
   const { params } = context;
@@ -127,7 +128,7 @@ export default function SingleProduct(props) {
   const [expanded, setExpanded] = React.useState(false);
   const [productWithStoreInfo, setProductWithStoreInfo] = React.useState([]);
   const [comments, setComments] = React.useState([]);
-  const userInf0 = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('userInfo')) : null;
+  const userInf0 = JSON.parse(Cookies.get('userInfo'));
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);

@@ -12,6 +12,7 @@ import axios from 'axios';
 import theme from '../theme';
 import CommentIcon from '@mui/icons-material/Comment';
 import styled from '@emotion/styled';
+import Cookies from 'js-cookie';
 
 const LabelButton = styled(Button)(({ theme }) => ({
   color: theme.palette.secondary.main,
@@ -67,7 +68,7 @@ function a11yProps(index) {
 export default function ProductTabs({ product, slug, comments, setComments }) {
   const { state, dispatch } = React.useContext(Store);
   const { snack, review: {hasReview, orderId, hasRated} } = state;
-  const userInf0 = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('userInfo')) : null;
+  const userInf0 = JSON.parse(Cookies.get('userInfo'));
   const [userInfo, setUserInfo] = React.useState([]);
   const [value, setValue] = React.useState(0);
   const [replyCommentId, setReplyCommentId] = React.useState('false');

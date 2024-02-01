@@ -21,6 +21,7 @@ import { LoadingButton } from '@mui/lab';
 import OrderItems from '../../src/components/OrderItems';
 import CartTotal from '../../src/components/CartTotal';
 import PaymentDialog from '../../src/assets/PaymentDialog';
+import Cookies from 'js-cookie';
 
 const bull = (
   <Box
@@ -72,7 +73,7 @@ const Item = styled(Paper)(({ theme }) => ({
 function Order(props) {
   const { params } = props;
   const orderId = params.id;
-  const userInf0 = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null;
+  const userInf0 = JSON.parse(Cookies.get('userInfo'));
   const { state: { personalInfo } } = useContext(Store);
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
   const [isPayPal, setIsPayPal] = useState(false);

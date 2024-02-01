@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
 import Header from './Header';
-import Snackbars from '../assets/Snackbars';
 import Footer from './Footer';
 import { useRouter } from 'next/router';
 import { useMediaQuery } from '@mui/material';
@@ -25,7 +24,6 @@ export default function Layout({ children }) {
         </Box>
         <Box sx={{ height: '100%', mt: 10 }}>
           {children}
-          <Snackbars />
         </Box>
       </Box>
 
@@ -40,7 +38,6 @@ export default function Layout({ children }) {
         <Box component="main" sx={{ height: '100%', mt: {xs: isNotPost && isNotBlog && isNotCat ? '5rem' : matches ? '5rem' : '2rem', sm: isNotPost && isNotBlog && isNotCat ? '10rem' : '2rem'} }}>
           {children}
         </Box>
-        <Snackbars />
       </Container>
       <Footer />
     </React.Fragment>

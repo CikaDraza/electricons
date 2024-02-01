@@ -33,7 +33,7 @@ function reducer(state, action) {
 }
 
 function ProfileOrderHistory() {
-  const userInf0 = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('userInfo')) : null;
+  const userInf0 = JSON.parse(Cookies.get('userInfo'));
 
   const [{ loading, error, orders }, dispatch] = useReducer(reducer, {
     loading: true,

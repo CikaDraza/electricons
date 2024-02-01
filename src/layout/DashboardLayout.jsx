@@ -75,7 +75,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function DashboardLayout({ children }) {
   const router = useRouter();
-  const userInf0 = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('userInfo')) : null;
+  const userInf0 = Cookies.get('userInfo') && JSON.parse(Cookies.get('userInfo'));
   const { pathname } = router;
   const { state, dispatch } = React.useContext(Store);
   const { snack } = state;
@@ -254,7 +254,6 @@ export default function DashboardLayout({ children }) {
           <Toolbar />
           <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
             {children}
-            <Snackbars />
           </Container>
         </Box>
       </Box>

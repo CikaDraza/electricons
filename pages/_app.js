@@ -16,6 +16,8 @@ import DashboardLayout from '../src/layout/DashboardLayout';
 import Loader from '../src/layout/Loader';
 import { Box } from '@mui/material';
 import { styled, keyframes } from '@mui/system';
+import { BackofficeProvider } from '../src/utils/BackofficeState';
+import Snackbars from '../src/assets/Snackbars';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -89,10 +91,10 @@ export default function MyApp(props) {
 
     const handleComplete = () => {
       // Postavlja loading na false nakon kratkog kašnjenja (500 ms)
-        loadingTimeout = setTimeout(() => {
-          setLoading(false);
-        }, 500);
+      loadingTimeout = setTimeout(() => {
+        setLoading(false);
         setSlideOut(false);
+        }, 500);
     };
 
     const handleError = () => {
@@ -131,14 +133,18 @@ export default function MyApp(props) {
             <PayPalScriptProvider deferLoading={true}>
               {
                 isBackoffice || isBackofficeProfile ?
-                <DashboardLayout>
-                  <Component {...pageProps} />
-                  <Analytics />
-                </DashboardLayout>
+                <BackofficeProvider>
+                  <DashboardLayout>
+                    <Component {...pageProps} />
+                    <Analytics />
+                  </DashboardLayout>
+                  <Snackbars />
+                </BackofficeProvider>
                 :
                 <Layout>
                   <Component {...pageProps} />
                   <Analytics />
+                  <Snackbars />
                 </Layout>
               }
             </PayPalScriptProvider>

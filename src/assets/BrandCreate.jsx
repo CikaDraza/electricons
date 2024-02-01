@@ -12,7 +12,7 @@ import theme from '../theme';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Image from 'next/image';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import MenuItem from '@mui/material/MenuItem';
+import { BackofficeStateContext } from '../utils/BackofficeState';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -27,6 +27,7 @@ const MenuProps = {
 
 export default function BrandCreate(props) {
   const { open, setOpen } = props;
+  const { state_office, state_dispatch } = React.useContext(BackofficeStateContext);
   const [checked, setChecked] = React.useState([]);
   const [children, setChildren] = React.useState([]);
   const [category, setCategory] = React.useState([]);
@@ -115,11 +116,12 @@ export default function BrandCreate(props) {
     }
     
     try {
-      const { data } = axios.post('/api/brand/upload_brand_image', formData);
+      // const { data } = axios.post('/api/brand/upload_brand_image', formData);
       setBrands((prev)=> [
         ...prev,
         formData?.brand
-      ])
+      ]);
+      dispatch_office({ type: 'CREATE_PRODUCT', payload: formData });
       handleClose();
     } catch (error) {
       console.log('error to upload', error);
@@ -127,7 +129,6 @@ export default function BrandCreate(props) {
     
   }
 
-console.log(brands, imgAvatarFile);
   return (
     <Box>
       {

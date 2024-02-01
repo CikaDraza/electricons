@@ -195,7 +195,7 @@ export default function SignIn() {
       });
       const { data } = await axios.post('/api/users/register', formData);
       dispatch({ type: 'SNACK_MESSAGE', payload: { ...state.snack, message: 'successfully register', severity: 'success'}});
-      localStorage.setItem('userInfo', JSON.stringify(data));
+      Cookies.set('userInfo', JSON.stringify(data));
     } catch (error) {
       dispatch({ type: 'SNACK_MESSAGE', payload: { ...state.snack, message: error ? error.response : error, severity: "error" }});
     }

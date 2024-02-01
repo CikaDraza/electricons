@@ -22,7 +22,7 @@ export default function ProfileWishlist() {
 
   useEffect(() => {
     async function fetchData() {
-      const dataId = JSON.parse(localStorage.getItem('userInfo'))._id;
+      const dataId = Cookies.get('userInfo')._id;
       try {
         const { data } = await axios.get('/api/wishlist/get_wishlist', {
           headers: {
