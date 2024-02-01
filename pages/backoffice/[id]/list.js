@@ -29,6 +29,7 @@ import StarIcon from '@mui/icons-material/Star';
 import Image from 'next/image';
 import Link from '../../../src/Link';
 import AddIcon from '@mui/icons-material/Add';
+import Cookies from 'js-cookie';
 
 const Search = styled(Box)(({ theme }) => ({
   position: 'relative',
