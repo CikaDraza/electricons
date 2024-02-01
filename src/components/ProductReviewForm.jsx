@@ -92,7 +92,6 @@ const ProductReviewForm = ({ slug, product, setShowForm, replyCommentId }) => {
           return;
         }
         if(formData.replyCommentId !== 'false' || !session) {
-          console.log(formData);
           const { data } = await axios.post(`/api/comments/${slug}`, formData);
           dispatch({ type: 'SNACK_MESSAGE', payload: { ...state.snack, message: 'successfully send review', severity: 'success'}});
         }
@@ -139,7 +138,6 @@ const ProductReviewForm = ({ slug, product, setShowForm, replyCommentId }) => {
 
   React.useEffect(() => {
     fetchUserOrders();
-    console.log('userInfo', userInfo);
   }, []);
 
   return (

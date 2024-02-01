@@ -63,9 +63,6 @@ handler.get( async(req, res) => {
     .skip((page - 1) * pageSize)
     .limit(pageSize);
 
-    
-    console.log(subCategoryUrl);
-
     await db.disconnect();
     res.status(200).json({
       products,

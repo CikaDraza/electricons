@@ -104,7 +104,7 @@ export default function BrandCreate(props) {
       brandImg: imgAvatarFile[0].image.name,
       brandUrl: imgAvatarFile[0].imageUrl,
     }
-    console.log(formData);
+
     if (formData.brand === '') {
       return setError('please enter brand name');
     }

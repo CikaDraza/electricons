@@ -93,10 +93,6 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-// Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
-// stableSort() brings sort stability to non-modern browsers (notably IE11). If you
-// only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
-// with exampleArray.slice().sort(exampleComparator)
 function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -307,14 +303,23 @@ export default function ProductsListTable() {
   const [totalProducts, setTotalProducts] = React.useState([]);
 
   React.useEffect(() => {
+    async function fetchingData() {
+      const { data } = await axios.get('/api/products');
+      setRows(data?.products);
+      setTotalProducts(data?.totalProducts)
+    }
+    fetchingData();
+  }, [])
+
+  React.useEffect(() => {
     async function fetchingData(totalProducts) {
       const { data } = await axios.get('/api/products', {
         params: {
           pageSize: totalProducts,
         }
       });
-      setRows(data.products);
-      setTotalProducts(data.totalProducts)
+      setRows(data?.products);
+      setTotalProducts(data?.totalProducts)
     }
     fetchingData(totalProducts);
   }, [totalProducts])
@@ -376,7 +381,7 @@ export default function ProductsListTable() {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows?.length) : 0;
 
   const visibleRows = React.useMemo(
     (e) =>
@@ -396,7 +401,7 @@ export default function ProductsListTable() {
   };
 
   function searchTable(rows) {
-    return rows && rows.lenght !== 0 ? rows.filter((row) => ((row.title && hasWord(row.title.toLowerCase(), search.toLowerCase())) || (row.subCategory && hasWord(row.subCategory.toLowerCase(), search.toLowerCase())))  || (row.category && hasWord(row.category.toLowerCase(), search.toLowerCase()) || (row._id.toString() && hasWord(row._id.toString().toLowerCase(), search.toLowerCase())))) : rows;
+    return rows && rows?.lenght !== 0 ? rows?.filter((row) => ((row.title && hasWord(row.title.toLowerCase(), search.toLowerCase())) || (row.subCategory && hasWord(row.subCategory.toLowerCase(), search.toLowerCase())))  || (row.category && hasWord(row.category.toLowerCase(), search.toLowerCase()) || (row._id.toString() && hasWord(row._id.toString().toLowerCase(), search.toLowerCase())))) : rows;
   }
 
   const usersTabs = ['All Products', 'Out of Stock', 'Zero Orders']
@@ -406,7 +411,7 @@ export default function ProductsListTable() {
       <Box component='nav' sx={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between'}}>
         <Box sx={{listStyle: 'none', display: 'flex', flexWrap: 'wrap', p: 0}} component="ul">
           {
-            usersTabs.map((tab, index) => (
+            usersTabs?.map((tab, index) => (
               <Box key={tab + index} sx={{pl: {xs: 1, md: 3} }} component='li'>
                 <Button value={index} onClick={(e) => setActiveTab(e.target.value)} sx={{bgcolor: usersTabs[activeTab] === tab ? theme.palette.dashboard.main : theme.palette.primary.main, fontSize: matches ? '.75rem' : '.5rem', p: {xs: '6px 8px'} }} variant="contained">
                   {tab}
@@ -450,11 +455,11 @@ export default function ProductsListTable() {
                 orderBy={orderBy}
                 onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
-                rowCount={rows.length}
+                rowCount={rows?.length}
               />
               <TableBody>
               {
-                (search !== '' ? searchTable(rows) : usersTabs[activeTab] === 'All Products' ? visibleRows : usersTabs[activeTab] === 'Out of Stock' ? rows.filter(row => row.inStock === 0) : rows.filter(row => row.orderCount === 0))
+                (search !== '' ? searchTable(rows) : usersTabs[activeTab] === 'All Products' ? visibleRows : usersTabs[activeTab] === 'Out of Stock' ? rows.filter(row => row.inStock === 0) : rows?.filter(row => row.orderCount === 0))
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.title);
                   const labelId = `enhanced-table-checkbox-${index}`;
@@ -490,19 +495,19 @@ export default function ProductsListTable() {
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           priority
                           src={row?.images[1]?.image}
-                          alt={row.title}
+                          alt={row?.title}
                         />
                       </Box>
                     </TableCell>
                     <TableCell align="right">
-                      {row.title}
+                      {row?.title}
                     </TableCell>
                     <TableCell color='primary' align="right">
-                      {'$'}{row.price}
+                      {'$'}{row?.price}
                     </TableCell>
                     <TableCell color='primary' align="right">
                       {
-                        row.inStock === 0 ? <Chip sx={{bgcolor: theme.palette.dashboard.main, color: theme.palette.primary.contrastText}} label={row.inStock} /> : <Chip sx={{bgcolor: theme.palette.success.main}} label={row.inStock} />
+                        row?.inStock === 0 ? <Chip sx={{bgcolor: theme.palette.dashboard.main, color: theme.palette.primary.contrastText}} label={row.inStock} /> : <Chip sx={{bgcolor: theme.palette.success.main}} label={row?.inStock} />
                       }
                     </TableCell>
                     <TableCell color='primary' align="right">
@@ -513,11 +518,11 @@ export default function ProductsListTable() {
                       
                     </TableCell>
                     <TableCell align="right">
-                      {row.category}{', '}{row.subCategory}
+                      {row?.category}{', '}{row?.subCategory}
                     </TableCell>
                     <TableCell align="right">
                       {
-                      row.orderCount === 0 ? <Chip sx={{bgcolor: theme.palette.dashboard.main, color: theme.palette.primary.contrastText}} label={row.orderCount} /> : <Chip sx={{bgcolor: theme.palette.success.main}} label={row.orderCount} />
+                      row?.orderCount === 0 ? <Chip sx={{bgcolor: theme.palette.dashboard.main, color: theme.palette.primary.contrastText}} label={row?.orderCount} /> : <Chip sx={{bgcolor: theme.palette.success.main}} label={row.orderCount} />
                       }
                     </TableCell>
                   </TableRow>
@@ -541,7 +546,7 @@ export default function ProductsListTable() {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
-              count={rows.length}
+              count={rows?.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}

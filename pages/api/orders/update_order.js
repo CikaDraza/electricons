@@ -8,7 +8,6 @@ handler.put(async (req, res) => {
   try {
     await db.connect();
     const { hasRated, slug, orderId } = req.body;
-    console.log(hasRated, slug, orderId);
 
     const order = await Order.findById(orderId);
 

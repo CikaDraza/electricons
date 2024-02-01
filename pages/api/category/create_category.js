@@ -38,7 +38,6 @@ handler.post(async (req, res) => {
     })
 
     const categories = await newCat.save();
-    // console.log(order);
 
     res.status(200).json(categories);
 

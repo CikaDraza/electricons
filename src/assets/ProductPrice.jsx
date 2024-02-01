@@ -45,7 +45,6 @@ export default function ProductPrice() {
     dispatch_office({ type: 'CREATE_PRODUCT', payload: { ...state_office.product, oldPrice: event.target.value} });
   };
   
-console.log(value, oldValue);
   return (
     <Box>
       <Box>
