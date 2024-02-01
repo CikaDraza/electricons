@@ -351,7 +351,7 @@ export default function WishTable(props) {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const { state, dispatch } = React.useContext(Store);
-  const { comparasion: { compareItems }, snack } = state;
+  const { comparasion: { compareItems }, snack, wishlist: { wishItems } } = state;
   const router = useRouter();
   const [loadingCompare, setLoadingCompare] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
@@ -470,10 +470,10 @@ export default function WishTable(props) {
                 orderBy={orderBy}
                 onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
-                rowCount={wishlist && wishlist.length}
+                rowCount={wishItems && wishItems.length}
               />
               <TableBody>
-                {wishlist && stableSort(wishlist, getComparator(order, orderBy))
+                {wishItems && stableSort(wishItems, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
                     const isItemSelected = isSelected(row.title);
@@ -506,7 +506,7 @@ export default function WishTable(props) {
                               fill
                               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                               priority
-                              src={row.image ? row.image : '/images/no-image.jpg'}
+                              src={row?.images.length !== 0 ? row?.images[1].image : '/images/no-image.jpg'}
                               alt={row.title}
                             />
                           </Box>

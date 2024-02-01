@@ -6,6 +6,7 @@ import BreadcrumbNav from "../../src/assets/BreadcrumbNav";
 import styled from "@emotion/styled";
 import { Paper, Typography } from "@mui/material";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',

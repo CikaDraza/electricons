@@ -30,7 +30,8 @@ export default function PersonalInfo() {
   const router = useRouter();
   const { state, dispatch } = useContext(Store);
   const { snack, cart: {cartItems, personalInfo} } = state;
-  const [userInfo, setUserInfo] = useState([]);
+  const [userInfo, setUserInfo] = useState({});
+  const [loggedUser, setLoggedUser] = useState({});
   const [willLogin, setWillLogin] = useState(false);
   const [willRegister, setWillRegister] = useState(false);
   const [error, setError] = useState(false);
@@ -52,7 +53,7 @@ export default function PersonalInfo() {
     confirmError: false
   });
   const pattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  const userInf0 = JSON.parse(Cookies.get('userInfo'));
+  const userInf0 = Cookies.get('userInfo') ? JSON.parse(Cookies.get('userInfo')) : {};
   const emptyPersonalInfo = personalInfo !== null ? Object.keys(personalInfo).length === 0 : true;
   const emptyUserInfo = userInf0 !== null ? Object.keys(userInf0).length === 0 : true;
   const emptyCartItems = Object.keys(cartItems).length === 0;
@@ -61,8 +62,8 @@ export default function PersonalInfo() {
     async function fetchData() {
       try {
         const { data } = await axios.get('/api/users');
-        const user = await data.filter(items => items._id === userInf0._id);
-        setUserInfo(user[0]);
+        const user = await data.filter(items => items?._id === userInf0?._id);
+        setUserInfo(user ? user[0] : {});
         const formData = {
           email: user[0]?.email,
           name: user[0]?.name,
@@ -85,7 +86,7 @@ export default function PersonalInfo() {
   function orderGestHandler() {
     setWillLogin(false);
   }
-console.log(userInfo);
+
   const handleWillRegister = (e) => {
     if(e.target.value === '') {
       setWillRegister(() => false);
@@ -223,7 +224,7 @@ console.log(userInfo);
 
       const { data } = await axios.post('/api/users/register', formData);
       dispatch({ type: 'SNACK_MESSAGE', payload: { ...state.snack, message: 'successfully register', severity: 'success'}});
-      localStorage.setItem('userInfo', JSON.stringify(data));
+      Cookies.set('userInfo', JSON.stringify(data));
       router.push('/checkout/addresses');
     } catch (error) {
       dispatch({ type: 'SNACK_MESSAGE', payload: { ...state.snack, message: error ? error.response.data.message : error, severity: error.response.data.severity }});
@@ -250,7 +251,7 @@ console.log(userInfo);
 
       const { data } = await axios.post('/api/users/login', formData);
       dispatch({ type: 'SNACK_MESSAGE', payload: { ...state.snack, message: 'successfully logedin', severity: 'success'}});
-      localStorage.setItem('userInfo', JSON.stringify(data));
+      Cookies.set('userInfo', JSON.stringify(data));
       setWillLogin(false);
       router.push('/checkout/addresses');
     } catch (error) {

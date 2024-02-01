@@ -46,7 +46,7 @@ export default function CartTotal({
 }) {
   const router = useRouter();
   const { state, dispatch } = useContext(Store);
-  const userInf0 = JSON.parse(Cookies.get('userInfo'));
+  const userInf0 = Cookies.get('userInfo') ? JSON.parse(Cookies.get('userInfo')) : {};
   const { snack, cart: {cartItems, personalInfo, shipping, addresses, payment, cupon_discount} } = state;
   const subTotal = order_items ? order_items.reduce((a, c) => a + c.quantity * c.price, 0) : cartItems.reduce((a, c) => a + c.quantity * c.price, 0);
   const [expanded, setExpanded] = useState(false);

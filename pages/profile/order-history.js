@@ -7,6 +7,7 @@ import styled from '@emotion/styled';
 import dynamic from 'next/dynamic';
 import OrderTable from '../../src/components/OrderTable';
 import ProfileLayout from '../../src/components/ProfileLayout';
+import Cookies from 'js-cookie';
 
 const LabelButton = styled(Button)(({ theme }) => ({
   color: theme.palette.secondary.main,

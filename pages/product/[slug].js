@@ -128,7 +128,7 @@ export default function SingleProduct(props) {
   const [expanded, setExpanded] = React.useState(false);
   const [productWithStoreInfo, setProductWithStoreInfo] = React.useState([]);
   const [comments, setComments] = React.useState([]);
-  const userInf0 = JSON.parse(Cookies.get('userInfo'));
+  const userInf0 = Cookies.get('userInfo') ? JSON.parse(Cookies.get('userInfo')) : {};
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);

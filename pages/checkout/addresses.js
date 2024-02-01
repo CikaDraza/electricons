@@ -73,7 +73,7 @@ export default function Addresses() {
     Cookies.set('forInvoice', Number(event.target.value));
   };
 
-  const userInf0 = JSON.parse(Cookies.get('userInfo'));
+  const userInf0 = Cookies.get('userInfo') ? JSON.parse(Cookies.get('userInfo')) : {};
   const emptyPersonalInfo = personalInfo && Object.keys(personalInfo).length === 0;
   const emptyAddresses = addresses?.length === 0;
   const emptyCartItems = Object.keys(cartItems).length === 0;

@@ -61,9 +61,9 @@ export default function Shipping() {
   };
  
   const shippingCost = 5;
-  const emptyShipping = cart.shipping && Object.keys(cart.shipping).length === 0;
+  const emptyShipping = cart?.shipping && Object.keys(cart.shipping).length === 0;
   const emptyCartItems = Object.keys(cartItems).length === 0;
-  const userInf0 = JSON.parse(Cookies.get('userInfo'));
+  const userInf0 = Cookies.get('userInfo') ? JSON.parse(Cookies.get('userInfo')) : {};
 
   const handleSubmit = async (event) => {
     event.preventDefault();

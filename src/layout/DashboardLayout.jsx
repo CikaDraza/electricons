@@ -114,7 +114,7 @@ export default function DashboardLayout({ children }) {
     Cookies.remove('payment');
     Cookies.remove('shipping');
     Cookies.remove('forInvoice');
-    localStorage.removeItem('userInfo');
+    Cookies.remove('userInfo');
     router.push('/login');
   };  
 
