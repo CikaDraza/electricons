@@ -13,7 +13,7 @@ handler.post(async (req, res) => {
 
     const category = await Category.findOne({slug: slug});
 
-    if (category.categoryName === categoryName) {
+    if (category?.categoryName === categoryName) {
       // Handle the case where the order is not found.
       return res.status(404).json({ error: 'Category already exist' });
     }

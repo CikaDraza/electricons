@@ -6,23 +6,34 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import data from '../utils/data';
 import category_data from '../utils/category';
-import { Accordion, AccordionDetails, AccordionSummary, Grid, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Grid, Typography } from '@mui/material';
 import Link from '../Link';
 import theme from '../theme';
 import PersonalVideoIcon from '@mui/icons-material/PersonalVideo';
 import ComputerIcon from '@mui/icons-material/Computer';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import axios from 'axios';
+import Image from 'next/image';
 
 export default function DropdownMenu(props) {
   const { openDropdown, anchorElDropdown, handleCloseDropdown, isVisible } = props;
   const { products } = data;
   const { categories } = category_data;
   const [expanded, setExpanded] = React.useState(false);
+  const [allCategories, setAllCategories] = React.useState([]);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
+
+  React.useEffect(() => {
+    async function fetchCategories() {
+      const { data } = await axios.get('/api/category');
+      setAllCategories(data);
+    }
+    fetchCategories();
+  }, [])
 
   const defaultTop = '50px!important';
 
@@ -75,8 +86,8 @@ export default function DropdownMenu(props) {
             }
           >
           {
-            categories.map((item, index) => (
-              item ? (
+            (allCategories ? allCategories : categories).map((item, index) => (
+              item?.subCategory?.some(sub => sub.url !== "none") ? (
                   <Accordion
                     elevation={0}
                     TransitionProps={{ unmountOnExit: true }}
@@ -95,9 +106,16 @@ export default function DropdownMenu(props) {
                     >
                     <Link href={`/category/${item.slug}`} sx={{display: 'flex'}}>
                       <Avatar sx={{ bgcolor: theme.palette.primary.white, '& svg': {color: theme.palette.secondary.main} }} onClick={handleCloseDropdown}>
-                        {
-                          item.slug === 'desktop-computers' ? <PersonalVideoIcon /> : item.slug === 'laptops' ? <ComputerIcon /> : item.slug === 'smartphones' ? <PhoneAndroidIcon /> : null
-                        }
+                        <Box sx={{position: 'relative', width: 24, height: 24, '& img': {objectFit: 'contain'} }}>
+                        <Image
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          priority
+                          src={item?.avatar !== '' ? item?.avatar : '/images/no-image.jpg'}
+                          alt={item?.categoryName}
+                          quality={100}
+                        />
+                        </Box>
                       </Avatar>
                       <Typography onClick={handleCloseDropdown} color="secondary" sx={{ width: '100%', flexShrink: 0, display: 'flex', alignItems: 'center', '&:hover': {color: theme.palette.primary.main} }}>
                         {item.categoryName}
@@ -107,7 +125,7 @@ export default function DropdownMenu(props) {
                     <AccordionDetails onClick={handleCloseDropdown} sx={{position: 'fixed', left: '100%', top: 0, backgroundColor: theme.palette.primary.contrastText, width: '500px', height: 'auto', py: 5, px: 3, marginLeft: '8px'}}>
                       <Grid container spacing={2}>
                     {
-                      item.subCategory.map((sub, index) => ( 
+                      item.subCategory.map((sub, index) => (
                           <Grid sx={{ '& a': {textDecoration: 'none' }, '&:hover a': {textDecoration: 'none' } }} key={index} item xs={4}>
                             <Link href={`/category/${item.slug}/${sub.url}`} passHref>
                               <Typography sx={{pb: 2, '&:hover': {color: theme.palette.primary.main}}} color="secondary" component="h5" variant="p">
@@ -141,7 +159,7 @@ export default function DropdownMenu(props) {
                     aria-controls={`${item.categoryName} controls`}
                     id={`${item.categoryName} panel`}
                   >
-                    <Link href={`/product/${item.slug}`} underline="hover" sx={{display: 'flex'}}>
+                    <Link href={`/product/${item.slug}`} underline="hover" sx={{display: 'flex', '& img': {objectFit: 'contain'}}}>
                       <Avatar alt={item.categoryName} src={item.avatar} />
                       <Typography sx={{ width: '33%', flexShrink: 0, display: 'flex', alignItems: 'center' }}>
                         {item.categoryName}

@@ -30,10 +30,12 @@ export default function CategoryCreate(props) {
   const [checked, setChecked] = React.useState([]);
   const [children, setChildren] = React.useState([]);
   const [category, setCategory] = React.useState([]);
+  const [childCategory, setChildCategory] = React.useState([]);
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const [imgAvatarFile, setImgAvatarFile] = React.useState([]);
   const [chipData, setChipData] = React.useState([]);
   const [parentCatName, setParentCatName] = React.useState("New Category");
+  const [subCatName, setSubCatName] = React.useState("New Sub Category");
   const [error, setError] = React.useState('');
   const [loading, setLoading] = React.useState(false);
 
@@ -139,9 +141,61 @@ export default function CategoryCreate(props) {
       return setError('please upload category icon');
     }
     try {
+      console.log(formData, 'new');
       const { data } = axios.post('/api/category/create_category', formData);
+      setParentCatName("New Category");
+      setChipData([]);
+      setImgAvatarFile([]);
+      setSubCatName("New Sub Category");
       setError('');
       setLoading(true);
+    } catch (error) {
+      console.log(error, error.data);
+      setError(`error: ${error}`);
+      setLoading(false);
+    }
+  }
+
+  const handleEditSubmit = (e) => {
+    e.preventDefault();
+    const formOutput = new FormData(e.currentTarget);
+    const selectedCategory = category.find((cat) => cat.categoryName === parentCatName.toString());
+    console.log(selectedCategory);
+    const formData = {
+      categoryName: selectedCategory?.categoryName,
+      image_name: imgAvatarFile[0]?.image?.name,
+      avatar: imgAvatarFile[0]?.imageUrl,
+      slug: selectedCategory?.slug,
+      subCategory: [
+        {
+          url: subCatName.toString() === 'New Sub Category' ? formOutput.get('subcategory-slug') : selectedCategory?.subCategory[0].url,
+          subCategoryName: subCatName.toString() === 'New Sub Category' ? formOutput.get('subcategory') : subCatName.toString(),
+          topCategoryName: selectedCategory?.categoryName,
+          topCategoryUrl: selectedCategory?.slug
+        }
+      ]
+    }
+    if (parentCatName.toString() !== "New Category" && subCatName.toString() === 'New Sub Category' && formData.subCategory[0].subCategoryName === '') {
+      return setError('please enter subcategory name');
+    }
+    if (parentCatName.toString() !== "New Category" && subCatName.toString() === 'New Sub Category' && formData.subCategory[0].url === '') {
+      return setError('please enter subcategory slug');
+    }
+    if (parentCatName.toString() !== "New Category" && formData.avatar === undefined) {
+      return setError('please upload category icon');
+    }
+    if (parentCatName.toString() !== "New Category" && formData.image_name === undefined) {
+      return setError('please upload category icon');
+    }
+    try {
+      console.log(formData, 'edit');
+      const { data } = axios.put('/api/category/edit_category', formData);
+      setError('');
+      setLoading(true);
+      setParentCatName("New Category");
+      setChipData([]);
+      setImgAvatarFile([]);
+      setSubCatName("New Sub Category");
     } catch (error) {
       console.log(error, error.data);
       setError(`error: ${error}`);
@@ -153,8 +207,27 @@ export default function CategoryCreate(props) {
     const {
       target: { value },
     } = event;
-    setParentCatName(
-      // On autofill we get a stringified value.
+    if (value === "New Category") {
+      setParentCatName("New Category");
+      setChipData([]);
+      setImgAvatarFile([]);
+      setSubCatName("New Sub Category");
+    } else {
+      setParentCatName(typeof value === 'string' ? value.split(',') : value);
+      const selectedCategory = category.find((cat) => cat.categoryName === value);
+      if (selectedCategory) {
+        const subCategories = selectedCategory.subCategory.map((subCat) => subCat.subCategoryName);
+        setSubCatName(subCategories[0]);
+        setChildCategory(selectedCategory);
+      }
+    }
+  };
+
+  const handleChangeSubCat = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setSubCatName(
       typeof value === 'string' ? value.split(',') : value,
     );
   };
@@ -200,13 +273,13 @@ export default function CategoryCreate(props) {
           </DialogTitle>
           :
           <DialogTitle id="dialog-title">
-            {"Create Category for this Product"}
+            {parentCatName.toString() === "New Category" ? "Create Category for this Product" : "Edit Category"}
           </DialogTitle>
         }
         <DialogActions sx={{flexWrap: 'wrap'}}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={8}>
-              <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 0 }}>
+              <Box component="form" noValidate onSubmit={parentCatName?.toString() === "New Category" ? handleSubmit : handleEditSubmit} sx={{ mt: 0 }}>
                 <FormControl sx={{ m: 1, width: 300, mt: 3 }}>
                   <Select
                     displayEmpty
@@ -237,6 +310,40 @@ export default function CategoryCreate(props) {
                   </Select>
                 </FormControl>
                 {
+                  parentCatName.toString() !== "New Category" &&
+                  <FormControl sx={{ m: 1, width: 300, mt: 3 }}>
+                    <Select
+                      displayEmpty
+                      value={subCatName}
+                      onChange={handleChangeSubCat}
+                      input={<OutlinedInput />}
+                      renderValue={(selected) => {
+                        if (selected.length === 0) {
+                          return <em>Child Category</em>;
+                        }
+
+                        return selected;
+                      }}
+                      MenuProps={MenuProps}
+                      inputProps={{ 'aria-label': 'Without label' }}
+                    >
+                      <MenuItem value="New Sub Category">
+                        <em>New Sub Category</em>
+                      </MenuItem>
+                      {
+                      childCategory?.subCategory?.map((name) => (
+                          <MenuItem
+                            key={name?._id}
+                            value={name?.subCategoryName}
+                          >
+                            {name?.subCategoryName}
+                          </MenuItem>
+                        ))
+                      }
+                    </Select>
+                  </FormControl>
+                }
+                {
                   parentCatName.toString() === "New Category" &&
                   <FormControl fullWidth sx={{ p: 1 }} variant="standard">
                     <InputLabel htmlFor="category"></InputLabel>
@@ -258,23 +365,29 @@ export default function CategoryCreate(props) {
                     />
                   </FormControl>
                 }
-                <FormControl fullWidth sx={{ p: 1 }} variant="standard">
-                  <InputLabel htmlFor="subcategory"></InputLabel>
-                  <Input
-                    id="subcategory"
-                    name='subcategory'
-                    startAdornment={<InputAdornment position="start">Subcategory Name:</InputAdornment>}
-                  />
-                </FormControl>
-                <FormControl fullWidth sx={{ p: 1 }} variant="standard">
-                  <InputLabel htmlFor="subcategory-slug"></InputLabel>
-                  <Input
-                    id="subcategory-slug"
-                    name="subcategory-slug"
-                    startAdornment={<InputAdornment position="start">Subcategory Slug:</InputAdornment>}
-                  />
-                </FormControl>
-                <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
+                {
+                  subCatName.toString() === "New Sub Category" &&
+                  <FormControl fullWidth sx={{ p: 1 }} variant="standard">
+                    <InputLabel htmlFor="subcategory"></InputLabel>
+                    <Input
+                      id="subcategory"
+                      name='subcategory'
+                      startAdornment={<InputAdornment position="start">Subcategory Name:</InputAdornment>}
+                    />
+                  </FormControl>
+                }
+                {
+                  subCatName.toString() === "New Sub Category" &&
+                  <FormControl fullWidth sx={{ p: 1 }} variant="standard">
+                    <InputLabel htmlFor="subcategory-slug"></InputLabel>
+                    <Input
+                      id="subcategory-slug"
+                      name="subcategory-slug"
+                      startAdornment={<InputAdornment position="start">Subcategory Slug:</InputAdornment>}
+                    />
+                  </FormControl>
+                }
+                <Box sx={{display: 'flex', justifyContent: 'flex-end', my: 3}}>
                   <Button size='small' type='submit' autoFocus>
                     submit categories
                   </Button>
@@ -286,10 +399,10 @@ export default function CategoryCreate(props) {
             </Grid>
             <Grid item xs={12} md={4}>
               {
-                parentCatName.toString() !== "New Category" ?
+                parentCatName.toString() !== "New Category" && chipData.length === 0 ?
                 <Box sx={{px: 3, py: 0, display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end'}}>
                   <Typography sx={{width: '100%', py: 3}}>Category Icon</Typography>
-                  <Box sx={{width: '150px', height: '100px', position: 'relative', zIndex: 0}}>
+                  <Box sx={{width: '150px', height: '100px', position: 'relative', zIndex: 0, '& > img': {objectFit: 'contain'}}}>
                     {
                       category.map(item => (
                         parentCatName.toString() === item.categoryName &&
@@ -302,6 +415,14 @@ export default function CategoryCreate(props) {
                       ))
                     }
                   </Box>
+                  <Stack sx={{ width: '100%'}} direction="row" justifyContent="center" alignItems="center" spacing={2}>
+                    <Box sx={{width: '100%', py: 2}}>
+                      <Button component="label" onChange={handleAvatarChoose} htmlFor="file-avatar" sx={{ width: '100%', display: 'flex', justifyContent: 'center', px: 3}}>
+                        edit icon
+                      <Box sx={{display: 'none'}} accept="image/jpg image/png image/jpeg" component="input" type="file" name="file-avatar" id="file-avatar"/>
+                      </Button>
+                    </Box>
+                  </Stack>
                 </Box>
                 :
                 <Box sx={{px: 3, py: 0, display: 'flex', justifyContent: 'flex-end'}}>  
@@ -318,11 +439,11 @@ export default function CategoryCreate(props) {
                       </Stack>
                       {
                         chipData.map(item => (
-                          <Box sx={{position: 'relative', width: '100%', height: '100%', display: 'flex', justifyContent: 'flex-end', flexWrap: 'wrap'}} key={item?.image?.lastModified}>
+                          <Box sx={{position: 'relative', width: '100%', height: 'auto', display: 'flex', justifyContent: 'flex-end', flexWrap: 'wrap'}} key={item?.image?.lastModified}>
                             <IconButton sx={{position: 'absolute', top: -20, right: -20, zIndex: 10, backgroundColor: '#fff', width: '30px', height: '30px', borderRadius: '100%'}} size='small' onClick={handleDelete(item)}>
                               <HighlightOffIcon />
                             </IconButton>
-                            <Box sx={{width: '150px', height: '100px', position: 'relative', zIndex: 0}}>
+                            <Box sx={{width: '150px', height: '100px', position: 'relative', zIndex: 0, '& > img': {objectFit: 'contain'}}}>
                               <Image
                                 fill
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -333,7 +454,7 @@ export default function CategoryCreate(props) {
                           </Box>
                         ))
                       }
-                      <Button fullWidth type='submit' size='small'>
+                      <Button sx={{width: '100%', my: 3}} type='submit' size='small'>
                         add icon
                       </Button>
                     </Box>

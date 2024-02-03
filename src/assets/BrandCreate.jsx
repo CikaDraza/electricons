@@ -13,6 +13,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Image from 'next/image';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { BackofficeStateContext } from '../utils/BackofficeState';
+import Cookies from 'js-cookie';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -27,7 +28,7 @@ const MenuProps = {
 
 export default function BrandCreate(props) {
   const { open, setOpen } = props;
-  const { state_office, state_dispatch } = React.useContext(BackofficeStateContext);
+  const { state_office, dispatch_office } = React.useContext(BackofficeStateContext);
   const [checked, setChecked] = React.useState([]);
   const [children, setChildren] = React.useState([]);
   const [category, setCategory] = React.useState([]);

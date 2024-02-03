@@ -30,6 +30,7 @@ handler.put(async (req, res) => {
       {
         new: true
       });
+      
       const responseData = {
         image: updatedUser.image,
       };

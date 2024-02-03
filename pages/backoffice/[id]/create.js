@@ -98,6 +98,12 @@ function CreateNewItems() {
   const [specifications, setSpecifications] = React.useState([{ attribute: '', detail: '' }]);
   const [open, setOpen] = React.useState(false);
   const [openBrand, setOpenBrand] = React.useState(false);
+  const [checkedCategory, setCheckedCategory] = React.useState(true);
+
+  const handleChange = (event) => {
+    const newSelectedItems = cartItems.map((n) => n);
+    setCheckedCategory(event.target.checked);
+  };
 
   const isQuill = typeof window !== 'undefined' ? require('quill') : null;
 
@@ -254,23 +260,20 @@ function CreateNewItems() {
                   <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 0 }}>
                     <TextField
                       name="title"
-                      fullWidth
                       id="title"
                       label="Product title here..."
-                      sx={{mb: 1, pb: 3}}
+                      sx={{mb: 1, pb: 3, width: '100%'}}
                     />
                     <TextField
                       name="slug"
-                      fullWidth
                       id="slug"
                       label="Product slug here..."
-                      sx={{mb: 1, pb: 3}}
+                      sx={{mb: 1, pb: 3, width: '100%'}}
                     />
                     <Typography component="label">Short Description</Typography>
                     <TextareaAutosize
                       name="short-description"
                       required
-                      fullWidth
                       id="short"
                       placeholder="Short description here..."
                       maxRows={10}
@@ -301,7 +304,7 @@ function CreateNewItems() {
                       {
                         specifications?.map((item, index) => (
                           <Box key={index} sx={{display: 'flex', flexWrap: 'nowrap'}}>
-                            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+                            <FormControl sx={{ m: 1, width: '100%' }} variant="standard">
                               <InputLabel htmlFor={`attribute-${index}`}>*</InputLabel>
                               <Input
                                 id={`attribute-${index}`}
@@ -310,7 +313,7 @@ function CreateNewItems() {
                                 startAdornment={<InputAdornment position="start">Attribute:</InputAdornment>}
                               />
                             </FormControl>
-                            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+                            <FormControl sx={{ m: 1, width: '100%' }} variant="standard">
                               <InputLabel htmlFor={`detail-${index}`}>*</InputLabel>
                               <Input
                                 id={`detail-${index}`}
@@ -334,7 +337,7 @@ function CreateNewItems() {
               </Grid>
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
-                
+
                 </Paper>
               </Grid>
             </Grid>
@@ -359,14 +362,14 @@ function CreateNewItems() {
                   <Divider />
                   <Box sx={{p: 2}}>
                     <Box sx={{display: 'flex', justifyContent: 'space-between', pb: 2}}>
-                      <Button sx={{mr: 1}} fullWidth variant='outlined'>
+                      <Button sx={{mr: 1}} variant='outlined'>
                         Preview
                       </Button>
-                      <Button sx={{ml: 1, color: 'whitesmoke'}} color='dashboard' fullWidth variant='contained'>
+                      <Button sx={{ml: 1, color: 'whitesmoke'}} color='dashboard' variant='contained'>
                         Save Draft
                       </Button>
                     </Box>
-                    <Button fullWidth variant='contained'>Publish</Button>
+                    <Button sx={{width: '100%'}} variant='contained'>Publish</Button>
                   </Box>
                 </Paper>
               </Grid>
@@ -448,7 +451,7 @@ function CreateNewItems() {
                 >
                   <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
                     <Typography component="p" variant='p' sx={{px: 2, py: 1, fontWeight: 'bold'}}>Categories</Typography>
-                    <Button onClick={handleClickOpen} size='small' sx={{mr: 3}}>+ add categories</Button>
+                    <Button onClick={handleClickOpen} size='small' sx={{mr: 3}}>+ add new or edit</Button>
                   </Box>
                   <Divider />
                   <Box sx={{p: 3}}>
