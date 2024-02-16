@@ -1,10 +1,10 @@
-import nc from 'next-connect';
+import { createRouter } from 'next-connect';
 import db from '../../../src/utils/db';
 import Blog from '../../../models/Blog';
 
-const handler = nc();
+const router = createRouter();
 
-handler.get(async (req, res) => {
+router.get(async (req, res) => {
   await db.connect();
   const { slug } = req.query;
   const blog = await Blog.findOne({ slug });
@@ -12,4 +12,4 @@ handler.get(async (req, res) => {
   res.send(blog);
 });
 
-export default handler;
+export default router.handler();

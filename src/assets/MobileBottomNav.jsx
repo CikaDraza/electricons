@@ -9,7 +9,7 @@ import CompareIcon from '@mui/icons-material/RepeatOutlined';
 import SwipeableCartDrawer from '../components/SwipeableCartDrawer';
 import { Store } from '../utils/Store';
 import { Badge } from '@mui/material';
-import Link from '../Link';
+import Link from 'next/link';
 import Cookies from 'js-cookie';
 
 export default function MobileBottomNav({ isVisible }) {

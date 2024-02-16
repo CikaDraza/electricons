@@ -6,7 +6,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from './Title';
 import { useRouter } from 'next/router';
-import Link from '../Link';
+import Link from 'next/link';
 import { TableFooter } from '@mui/material';
 
 export default function Orders(props) {

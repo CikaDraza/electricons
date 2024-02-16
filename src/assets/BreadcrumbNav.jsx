@@ -3,8 +3,9 @@ import Typography from '@mui/material/Typography';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import HomeIcon from '@mui/icons-material/Home';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import Link from '../Link';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
+import theme from '../theme';
 
 const breadcrumbNameMap = {
   '/inbox': 'Inbox',
@@ -47,11 +48,9 @@ export default function BreadcrumbNav({productData, categoryData, blogData, blog
 
   if(isBlogData && blogPost) {
     return (
-      <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />} sx={{ fontSize: {xs: 12, sm: 'inherit'}, my: 4, 'a' : { textDecoration: 'none'} }}>
+      <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />} sx={{ fontSize: {xs: 12, sm: 'inherit'}, my: 4, '& a' : { textDecoration: 'none', display: 'flex', alignItems: 'center', color: "primary.main"} }}>
         <Link
           underline="none"
-          sx={{ display: 'flex', alignItems: 'center' }}
-          color="primary"
           href="/blog"
         >
           <HomeIcon sx={{ mr: 0.5 }} fontSize="inherit" />
@@ -69,11 +68,9 @@ export default function BreadcrumbNav({productData, categoryData, blogData, blog
 
   if(!isBlogData) {
     return (
-      <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />} sx={{ fontSize: {xs: 12, sm: 'inherit'}, my: 4, 'a' : { textDecoration: 'none'} }}>
+      <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />} sx={{ fontSize: {xs: 12, sm: 'inherit'}, my: 4, '& a' : { textDecoration: 'none', display: 'flex', alignItems: 'center', color: "primary.main"} }}>
         <Link
           underline="none"
-          sx={{ display: 'flex', alignItems: 'center' }}
-          color="primary"
           href="/blog"
         >
           <HomeIcon sx={{ mr: 0.5 }} fontSize="inherit" />
@@ -83,8 +80,6 @@ export default function BreadcrumbNav({productData, categoryData, blogData, blog
           !isBlogData && blogData[0] && !blogPost &&
             <Link
               underline="none"
-              sx={{ display: 'flex', alignItems: 'center' }}
-              color="primary"
               href={`/blog/category/${blogData[0]}`}
             >
               {blogData[0].replace(/-/g, ' ').replace(/^./, function(x){return x.toUpperCase()})}
@@ -94,8 +89,6 @@ export default function BreadcrumbNav({productData, categoryData, blogData, blog
           !isBlogData && blogData[1] && !blogPost &&
             <Link
               underline="none"
-              sx={{ display: 'flex', alignItems: 'center' }}
-              color="primary"
               href={`/blog/category/${blogData[0]}/${blogData[1]}`}
             >
               {blogData[1].replace(/-/g, ' ').replace(/^./, function(x){return x.toUpperCase()})}
@@ -106,11 +99,8 @@ export default function BreadcrumbNav({productData, categoryData, blogData, blog
   }
 
   return (
-    <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />} sx={{ fontSize: {xs: 12, sm: 'inherit'}, my: 4, 'a' : { textDecoration: 'none'} }}>
+    <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />} sx={{ fontSize: {xs: 12, sm: 'inherit'}, my: 4, '& a' : { textDecoration: 'none', display: 'flex', alignItems: 'center', color: theme.palette.primary.main} }}>
       <Link
-        underline="none"
-        sx={{ display: 'flex', alignItems: 'center' }}
-        color="primary"
         href="/"
       >
         <HomeIcon sx={{ mr: 0.5 }} fontSize="inherit" />
@@ -119,9 +109,6 @@ export default function BreadcrumbNav({productData, categoryData, blogData, blog
       {
         categoryData && categoryData[0] &&
           <Link
-            underline="none"
-            sx={{ display: 'flex', alignItems: 'center' }}
-            color="primary"
             href={`/category/${categoryData[0]}`}
           >
             {categoryData[0].replace(/-/g, ' ').replace(/^./, function(x){return x.toUpperCase()})}
@@ -130,9 +117,6 @@ export default function BreadcrumbNav({productData, categoryData, blogData, blog
       {
         categoryData && categoryData[1] &&
           <Link
-            underline="none"
-            sx={{ display: 'flex', alignItems: 'center' }}
-            color="primary"
             href={`/category/${categoryData[0]}/${categoryData[1]}`}
           >
             {categoryData[1].replace(/-/g, ' ').replace(/^./, function(x){return x.toUpperCase()})}
@@ -141,9 +125,6 @@ export default function BreadcrumbNav({productData, categoryData, blogData, blog
       {
         productData && productData.categoryUrl &&
           <Link
-            underline="none"
-            sx={{ display: 'flex', alignItems: 'center' }}
-            color="primary"
             href={`/category/${productData.categoryUrl}`}
           >
             {productData.categoryUrl}
@@ -152,9 +133,6 @@ export default function BreadcrumbNav({productData, categoryData, blogData, blog
       {
         productData && productData.subCategoryUrl &&
           <Link
-            underline="none"
-            sx={{ display: 'flex', alignItems: 'center' }}
-            color="primary"
             href={`/category/${productData.categoryUrl}/${productData.subCategoryUrl}`}
           >
             {productData.subCategory}
@@ -172,9 +150,6 @@ export default function BreadcrumbNav({productData, categoryData, blogData, blog
       {
         !productData && !categoryData &&
           <Link
-            underline="none"
-            sx={{ display: 'flex', alignItems: 'center' }}
-            color="primary"
             href={`${location.pathname}`}
           >
             {`${location.pathname.replace('/', '')}`}

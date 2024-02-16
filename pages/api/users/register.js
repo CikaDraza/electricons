@@ -1,16 +1,16 @@
-import nc from 'next-connect';
+import { createRouter } from 'next-connect';
 import User from '../../../models/User';
 import db from '../../../src/utils/db';
 import bcrypt from 'bcryptjs';
 import { signToken, isAuth } from '../../../src/utils/auth';
 import { onError } from '../../../src/utils/error';
 
-const handler = nc({
+const router = createRouter({
   onError,
   isAuth
 });
 
-handler.post(async (req, res) => {
+router.post(async (req, res) => {
   try {
     await db.connect(); 
     const newUser = new User({
@@ -58,4 +58,4 @@ handler.post(async (req, res) => {
 });
 
 
-export default handler;
+export default router.handler();

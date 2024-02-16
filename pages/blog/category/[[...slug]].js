@@ -24,7 +24,7 @@ import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import Blog from '../../../models/Blog';
 import db from '../../../src/utils/db';
-import Link from '../../../src/Link';
+import Link from 'next/link';
 import SelectSort from '../../../src/assets/SelectSort';
 import BreadcrumbNav from '../../../src/assets/BreadcrumbNav';
 import theme from '../../../src/theme';
@@ -313,7 +313,7 @@ export default function CategoryProducts(props) {
         <Grid container spacing={2}>
           <Grid xs={12}>
             <Item elevation={0}>
-              <Link href="/" passHref>
+              <Link href="/">
                 <Button sx={{'&:hover': {backgroundColor: theme.palette.secondary.main}}} variant="contained" startIcon={<ReplyIcon />}>
                   back to shop
                 </Button>
@@ -330,9 +330,9 @@ export default function CategoryProducts(props) {
       <BreadcrumbNav blogData={slug} />
       <Grid container spacing={2}>
         <Grid item xs={12} lg={9}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <AppBar elevation={0} sx={{bgcolor: theme.palette.primary.white}} position="static">
+          <Grid id="category-products" container spacing={2}>
+            <Grid sx={{width: '100%'}} item xs={12}>
+              <AppBar elevation={0} sx={{bgcolor: theme.palette.primary.white, width: '100%'}} position="static">
                 <Toolbar sx={{display: 'flex', flexWrap: 'wrap'}}>
                   <Box sx={{width: {xs: '100%', sm: 'auto'}, flexGrow: 1, display: 'flex', alignItems: 'center', flexWrap: 'wrap'}}>
                     <Typography sx={{paddingBottom: {xs: '1rem', md: '0'} }} color="secondary.lightGrey" component="h2" variant="p">
@@ -355,10 +355,10 @@ export default function CategoryProducts(props) {
             </Grid>
             {
               products.map(prod => (
-                <Grid key={prod._id} item xs={12}>
+                <Grid sx={{width: '100%'}} key={prod._id} item xs={12}>
                     <Card elevation={0} sx={{ width: "100%", height: "100%", display: 'flex' }}>
-                        <CardActionArea sx={{position: 'relative', width: '100%', display: 'flex', '& a': { width: '100%', textDecoration: 'none'} }}>
-                          <Link sx={{position: 'relative', display: 'flex', flex: 0, flexWrap: {xs: 'wrap', md: 'nowrap'} }} href={`/blog/post/${prod.slug}`} onClick={() => handleLoading(prod)}>
+                        <CardActionArea sx={{position: 'relative', width: '100%', display: 'flex', '& > a': { width: '100%', textDecoration: 'none', position: 'relative', display: 'flex', flex: 1, flexWrap: {xs: 'wrap', md: 'nowrap'} } }}>
+                          <Link href={`/blog/post/${prod.slug}`} onClick={() => handleLoading(prod)}>
                           {
                             prod._id === selected &&
                             <CircularProgress sx={{position: 'absolute', left: '45%', top: '20%', zIndex: 1, transform: 'translateX(-50%)'}} size={50} />
@@ -374,7 +374,7 @@ export default function CategoryProducts(props) {
                               />
                             </CardMedia>
                             <CardContent sx={{display: 'flex', flex: {xs: '0 0 100%', md: '0 0 75%'}, flexWrap: 'wrap'}}>
-                              <Typography sx={{width: '100%'}} gutterBottom variant="h6" component="h3" align="left">
+                              <Typography sx={{width: '100%', color: 'primary.main'}} gutterBottom variant="h6" component="h3" align="left">
                               {prod.title}
                               </Typography>
                               <Typography align="justify" variant="body2" color="text.secondary">
@@ -387,7 +387,7 @@ export default function CategoryProducts(props) {
                 </Grid>
               ))
             }
-            <Grid item xs={12}>
+            <Grid sx={{width: '100%'}} item xs={12}>
               <AppBar elevation={0} sx={{bgcolor: theme.palette.primary.white}} position="static">
                 <Toolbar sx={{display: 'flex', flexWrap: 'wrap'}}>
                   <SelectPages values={['6', '12', '24', '36']} sx={{order: 2}} pageSize={pageSize} pageSizeHandler={pageSizeHandler}  />
@@ -434,10 +434,10 @@ export default function CategoryProducts(props) {
               <Box sx={{py: 1, display: 'flex', justifyContent: 'left', flexWrap: 'wrap', borderBottom: `thin solid ${theme.palette.badge.bgd}`}}>
                 <Typography color="secondary.lightGrey" component="h3" variant='h6'>Categories</Typography>
               </Box>
-              <List sx={{ '& a': {textDecoration: 'none'} }}>
+              <List sx={{ '& a': {textDecoration: 'none', color: 'secondary.main'} }}>
                 {
                   categories.map((cat, i) => (
-                  <Link color='secondary.lightGrey' key={cat + i} href={`/blog/category/${cat}`}>
+                  <Link key={cat + i} href={`/blog/category/${cat}`}>
                     <ListItem disablePadding>
                       <ListItemButton>
                         <ListItemText primary={cat} />

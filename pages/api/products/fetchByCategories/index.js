@@ -1,11 +1,11 @@
 
 import Product from '../../../../models/Product';
 import db from '../../../../src/utils/db';
-import nc from 'next-connect';
+import { createRouter } from 'next-connect';
 
-const handler = nc();
+const router = createRouter();
 
-handler.get( async(req, res) => {
+router.get( async(req, res) => {
   const { query } = req;
   const { minPrice, maxPrice, brand } = req.query;
   
@@ -77,4 +77,4 @@ handler.get( async(req, res) => {
   }
 });
 
-export default handler;
+export default router.handler();

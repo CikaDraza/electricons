@@ -6,7 +6,7 @@ import Product from '../models/Product';
 import BreadcrumbNav from '../src/assets/BreadcrumbNav';
 import SelectSort from '../src/assets/SelectSort';
 import ToggleButtons from '../src/assets/ToggleButtons';
-import Link from '../src/Link';
+import Link from 'next/link';
 import theme from '../src/theme';
 import db from '../src/utils/db';
 import SelectPages from '../src/assets/SelectPages';

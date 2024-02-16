@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import Rating from '@mui/material/Rating';
 import { Box } from '@mui/system';
-import Link from '../Link';
+import Link from 'next/link';
 import CircularProgress from '@mui/material/CircularProgress';
 
 export default function SingleCardProduct({product}) {

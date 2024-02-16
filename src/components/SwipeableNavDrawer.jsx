@@ -9,16 +9,14 @@ import ListItemText from '@mui/material/ListItemText';
 import { Avatar, Grid, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu';
-import category_data from '../utils/category';
 import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import data from '../utils/data';
-import Link from '../Link';
+import Link from 'next/link';
 import theme from '../theme';
-import PersonalVideoIcon from '@mui/icons-material/PersonalVideo';
-import ComputerIcon from '@mui/icons-material/Computer';
-import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
+import Image from 'next/image';
+import axios from 'axios';
 
 function ListsItem(props) {
   const { cat, onClose } = props;
@@ -30,58 +28,82 @@ function ListsItem(props) {
       setOpenSub(`open ${i}`);
     }
   }
-
+console.log(cat.subCategory.some(sub => sub.url === 'none'));
   return (
       <React.Fragment>
         <ListItem key={cat.categoryName} disablePadding>
-          <ListItemButton sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', '& a': {textDecoration: 'none'} }} onClick={() => setOpen(!open)}>
-          <Link onClick={onClose} href={`/category/${cat.slug}`} sx={{display: 'flex', alignItems: 'center', '&:hover': {color: theme.palette.primary.main} }} color="secondary">
-            <Avatar sx={{ bgcolor: theme.palette.primary.white, '& svg': {color: theme.palette.secondary.main} }}>
-              {
-                cat.slug === 'desktop-computers' ? <PersonalVideoIcon /> : cat.slug === 'laptops' ? <ComputerIcon /> : cat.slug === 'smartphones' ? <PhoneAndroidIcon /> : null
+          {
+            cat.subCategory.some(sub => sub.url !== 'none') ?
+            <ListItemButton sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', '& a': {textDecoration: 'none', display: 'flex', width: '100%'} }} onClick={() => setOpen(!open)}>
+              <Link onClick={onClose} href={`/category/${cat.slug}`}>
+                <Avatar variant="square" sx={{ bgcolor: 'transparent', position: 'relative', mr: 1, width: 24, height: 24, '& img': {objectFit: 'contain'} }}>
+                  <Image
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    priority
+                    src={cat?.avatar !== '' ? cat?.avatar : '/images/no-image.jpg'}
+                    alt={cat?.categoryName}
+                    quality={100}
+                  />
+                </Avatar>
+                <ListItemText sx={{color: theme.palette.secondary.main}} primary={cat.categoryName} />
+              </Link>
+              {open ? 
+                <ExpandLess />
+              :
+                <ExpandMore />
               }
-            </Avatar>
-            <ListItemText primary={cat.categoryName} />
-          </Link>
-            {open ? 
-              <ExpandLess />
+            </ListItemButton>
             :
-              <ExpandMore />
-            }
-          </ListItemButton>
+            <ListItemButton sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', '& a': {textDecoration: 'none', display: 'flex', width: '100%'} }} onClick={() => setOpen(!open)}>
+              <Link onClick={onClose} href={`/category/${cat.slug}`}>
+                <Avatar variant="square" sx={{ bgcolor: 'transparent', position: 'relative', mr: 1, width: 24, height: 24, '& img': {objectFit: 'contain'} }}>
+                  <Image
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    priority
+                    src={cat?.avatar !== '' ? cat?.avatar : '/images/no-image.jpg'}
+                    alt={cat?.categoryName}
+                    quality={100}
+                  />
+                </Avatar>
+                <ListItemText sx={{color: theme.palette.primary.main}} primary={cat.categoryName} />
+              </Link>
+            </ListItemButton>
+          }
         </ListItem>
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List sx={{'& a': {textDecoration: 'none'}}} component="ul" disablePadding>
           {
             cat.subCategory.map((sub, i) => (
-              <React.Fragment key={sub.url}>
-                  <ListItem disablePadding>
-                    <ListItemButton tabIndex={i} onClick={(e) => collapseHeandler(e, i)} sx={{ pl: 4, justifyContent: 'space-between' }}>
-                      <Link href={`/category/${cat.slug}/${sub.url}`} sx={{display: 'flex', '&:hover': {color: theme.palette.primary.main} }} color="secondary">
-                        <ListItemText sx={{'& span': {fontSize: '14px', ml: 2} }} onClick={onClose} primary={sub.subCategoryName} />
+            <React.Fragment key={sub.url}>
+              <ListItem disablePadding>
+                <ListItemButton tabIndex={i} onClick={(e) => collapseHeandler(e, i)} sx={{ pl: 4, justifyContent: 'space-between' }}>
+                  <Link href={`/category/${cat.slug}/${sub.url}`} sx={{display: 'flex', '&:hover': {color: theme.palette.primary.main} }} color="secondary">
+                    <ListItemText  sx={{'& span': {fontSize: '14px', ml: 2} }} onClick={onClose} primary={sub.subCategoryName} />
+                  </Link>
+                  {openSub === `open ${i}` ? 
+                    <ExpandLess />
+                  :
+                    <ExpandMore />
+                  }
+                </ListItemButton>
+              </ListItem>
+              <Collapse in={openSub === `open ${i}`} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  {
+                    data.products.map(prod => (
+                      sub.url === prod.subCategoryUrl &&
+                      <Link onClick={onClose} underline="none" key={prod.slug} href={`/product/${prod.slug}`} sx={{display: 'flex', pb: 1, '&:hover': {color: theme.palette.primary.main} }} color="secondary.lightGrey">
+                        <ListItemButton sx={{ pl: 4 }}>                   
+                          <ListItemText sx={{'& span': {fontSize: '13px', ml: 2, fontWeight: 'bold'} }} primary={prod.title} />
+                        </ListItemButton>
                       </Link>
-                      {openSub === `open ${i}` ? 
-                        <ExpandLess />
-                      :
-                        <ExpandMore />
-                      }
-                    </ListItemButton>
-                  </ListItem>
-                <Collapse in={openSub === `open ${i}`} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding>
-                    {
-                      data.products.map(prod => (
-                        sub.url === prod.subCategoryUrl &&
-                        <Link onClick={onClose} underline="none" key={prod.slug} href={`/product/${prod.slug}`} sx={{display: 'flex', pb: 1, '&:hover': {color: theme.palette.primary.main} }} color="secondary.lightGrey">
-                          <ListItemButton sx={{ pl: 4 }}>                   
-                            <ListItemText sx={{'& span': {fontSize: '13px', ml: 2, fontWeight: 'bold'} }} primary={prod.title} />
-                          </ListItemButton>
-                        </Link>
-                      ))
-                    }
-                  </List>
-                </Collapse>
-              </React.Fragment>
+                    ))
+                  }
+                </List>
+              </Collapse>
+            </React.Fragment>
             ))
           }
           </List>
@@ -93,6 +115,15 @@ export default function SwipeableNavDrawer({ pagesTop }) {
   const [state, setState] = React.useState({
     left: false
   });
+  const [allCategories, setAllCategories] = React.useState([]);
+
+  React.useEffect(() => {
+    async function fetchCategories() {
+      const { data } = await axios.get('/api/category');
+      setAllCategories(data);
+    }
+    fetchCategories();
+  }, [])
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -139,7 +170,7 @@ export default function SwipeableNavDrawer({ pagesTop }) {
               component="ul"
               aria-labelledby="nested-list-sub-nav"
               >
-               {category_data.categories.map((cat, index) => (
+               {allCategories.map((cat, index) => (
                 <ListsItem key={cat.categoryName} cat={cat} onClose={toggleDrawer(anchor, false)}/>
                ))}
               </List>

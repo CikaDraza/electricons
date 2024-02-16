@@ -1,10 +1,10 @@
 import db from '../../../src/utils/db';
-import nc from 'next-connect';
+import { createRouter } from 'next-connect';
 import StoreInfo from '../../../models/StoreInfo';
 
-const handler = nc();
+const router = createRouter();
 
-handler.get(async (req, res) => {
+router.get(async (req, res) => {
   await db.connect();
   const store_info = await StoreInfo.find({});
   await db.disconnect();
@@ -12,4 +12,4 @@ handler.get(async (req, res) => {
 });
 
 
-export default handler;
+export default router.handler();

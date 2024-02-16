@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepButton from '@mui/material/StepButton';
-import Link from '../Link';
+import Link from 'next/link';
 import { StepLabel, useMediaQuery } from '@mui/material';
 import { Store } from '../utils/Store';
 import InfoIcon from '@mui/icons-material/Info';

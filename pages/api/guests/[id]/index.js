@@ -1,10 +1,10 @@
-import nc from 'next-connect';
+import { createRouter } from 'next-connect';
 import db from '../../../../src/utils/db';
 import Guest from '../../../../models/Guest';
 
-const handler = nc();
+const router = createRouter();
 
-handler.get(async (req, res) => {
+router.get(async (req, res) => {
   await db.connect();
   const guest_order = await Guest.findById(req.query.id);
   await db.disconnect();
@@ -12,4 +12,4 @@ handler.get(async (req, res) => {
 });
 
 
-export default handler;
+export default router.handler();

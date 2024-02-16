@@ -26,7 +26,7 @@ import AlertDialogSlide from '../../../src/assets/AlertDialogSlide';
 import styled from '@emotion/styled';
 import SearchIcon from '@mui/icons-material/Search';
 import GuestCustomerTable from '../../../src/components/GuestCustomerTable';
-import Link from '../../../src/Link';
+import Link from 'next/link';
 
 const Search = styled(Box)(({ theme }) => ({
   position: 'relative',

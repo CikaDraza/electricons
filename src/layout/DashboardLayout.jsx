@@ -17,7 +17,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import CartIcon from '@mui/icons-material/ShoppingCartOutlined';
 import MainListItems from '../components/MainListItems';
 import theme from '../theme';
-import Link from '../Link';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Avatar, Menu, MenuItem, Tooltip } from '@mui/material';
 import { Store } from '../utils/Store';

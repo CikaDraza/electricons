@@ -21,7 +21,7 @@ import CountQuantity from '../assets/CountQuantity';
 import ReplyIcon from '@mui/icons-material/Reply';
 import { Alert, Button, FormHelperText } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
-import Link from '../Link';
+import Link from 'next/link';
 import { Store } from '../utils/Store';
 import { useRouter } from 'next/router';
 import theme from '../theme';

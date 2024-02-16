@@ -5,7 +5,7 @@ import Paper from '@mui/material/Paper';
 import { useContext } from 'react';
 import { Store } from '../src/utils/Store';
 import dynamic from 'next/dynamic';
-import Link from '../src/Link';
+import Link from 'next/link';
 import theme from '../src/theme';
 import ReplyIcon from '@mui/icons-material/Reply';
 import CompareTable from '../src/components/CompareTable';

@@ -10,7 +10,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Badge, Grid, IconButton, Typography, useMediaQuery } from '@mui/material';
 import theme from '../theme';
 import CartIcon from '@mui/icons-material/ShoppingCartOutlined';
-import Link from '../Link';
+import Link from 'next/link';
 import { Store } from '../utils/Store';
 
 export default function SwipeableCartDrawer() {
@@ -55,7 +55,7 @@ export default function SwipeableCartDrawer() {
   const list = (anchor) => (
     <React.Fragment>
       <Box
-        sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 300, flexGrow: 2 }}
+        sx={{ width: match || anchor === 'top' || anchor === 'bottom' ? 300 : 400, flexGrow: 2 }}
         role="presentation"
       >
         <Box sx={{display: 'flex', alignItems: 'center', p: 1}}>
@@ -168,13 +168,17 @@ export default function SwipeableCartDrawer() {
               ))}
             </List>
           </Box>
-          <Box sx={{ display: 'flex', flexGrow: 0, width: '100%', '& a': {flex: 1, textDecoration: 'none'} }}>
-            <Link sx={{ '&:hover p': {color: 'secondary.main'}, p: 2, backgroundColor: 'primary.main', color: 'primary.contrastText', display: 'flex', flexGrow: 1, textAlign: 'center' }} href="/cart" onClick={toggleDrawer(anchor, false)} passHref>
-              <Typography sx={{ display: 'block', height: '100%', margin: 'auto' }} component="p">View Cart</Typography>
-            </Link>
-            <Link sx={{ '&:hover p': {color: 'primary.main'}, p: 2, backgroundColor: 'secondary.main', color: 'primary.contrastText', flex: 1, textAlign: 'center', display: 'flex' }} href="/checkout/personal-info" onClick={toggleDrawer(anchor, false)} passHref>
-              <Typography sx={{ display: 'block', height: '100%', margin: 'auto' }} component="p">Checkout</Typography>
-            </Link>
+          <Box sx={{ display: 'flex', flexGrow: 0, width: '100%', '& div': {flex: 1, textDecoration: 'none'} }}>
+            <Box sx={{ backgroundColor: 'primary.main', '&:hover p': {color: 'secondary.main'}, p: 2, '& a': {color: 'primary.contrastText', display: 'flex', flexGrow: 1, textAlign: 'center'} }}>
+              <Link href="/cart" onClick={toggleDrawer(anchor, false)}>
+                <Typography sx={{ display: 'block', height: '100%', margin: 'auto' }} component="p">View Cart</Typography>
+              </Link>
+            </Box>
+            <Box sx={{ backgroundColor: 'secondary.main', '&:hover p': {color: 'primary.main'}, p: 2, '& a': {color: 'primary.contrastText', display: 'flex', flexGrow: 1, textAlign: 'center'} }}>
+              <Link href="/checkout/personal-info" onClick={toggleDrawer(anchor, false)}>
+                <Typography sx={{ display: 'block', height: '100%', margin: 'auto' }} component="p">Checkout</Typography>
+              </Link>
+            </Box>
           </Box>
         </React.Fragment>
       }

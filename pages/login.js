@@ -10,7 +10,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
-import Link from '../src/Link';
+import Link from 'next/link';
 import axios from 'axios';
 import { Store } from '../src/utils/Store';
 import { useRouter } from 'next/router';

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Link from '@mui/material/Link';
+import Link from 'next/link';
 import Typography from '@mui/material/Typography';
 import Title from './Title';
 import theme from '../theme';

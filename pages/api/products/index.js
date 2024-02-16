@@ -1,13 +1,13 @@
 
-import nc from 'next-connect';
+import { createRouter } from 'next-connect';
 import db from '../../../src/utils/db';
 import Product from '../../../models/Product';
 import Order from '../../../models/Order';
 import Guest from '../../../models/Guest';
 
-const handler = nc();
+const router = createRouter();
 
-handler.get(async (req, res) => {
+router.get(async (req, res) => {
   const { query } = req;
 
   try {
@@ -68,4 +68,4 @@ handler.get(async (req, res) => {
 });
 
 
-export default handler;
+export default router.handler();

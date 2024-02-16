@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Link from '../../src/Link';
+import Link from 'next/link';
 import ReplyIcon from '@mui/icons-material/Reply';
 import theme from '../../src/theme';
 import CheckIcon from '@mui/icons-material/Check';

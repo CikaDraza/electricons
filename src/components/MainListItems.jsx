@@ -9,7 +9,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import LayersIcon from '@mui/icons-material/Layers';
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import Link from '../Link';
+import Link from 'next/link';
 import { Divider, Tooltip } from '@mui/material';
 import ButtonAccordion from '../assets/ButtonAccordion';
 import Cookies from 'js-cookie';

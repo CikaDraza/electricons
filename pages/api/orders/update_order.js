@@ -1,10 +1,10 @@
-import nc from 'next-connect';
+import { createRouter } from 'next-connect';
 import Order from '../../../models/Order';
 import db from '../../../src/utils/db';
 
-const handler = nc();
+const router = createRouter();
 
-handler.put(async (req, res) => {
+router.put(async (req, res) => {
   try {
     await db.connect();
     const { hasRated, slug, orderId } = req.body;
@@ -41,4 +41,4 @@ handler.put(async (req, res) => {
   }
 });
 
-export default handler;
+export default router.handler();

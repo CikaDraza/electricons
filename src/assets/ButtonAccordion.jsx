@@ -13,7 +13,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import ListIcon from '@mui/icons-material/List';
-import Link from '../Link';
+import Link from 'next/link';
 import { Tooltip } from '@mui/material';
 
 export default function ButtonAccordion(props) {

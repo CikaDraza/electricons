@@ -10,7 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
-import Link from '../Link';
+import Link from 'next/link';
 import theme from '../theme';
 import Image from 'next/image';
 

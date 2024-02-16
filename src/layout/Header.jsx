@@ -30,7 +30,7 @@ import DropdownMenu from '../components/DropdownMenu';
 import { useRouter } from 'next/router';
 import { Store } from '../utils/Store';
 import SwipeableCartDrawer from '../components/SwipeableCartDrawer';
-import Link from '../Link';
+import Link from 'next/link';
 import Cookies from 'js-cookie';
 import SwipeableNavDrawer from '../components/SwipeableNavDrawer';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -324,11 +324,9 @@ export default function Header() {
                 <Box sx={{ flexGrow: 1, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', '& > :not(style) + :not(style)': { ml: 2 } }}>
                   {
                     pagesTop.map((page) => (
-                      <Box key={page.name} sx={{display: 'flex', 'hr': { marginLeft: 2}, '&:last-child hr': {display: 'none'}, '& a': {textDecoration: 'none'} }}>
+                      <Box key={page.name} sx={{display: 'flex', 'hr': { marginLeft: 2}, '&:last-child hr': {display: 'none'}, '& a': {textDecoration: 'none', my: 2, color: theme.palette.secondary.main, display: 'block', m: 0, display: 'flex'} }}>
                           <Link
                             href={page.link}
-                            sx={{ my: 2, color: theme.palette.secondary.main, display: 'block', m: 0, display: 'flex' }}
-                            passHref
                           >
                           {page.icon}
                           {page.name}

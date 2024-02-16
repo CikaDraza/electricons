@@ -22,7 +22,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import CartIcon from '@mui/icons-material/ShoppingCartOutlined';
 import axios from 'axios';
 import { Store } from '../utils/Store';
-import Link from '../Link';
+import Link from 'next/link';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';

@@ -3,7 +3,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import TabPanel from '@mui/lab/TabPanel';
 import Box from '@mui/material/Box';
-import Link from '../Link';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Button, Collapse, Grid, IconButton, Menu, MenuItem, Typography, useMediaQuery } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
@@ -129,7 +129,7 @@ export default function NavTabs(props) {
                     laptopPromo && laptopPromo.map(laptop => (
                       <Grid key={laptop._id} item xs={Math.ceil(12 / laptopPromo.length)}>
                          <MenuItem sx={{ overflow: 'hidden', display: 'flex', justifyContent: 'center', '& a': {width: '100%!important'} }} onClick={handleClose}>
-                            <Link passHref noLinkStyle href={`/product/${laptop.slug}`}>
+                            <Link noLinkStyle href={`/product/${laptop.slug}`}>
                               <Box sx={{ p: 2, mb: 3, bgcolor: theme.palette.badge.bgdLight }}>
                                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center','& img': {objectFit: 'contain', width: 'auto!important', height: '120px!important', position: 'relative!important'}, p: 2 }}>
                                   <Image
@@ -186,7 +186,7 @@ export default function NavTabs(props) {
                     desktopPromo && desktopPromo.map(desktop => (
                       <Grid key={desktop._id} item xs={Math.ceil(12 / desktopPromo.length)}>
                         <MenuItem sx={{ minWidth: '250px', display: 'flex', justifyContent: 'center', '& a': {width: '100%!important'} }} onClick={handleClose}>
-                          <Link passHref noLinkStyle href={`/product/${desktop.slug}`}>
+                          <Link noLinkStyle href={`/product/${desktop.slug}`}>
                             <Box sx={{p: 2, mb: 3, bgcolor: theme.palette.badge.bgdLight, overflow: 'hidden'}}>
                               <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center','& img': {objectFit: 'contain', width: 'unset!important', height: '120px!important', position: 'relative!important'}, p: 2 }}>
                                 <Image
@@ -239,7 +239,7 @@ export default function NavTabs(props) {
                     mobilePromo && mobilePromo?.map(desktop => (
                       <Grid key={desktop._id} sx={{pr: '1rem'}} item xs={mobilePromo.length < 4 ? Math.ceil(12 / mobilePromo.length) : 4}>
                         <MenuItem sx={{ minWidth: '250px', display: 'flex', justifyContent: 'center', '& a': {width: '100%!important'} }} onClick={handleClose}>
-                          <Link passHref noLinkStyle href={`/product/${desktop.slug}`}>
+                          <Link noLinkStyle href={`/product/${desktop.slug}`}>
                             <Box sx={{p: 2, mb: 3, bgcolor: theme.palette.badge.bgdLight, overflow: 'hidden'}}>
                               <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center','& img': {objectFit: 'contain', width: 'unset!important', height: '120px!important', position: 'relative!important'}, p: 2 }}>
                                 <Image
@@ -285,7 +285,7 @@ export default function NavTabs(props) {
                     uniqueBrandObjects?.map(store => (
                       <Grid key={store._id} item xs={4}>
                         <MenuItem sx={{ minWidth: '80px', display: 'flex', justifyContent: 'center', '& a': {width: '100%!important'} }} onClick={handleClose}>
-                          <Link passHref noLinkStyle href={`/search?&brand=${store.brand}`}>
+                          <Link noLinkStyle href={`/search?&brand=${store.brand}`}>
                             <Box sx={{p: 1}}>
                               <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center','& img': {objectFit: 'contain', width: 'auto!important', height: '40px!important', position: 'relative!important'} }}>
                                 <Image

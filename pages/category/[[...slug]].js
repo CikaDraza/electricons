@@ -9,7 +9,7 @@ import theme from '../../src/theme';
 import SwipeableFilterDrawer from '../../src/components/SwipeableFilterDrawer';
 import ToggleButtons from '../../src/assets/ToggleButtons';
 import SelectSort from '../../src/assets/SelectSort';
-import Link from '../../src/Link';
+import Link from 'next/link';
 import ActionCardButtons from '../../src/assets/ActionCardButtons';
 import SelectPages from '../../src/assets/SelectPages';
 

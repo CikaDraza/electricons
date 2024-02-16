@@ -27,7 +27,7 @@ import styled from '@emotion/styled';
 import SearchIcon from '@mui/icons-material/Search';
 import StarIcon from '@mui/icons-material/Star';
 import Image from 'next/image';
-import Link from '../../../src/Link';
+import Link from 'next/link';
 import AddIcon from '@mui/icons-material/Add';
 import Cookies from 'js-cookie';
 

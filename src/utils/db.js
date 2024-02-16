@@ -32,6 +32,9 @@ async function disconnect() {
 }
 
 function convertDocToObject(doc) {
+  if (!doc) {
+    return doc = null
+  }
   if(doc.images) {
     doc._id = doc._id.toString();
     doc.images.forEach(img => {

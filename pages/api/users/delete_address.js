@@ -1,10 +1,10 @@
-import nc from 'next-connect';
+import { createRouter } from 'next-connect';
 import User from '../../../models/User';
 import db from '../../../src/utils/db';
 
-const handler = nc();
+const router = createRouter();
 
-handler.delete(async (req, res) => {
+router.delete(async (req, res) => {
 
   try {
     await db.connect();
@@ -37,4 +37,4 @@ handler.delete(async (req, res) => {
 });
 
 
-export default handler;
+export default router.handler();

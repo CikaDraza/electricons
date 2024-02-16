@@ -15,7 +15,7 @@ import Public from '@mui/icons-material/Public';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import StayCurrentPortraitIcon from '@mui/icons-material/StayCurrentPortrait';
 import MapFooter from '../assets/MapFooter';
-import Link from '../Link';
+import Link from 'next/link';
 import theme from '../theme';
 import { useRouter } from 'next/router';
 import axios from 'axios';

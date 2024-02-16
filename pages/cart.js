@@ -7,7 +7,7 @@ import { useContext } from 'react';
 import { Store } from '../src/utils/Store';
 import dynamic from 'next/dynamic';
 import CartTable from '../src/components/CartTable';
-import Link from '../src/Link';
+import Link from 'next/link';
 import theme from '../src/theme';
 import ReplyIcon from '@mui/icons-material/Reply';
 

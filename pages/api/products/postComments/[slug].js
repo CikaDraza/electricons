@@ -1,10 +1,10 @@
-import nc from 'next-connect';
+import { createRouter } from 'next-connect';
 import ProductComment from '../../../../models/ProductComment';
 import db from '../../../../src/utils/db';
 
-const handler = nc();
+const router = createRouter();
 
-handler.post( async (req, res) => {
+router.post( async (req, res) => {
 
   try {
     await db.connect();
@@ -29,4 +29,4 @@ handler.post( async (req, res) => {
   }
 });
 
-export default handler;
+export default router.handler();

@@ -1,12 +1,12 @@
-import nc from 'next-connect';
+import { createRouter } from 'next-connect';
 import db from '../../../src/utils/db';
 import Product from '../../../models/Product';
 import ProductComment from '../../../models/ProductComment';
 import mongoose from 'mongoose';
 
-const handler = nc();
+const router = createRouter();
 
-handler.get(async (req, res) => {
+router.get(async (req, res) => {
   await db.connect();
   const { slug } = req.query;
   const product = await Product.findOne({ slug }).populate('comments');
@@ -14,7 +14,7 @@ handler.get(async (req, res) => {
   res.send(product);
 });
 
-handler.post(async (req, res) => {
+router.post(async (req, res) => {
   const { id } = req.query;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -59,4 +59,4 @@ handler.post(async (req, res) => {
 });
 
 
-export default handler;
+export default router.handler();

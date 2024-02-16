@@ -1,10 +1,10 @@
-import nc from 'next-connect';
+import { createRouter } from 'next-connect';
 import db from '../../../../src/utils/db';
 import Wishlist from '../../../../models/Wishlist';
 
-const handler = nc();
+const router = createRouter();
 
-handler.get( async (req, res) => {
+router.get( async (req, res) => {
   const dataId = req.headers.id;
 
   try {
@@ -25,4 +25,4 @@ handler.get( async (req, res) => {
   }
 });
 
-export default handler;
+export default router.handler();

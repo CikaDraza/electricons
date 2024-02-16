@@ -2,7 +2,7 @@ import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import { CardActionArea, useMediaQuery } from '@mui/material';
-import Link from '../Link';
+import Link from 'next/link';
 import Image from 'next/image';
 import CircularProgress from '@mui/material/CircularProgress';
 

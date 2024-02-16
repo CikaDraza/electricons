@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2';
 import { Accordion, AccordionDetails, AccordionSummary, Button, Divider, Typography } from '@mui/material';
-import Link from '../../src/Link';
+import Link from 'next/link';
 import ReplyIcon from '@mui/icons-material/Reply';
 import VerticalTabs from '../../src/components/VerticalTabs';
 import Rating from '@mui/material/Rating';
@@ -179,12 +179,12 @@ export default function SingleProduct(props) {
   if(!product) {
     return (
       <Box sx={{ flexGrow: 1, my: 4  }}>
-        <Typography gutterBottom variant="h6" component="h3" textAlign="center">
+        <Typography gutterBottom variant="h6" component="h3" sx={{textAlign: 'center', pt: 5}}>
           Product not found
         </Typography>
         <Grid container spacing={2}>
           <Grid xs={12}>
-            <Item>
+            <Item elevation={0}>
               <Link href="/">
                 <Button variant="contained" startIcon={<ReplyIcon />}>
                   back to shop

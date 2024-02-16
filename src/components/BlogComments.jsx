@@ -106,7 +106,7 @@ export default function BlogComments({ slug }) {
     } catch (error) {
       console.log(error);
     }finally {
-      setIsSubmitting(false); // Reset the submission flag
+      setIsSubmitting(false);
     }
     setShowForm(false);
     setReplyCommentId('false');
@@ -138,7 +138,6 @@ export default function BlogComments({ slug }) {
     try {
       const { data } = await axios.get(`/api/blog/getComment/${slug}`);
       setComments(data);
-      console.log('fetch data');
     } catch (error) {
       console.log(error);
     }

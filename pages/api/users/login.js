@@ -1,17 +1,18 @@
-import nc from 'next-connect';
+import { createRouter } from 'next-connect';
 import User from '../../../models/User';
 import db from '../../../src/utils/db';
 import bcrypt from 'bcryptjs';
 import { signToken, isAuth } from '../../../src/utils/auth';
 import { onError } from '../../../src/utils/error';
 
-const handler = nc({
+const router = createRouter({
   onError,
   isAuth
 });
+
 const pattern= /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
 
-handler.post(async (req, res) => {
+router.post(async (req, res) => {
   await db.connect();
   const user = await User.findOne({ email: req.body.email });
 
@@ -48,4 +49,4 @@ handler.post(async (req, res) => {
 });
 
 
-export default handler;
+export default router.handler();

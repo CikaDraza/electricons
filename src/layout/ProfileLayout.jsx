@@ -10,7 +10,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import { Grid } from '@mui/material';
-import Link from '../Link';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 export default function ProfileLayout({ children }) {

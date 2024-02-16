@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea, Grid, useMediaQuery } from '@mui/material';
 import Rating from '@mui/material/Rating';
 import { Box } from '@mui/system';
-import Link from '../Link';
+import Link from 'next/link';
 import Image from 'next/image';
 import CircularProgress from '@mui/material/CircularProgress';
 import ActionCardButtons from '../assets/ActionCardButtons';

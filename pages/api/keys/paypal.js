@@ -1,9 +1,9 @@
-import nextConect from 'next-connect';
+import { createRouter } from 'next-connect';
 
-const handler = nextConect();
+const router = createRouter();
 
-handler.get(async (req, res) => {
+router.get(async (req, res) => {
     res.send(process.env.CLIENT_ID_PAYPAL || 'sandbox')
 });
 
-export default handler;
+export default router.handler();

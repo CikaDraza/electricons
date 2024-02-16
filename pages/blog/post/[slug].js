@@ -11,7 +11,7 @@ import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import { useRouter } from 'next/router';
 import theme from '../../../src/theme';
-import Link from '../../../src/Link';
+import Link from 'next/link';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import ReplyIcon from '@mui/icons-material/Reply';
@@ -268,10 +268,10 @@ function SinglePost(props) {
             <Box sx={{py: 1, display: 'flex', justifyContent: 'left', flexWrap: 'wrap', borderBottom: `thin solid ${theme.palette.badge.bgd}`}}>
               <Typography color="secondary.lightGrey" component="h3" variant='h6'>Categories</Typography>
             </Box>
-            <List sx={{ '& a': {textDecoration: 'none'} }}>
+            <List sx={{ '& a': {textDecoration: 'none', color: 'secondary.main'} }}>
               {
                 categories.map(cat => (
-                <Link color='secondary.lightGrey' key={cat} href={`/blog/category/${cat}`}>
+                <Link key={cat} href={`/blog/category/${cat}`}>
                   <ListItem disablePadding>
                     <ListItemButton>
                       <ListItemText primary={cat} />

@@ -4,7 +4,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Paper from '@mui/material/Paper';
 import { useContext } from 'react';
 import { Store } from '../src/utils/Store';
-import Link from '../src/Link';
+import Link from 'next/link';
 import theme from '../src/theme';
 import ReplyIcon from '@mui/icons-material/Reply';
 import WishTable from '../src/components/WishTable';

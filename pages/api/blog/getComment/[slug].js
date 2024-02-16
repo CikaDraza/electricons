@@ -1,10 +1,10 @@
 import Comment from '../../../../models/Comment';
-import nc from 'next-connect';
+import { createRouter } from 'next-connect';
 import db from '../../../../src/utils/db';
 
-const handler = nc();
+const router = createRouter();
 
-handler.get(async(req, res) => {
+router.get(async(req, res) => {
   try {
     await db.connect();
     const { slug } = req.query;
@@ -18,4 +18,4 @@ handler.get(async(req, res) => {
   }
 });
 
-export default handler;
+export default router.handler();

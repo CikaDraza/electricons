@@ -1,10 +1,10 @@
 import ProductComment from '../../../../models/ProductComment';
 import db from '../../../../src/utils/db';
-import nc from 'next-connect';
+import { createRouter } from 'next-connect';
 
-const handler = nc();
+const router = createRouter();
 
-handler.get( async(req, res) => {    
+router.get( async(req, res) => {    
   try {
     await db.connect();
     // Retrieve comments from the database and send them to the client
@@ -17,4 +17,4 @@ handler.get( async(req, res) => {
   }
 });
 
-export default handler;
+export default router.handler();

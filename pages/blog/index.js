@@ -2,7 +2,7 @@ import { AppBar, Box, Button, Card, CardActionArea, CardContent, CardMedia, Circ
 import React, { useEffect } from 'react'
 import theme from '../../src/theme'
 import Image from 'next/image'
-import Link from '../../src/Link';
+import Link from 'next/link';
 import styled from '@emotion/styled';
 import { alpha } from '@mui/material/styles';
 import { useRouter } from 'next/router';
@@ -322,8 +322,8 @@ export default function BlogPages(props) {
                 blogs.map(blog => (
                   blog.category === 'Desktop computers' &&
                   <Grid key={blog._id} item xs={12}>
-                    <Card sx={{ width: "100%", height: "100%", display: 'flex', boxShadow: 'none!important', '& > a': {textDecoration: 'none'} }}>
-                      <Link sx={{position: 'relative', color: theme.palette.primary.main, display: 'flex', flex: 0}} href={`/blog/post/${blog.slug}?counter=10`} noLinkStyle onClick={() => handleLoading(blog)}>
+                    <Card sx={{ width: "100%", height: "100%", display: 'flex', boxShadow: 'none!important', '& > a': {textDecoration: 'none', position: 'relative', color: theme.palette.primary.main, display: 'flex', flex: 1} }}>
+                      <Link href={`/blog/post/${blog.slug}`} noLinkStyle onClick={() => handleLoading(blog)}>
                         {
                           blog._id === selected &&
                           <CircularProgress sx={{position: 'absolute', left: '45%', top: '20%', zIndex: 1, transform: 'translateX(-50%)'}} size={50} />
@@ -414,8 +414,8 @@ export default function BlogPages(props) {
               blogs.map(blog => (
                 blog.category === 'Laptop computers' &&
                 <Grid key={blog._id} item xs={12}>
-                  <Card sx={{ width: "100%!important", height: "100%", display: 'flex', boxShadow: 'none!important', '& > a': {textDecoration: 'none', width: '100%'} }}>
-                    <Link sx={{position: 'relative', color: theme.palette.primary.main, display: 'flex', flex: 0, width: '100%' }} href={`/blog/post/${blog.slug}`} noLinkStyle onClick={() => handleLoading(blog)}>
+                  <Card sx={{ width: "100%!important", height: "100%", display: 'flex', boxShadow: 'none!important', '& > a': {textDecoration: 'none', width: '100%', position: 'relative', color: theme.palette.primary.main, display: 'flex', flex: 1} }}>
+                    <Link href={`/blog/post/${blog.slug}`} noLinkStyle onClick={() => handleLoading(blog)}>
                       {
                         blog._id === selected &&
                         <CircularProgress sx={{position: 'absolute', left: '45%', top: '20%', zIndex: 1, transform: 'translateX(-50%)'}} size={50} />
@@ -506,8 +506,8 @@ export default function BlogPages(props) {
               blogs.map(blog => (
                 blog.category === 'Smartphones' &&
                 <Grid key={blog._id} item xs={12}>
-                  <Card sx={{ width: "100%!important", height: "100%", display: 'flex', boxShadow: 'none!important', '& > a': {textDecoration: 'none'} }}>
-                    <Link sx={{position: 'relative', color: theme.palette.primary.main, display: 'flex', flex: 0, width: '100%' }} href={`/blog/post/${blog.slug}`} noLinkStyle onClick={() => handleLoading(blog)}>
+                  <Card sx={{ width: "100%!important", height: "100%", display: 'flex', boxShadow: 'none!important', '& > a': {textDecoration: 'none', position: 'relative', color: theme.palette.primary.main, display: 'flex', flex: 1, width: '100%'} }}>
+                    <Link href={`/blog/post/${blog.slug}`} noLinkStyle onClick={() => handleLoading(blog)}>
                         {
                           blog._id === selected &&
                           <CircularProgress sx={{position: 'absolute', left: '45%', top: '20%', zIndex: 1, transform: 'translateX(-50%)'}} size={50} />

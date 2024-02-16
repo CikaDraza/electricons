@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Checkbox, Divider, FormControlLabel, FormHelperText, Grid, Chip, Tooltip } from '@mui/material';
 import Collapse from '@mui/material/Collapse';
-import Link from '../Link';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Store } from '../utils/Store';
 import theme from '../theme';

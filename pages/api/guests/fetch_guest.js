@@ -1,10 +1,10 @@
-import nc from 'next-connect';
+import { createRouter } from 'next-connect';
 import db from '../../../src/utils/db';
 import Guest from '../../../models/Guest';
 
-const handler = nc();
+const router = createRouter();
 
-handler.get( async (req, res) => {
+router.get( async (req, res) => {
     await db.connect();
     const guest_orders = await Guest.find();
     const recentFiveGuestOrders = await Guest.find()
@@ -40,4 +40,4 @@ handler.get( async (req, res) => {
     res.send([{guest_orders: guest_orders}, {recentFiveGuestOrders: recentFiveGuestOrders}, {guest_users: uniqueCustomers}]);
 });
 
-export default handler;
+export default router.handler();
