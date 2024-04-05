@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 import { useState } from "react";
 import Slider from "react-slick";
 import Skeleton from '@mui/material/Skeleton';
+import CardHero from "./CardHero";
 
 function HeroCarousel({ hero_products }) {
   const [carouselPoroduct, setCarouselPoroduct] = useState([]);
@@ -34,61 +35,140 @@ function HeroCarousel({ hero_products }) {
     slidesToShow: 1,
     slidesToScroll: 1
   };
-
+console.log(carouselPoroduct
+  .filter(product => !['Desktop computers', 'Laptop computers'].includes(product.category)));
   return (
     <Grid sx={{height: !matches ? 'auto' : '500px', p: 0, mt: 0}} container spacing={3}>
       <Grid sx={{ position: 'relative', display: {xs: 'none', lg: 'block'}, height: '100%!important', boxSizing: 'border-box' }} className="grid-slider" item xs={12} sm={8}>
         {
-          loading ?
+          loading ?(
             <Skeleton variant="rectangular" height={450} />
-          :
+          ) : (
           <Box className="slick-wrap_box" sx={{height: '100%'}}>
             <Slider {...settings}>
-            {
-                carouselPoroduct.map((product, index) => (
-                  product.category === 'Desktop computers' &&
-                    <CardProduct key={index} loading product={product} cardHeight="calc(450px - 8px)" imgWidth={'100%'} imgHeight={'110%!important'} marginTop={'-20px'} variantSubtitle="p" variantTitle="h3" moveContent="translateX(0px)" />
-                ))
-              }
+              {
+                carouselPoroduct
+                  .filter(product => product.category === 'Desktop computers')
+                  .map((product, index) => (
+                    <CardProduct
+                      key={index}
+                      loading
+                      product={product}
+                      cardHeight="calc(450px - 8px)"
+                      imgWidth={'100%'}
+                      imgHeight={'110%!important'}
+                      marginTop={'-20px'}
+                      variantSubtitle="p"
+                      variantTitle="h3"
+                      moveContent="translateX(0px)"
+                    />
+                  ))
+                }
+                {
+                  carouselPoroduct.filter(product => product.category === 'Desktop computers').length === 0 &&
+                  <CardHero
+                    loading
+                    product={{ category: 'smartphones', heroImage: '/images/bgd_mobile5.jpg' }}
+                    cardHeight="calc(225px - 8px)"
+                    imgWidth={'100%'}
+                    imgHeight={'225px!important'}
+                    marginTop={'-20px'}
+                    variantSubtitle="caption"
+                    variantTitle="h3"
+                    moveContent="translateX(0px)"
+                  />
+                }
             </Slider>
           </Box>
-        }
+        )}
       </Grid>
       <Grid sx={{display: {xs: 'none', lg: 'block'}}} item xs={12} sm={4}>
         <Grid sx={{height: '100%'}} container spacing={3}>
           <Grid sx={{height: {xs: 'auto', sm: '225px'}}} item xs={12}>
             {
-              loading ?
-              <Skeleton variant="rectangular" height={220} />
-              :
+              loading ? (
+                <Skeleton variant="rectangular" height={450} />
+              ) : (
               <Box sx={{height: '100%'}}>
                 <Slider {...settings}>
-                {
-                    carouselPoroduct.map((product, index) => (
-                      product.category === 'Laptop computers' &&
-                        <CardProduct key={index} loading product={product} cardHeight="calc(225px - 8px)" imgWidth={'100%'} marginTop={'5px'} imgHeight={'100%!important'} variantSubtitle="caption" variantTitle="h4" index={index} />
-                    ))
-                  }
+                  {
+                    carouselPoroduct
+                      .filter(product => product.category === 'Laptop computers')
+                      .map((product, index) => (
+                        <CardProduct
+                          key={index}
+                          loading
+                          product={product}
+                          cardHeight="calc(225px - 8px)"
+                          imgWidth={'100%'}
+                          imgHeight={'110%!important'}
+                          marginTop={'-20px'}
+                          variantSubtitle="p"
+                          variantTitle="h3"
+                          moveContent="translateX(0px)"
+                        />
+                      ))
+                    }
+                    {
+                      carouselPoroduct.filter(product => product.category === 'Laptop computers').length === 0 &&
+                      <CardHero
+                        loading
+                        product={{ category: 'smartphones', heroImage: '/images/bgd_mobile5.jpg' }}
+                        cardHeight="calc(225px - 8px)"
+                        imgWidth={'100%'}
+                        imgHeight={'225px!important'}
+                        marginTop={'-20px'}
+                        variantSubtitle="caption"
+                        variantTitle="h3"
+                        moveContent="translateX(0px)"
+                      />
+                    }
                 </Slider>
               </Box>
-            }
+            )}
           </Grid>
           <Grid sx={{height: {xs: 'auto', sm: '225px'}}} item xs={12}>
             {
-              loading ?
-              <Skeleton variant="rectangular" height={220} />
-              :
+              loading ? (
+                <Skeleton variant="rectangular" height={450} />
+              ) : (
               <Box>
                 <Slider {...settings}>
-                {
-                    carouselPoroduct.map((product, index) => (
-                      product.category === 'Smartphones' &&
-                        <CardProduct key={index} loading product={product} cardHeight="calc(225px - 8px)" imgWidth={'100%'} imgHeight={'100%!important'} marginTop={'5px'} variantSubtitle="caption" variantTitle="h6" moveContent="translateX(0px)" />
-                    ))
-                  }
+                  {
+                    carouselPoroduct
+                      .filter(product => product.category === 'Smartphones')
+                      .map((product, index) => (
+                        <CardProduct
+                          key={index}
+                          loading
+                          product={product}
+                          cardHeight="calc(225px - 8px)"
+                          imgWidth={'100%'}
+                          imgHeight={'110%!important'}
+                          marginTop={'-20px'}
+                          variantSubtitle="p"
+                          variantTitle="h3"
+                          moveContent="translateX(0px)"
+                        />
+                      ))
+                    }
+                    {
+                      carouselPoroduct.filter(product => product.category === 'Smartphones').length === 0 &&
+                      <CardHero
+                        loading
+                        product={{ category: 'smartphones', heroImage: '/images/bgd_mobile5.jpg' }}
+                        cardHeight="calc(225px - 8px)"
+                        imgWidth={'100%'}
+                        imgHeight={'225px!important'}
+                        marginTop={'-20px'}
+                        variantSubtitle="caption"
+                        variantTitle="h3"
+                        moveContent="translateX(0px)"
+                      />
+                    }
                 </Slider>
               </Box>
-            }
+            )}
           </Grid>
         </Grid>
       </Grid>
@@ -119,8 +199,8 @@ function HeroCarousel({ hero_products }) {
                 <Slider {...settings}>
                   {
                     carouselPoroduct.map((product, index) => (
-                      product.category === 'Smartphones' &&
-                        <CardProduct key={index} loading product={product} cardHeight="450px" imgWidth={'100%!important'} marginTop={'0px'} imgHeight={'auto!important'} variantSubtitle="caption" variantTitle="h6" moveContent="translateX(0px)" />
+                      product.category === 'Laptop computers' &&
+                        <CardProduct key={index} loading product={product} cardHeight="calc(225px - 8px)" imgWidth={'100%!important'} marginTop={'0px'} imgHeight={'auto!important'} variantSubtitle="caption" variantTitle="h6" moveContent="translateX(0px)" />
                     ))
                   }
                 </Slider>

@@ -9,7 +9,7 @@ const router = createRouter();
 router.post(async (req, res) => {
   try {
     await db.connect();
-    const { categoryName, avatar, slug, subCategory } = req.body;
+    const { categoryName, avatar, slug, subCategory, categoryPublished } = req.body;
 
     const category = await Category.findOne({slug: slug});
 
@@ -34,7 +34,8 @@ router.post(async (req, res) => {
       categoryName: categoryName,
       avatar: avatar.imageUrl[0].toString(),
       slug: slug,
-      subCategory: subCategory
+      subCategory: subCategory,
+      categoryPublished: categoryPublished
     })
 
     const categories = await newCat.save();

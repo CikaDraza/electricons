@@ -150,7 +150,7 @@ export default function DashboardLayout({ children }) {
               {pathname === '/backoffice/profile/[id]' ? `${userInf0?.email}` : capitalizeFirstLetter(tabName)}
             </Typography>
             <Link color={theme.palette.primary.contrastText} href="/">
-              <IconButton color="inherit">                
+              <IconButton color="white">                
                 <CartIcon sx={{ '&:hover': { color: theme.palette.primary.bgdLight}}}/>
               </IconButton>
             </Link>

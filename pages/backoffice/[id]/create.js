@@ -22,6 +22,10 @@ import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
+import InventoryProduct from '../../../src/assets/InventoryProduct';
+import ShipingProduct from '../../../src/assets/ShippingProduct';
+import ChipsHeroImage from '../../../src/components/ChipsHeroImage';
+import StoresProduct from '../../../src/assets/StoresProduct';
 
 const Quill = dynamic(() => import('react-quill'), { ssr: false });
 
@@ -86,12 +90,16 @@ const customIcons = {
 function CreateNewItems() {
   const userInf0 = Cookies.get('userInfo') && JSON.parse(Cookies.get('userInfo'));
   const { state_office, dispatch_office } = useContext(BackofficeStateContext);
-  const { state, dispatch,  } = useContext(Store);
+  const { state, dispatch } = useContext(Store);
   const { snack } = state;
+  const titleRef = React.useRef('');
+  const slugRef = React.useRef('');
+  const shortDescriptionRef = React.useRef('');
+  const descriptionRef = React.useRef('');
   const [description, setDescription] = React.useState('');
   const [error, setError] = React.useState('');
   const [imgFile, setImgFile] = React.useState([]);
-  const [imgWidgetFile, setImgWidgetFile] = React.useState([]);
+  const [imgHeroFile, setImgHeroFile] = React.useState({});
   const [specifications, setSpecifications] = React.useState([{ attribute: '', detail: '' }]);
   const [open, setOpen] = React.useState(false);
   const [openBrand, setOpenBrand] = React.useState(false);
@@ -130,17 +138,16 @@ function CreateNewItems() {
     reader.readAsDataURL(file);
   }
 
-  function handleWidgetImageChoose(e) {
+  function handleHeroImageChoose(e) {
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.onload = () => {
-        setImgWidgetFile([
-          ...imgWidgetFile,
+      setImgHeroFile(
           {            
             image: file,
             imageUrl: reader.result
           }
-        ]);
+        );
         e.target.value = ''
     }
     reader.readAsDataURL(file);
@@ -158,15 +165,14 @@ function CreateNewItems() {
       images: [
         { image: imgFile.map((item) => item?.imageUrl)}
       ],
-      widgetImages: [
-        { image: imgWidgetFile?.map((item) => item?.imageUrl) }
-      ],
+      widgetImages: { image: imgWidgetFile?.imageUrl },
       category: '',
       categoryUrl: '',
       subCategory: '',
       subCategoryUrl: '',
       brand: '',
       brandImg: '',
+      brandPublished: false,
       price: 0,
       oldPrice: 0,
       rating: 0,
@@ -174,8 +180,13 @@ function CreateNewItems() {
       inStock: 0,
       inWidget: '',
       online: false,
+      shipping: {
+        weight: formOutput.get('weight'),
+        length: formOutput.get('length'),
+        width: formOutput.get('width'),
+      },
       stores: [
-        { store: ''}
+        { store: formOutput.get('short-description')}
       ]
     }
 
@@ -198,6 +209,27 @@ function CreateNewItems() {
     }
   }
 
+  const handleTitle = (e) => {
+    titleRef.current = e.target.value;
+    dispatch_office({ type: 'CREATE_PRODUCT', payload: { title: titleRef.current } });
+  }
+
+  const handleSlug = (e) => {
+    slugRef.current = e.target.value;
+    dispatch_office({ type: 'CREATE_PRODUCT', payload: { slug: slugRef.current } });
+  }
+
+  const handleShortDescription = (e) => {
+    shortDescriptionRef.current = e.target.value;
+    dispatch_office({ type: 'CREATE_PRODUCT', payload: { shortDescription: shortDescriptionRef.current } });
+  }
+
+  const handleDescription = (values) => {
+    descriptionRef.current = values;
+    setDescription(descriptionRef.current)
+    dispatch_office({ type: 'CREATE_PRODUCT', payload: { description: descriptionRef.current } });
+  }
+
   const handleAddSpecification = () => {
     setSpecifications([...specifications, { attribute: '', detail: '' }]);
   };
@@ -206,7 +238,7 @@ function CreateNewItems() {
     const updatedSpecifications = [...specifications];
     updatedSpecifications[index][field] = value;
     setSpecifications(updatedSpecifications);
-    dispatch_office({ type: 'CREATE_PRODUCT', payload: { details: updatedSpecifications } });
+    dispatch_office({ type: 'CREATE_PRODUCT', payload: { details: specifications } });
   };
 
   const handleClickOpen = () => {
@@ -216,6 +248,8 @@ function CreateNewItems() {
   const handleClickOpenBrand = () => {
     setOpenBrand(true);
   };
+
+console.log(state_office);
 
   return (
     <Box>
@@ -254,18 +288,20 @@ function CreateNewItems() {
                     height: 'auto',
                   }}
                 >
-                  <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 0 }}>
+                  <Box sx={{ mt: 0 }}>
                     <TextField
                       name="title"
                       id="title"
                       label="Product title here..."
                       sx={{mb: 1, pb: 3, width: '100%'}}
+                      onChange={handleTitle}
                     />
                     <TextField
                       name="slug"
                       id="slug"
                       label="Product slug here..."
                       sx={{mb: 1, pb: 3, width: '100%'}}
+                      onChange={handleSlug}
                     />
                     <Typography component="label">Short Description</Typography>
                     <TextareaAutosize
@@ -277,20 +313,19 @@ function CreateNewItems() {
                       minRows={4}
                       aria-label="empty textarea"
                       style={{ width: '100%', resize: 'vertical', padding: '8px' }}
+                      onChange={handleShortDescription}
                     />
                     <Box sx={{py: 3}}>
                       <Typography component="label">Description</Typography>
                       {
-                        isQuill ?
+                        isQuill &&
                         <QuillStyled
                           theme="snow"
                           modules={modules}
                           formats={formats}
                           value={description}
-                          onChange={(values) => setDescription(values)}
+                          onChange={handleDescription}
                         />
-                        :
-                        null
                       }
                     </Box>
                     <Box sx={{py: 3}}>
@@ -334,7 +369,17 @@ function CreateNewItems() {
               </Grid>
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
-
+                  <InventoryProduct />
+                </Paper>
+              </Grid>
+              <Grid item xs={12}>
+                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
+                  <StoresProduct />
+                </Paper>
+              </Grid>
+              <Grid item xs={12}>
+                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
+                  <ShipingProduct />
                 </Paper>
               </Grid>
             </Grid>
@@ -352,9 +397,18 @@ function CreateNewItems() {
                 >
                   <Typography component="p" variant='p' sx={{px: 2, py: 1, fontWeight: 'bold'}}>Publish</Typography>
                   <Divider />
+                  <Box sx={{px: 2, pt: 2, display: 'flex', alignItems: 'center'}}>
+                    <Typography sx={{display: 'flex', alignItems: 'center'}} component="span" color="secondary.lightGrey" variant='span'>Status</Typography>
+                    <Typography sx={{pl: 1}} component="span" variant='span'>Draft</Typography>
+                  </Box>
+                  <Box sx={{px: 2, pt: 2, display: 'flex', alignItems: 'center'}}>
+                    <Typography sx={{display: 'flex', alignItems: 'center'}} component="span" color="secondary.lightGrey" variant='span'>Visibility</Typography>
+                    <Typography sx={{pl: 1}} component="span" variant='span'>Visible</Typography>
+                  </Box>
                   <Box sx={{p: 2, display: 'flex', alignItems: 'center'}}>
-                    <Typography sx={{display: 'flex', alignItems: 'center'}} component="span" variant='span'>{customIcons[4].icon}</Typography>
-                    <Typography sx={{pl: 1}} component="span" variant='span'>SEO score</Typography>
+                    <Typography component="span" color="secondary.lightGrey" variant='span'>SEO score</Typography>
+                    <Typography sx={{pl: 1}} component="span" variant='span'>Good</Typography>
+                    <Typography sx={{display: 'flex', alignItems: 'center', pl: 1}} component="span" variant='span'>{customIcons[4].icon}</Typography>
                   </Box>
                   <Divider />
                   <Box sx={{p: 2}}>
@@ -403,22 +457,22 @@ function CreateNewItems() {
                     flexDirection: 'column',
                   }}
                 >
-                  <Typography component="p" variant='p' sx={{px: 2, py: 1, fontWeight: 'bold'}}>Widget Images</Typography>
+                  <Typography component="p" variant='p' sx={{px: 2, py: 1, fontWeight: 'bold'}}>Hero Image</Typography>
                   <Divider />
                   <Box>
                     <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
                       <Box sx={{width: '100%', p: 2}}>
-                        <Button component="label" onChange={handleWidgetImageChoose} htmlFor="file-widget" sx={{border: 'thin dashed grey', width: '100%', height: '100px', display: 'flex', justifyContent: 'center'}} startIcon={<CloudUploadIcon />}>
+                        <Button component="label" onChange={handleHeroImageChoose} htmlFor="file-widget" sx={{border: 'thin dashed grey', width: '100%', height: '100px', display: 'flex', justifyContent: 'center'}} startIcon={<CloudUploadIcon />}>
                           Upload
                         <Box sx={{display: 'none'}} accept="image/jpg image/png image/jpeg" component="input" type="file" name="file-widget" id="file-widget"/>
                         </Button>
                       </Box>
                     </Stack>
                   </Box>
-                  <ChipsImages selectedFile={imgWidgetFile} setImgFile={setImgWidgetFile} />
+                  <ChipsHeroImage selectedFile={imgHeroFile} setImgFile={setImgHeroFile} />
                 </Paper>
               </Grid>
-              {/* Upload Widget Images */}
+              {/* Upload Hero Images */}
               <Grid item xs={12}>
                 <Paper
                   sx={{

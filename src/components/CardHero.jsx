@@ -1,12 +1,12 @@
 import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
-import { CardActionArea, useMediaQuery } from '@mui/material';
+import { Box, CardActionArea, useMediaQuery } from '@mui/material';
 import Link from 'next/link';
 import Image from 'next/image';
 import CircularProgress from '@mui/material/CircularProgress';
 
-export default function CardProduct(props) {
+export default function CardHero(props) {
   const { product, cardHeight, marginTop, imgHeight, imgWidth } = props;
   const [selected, setSelected] = React.useState('');
   const matches = useMediaQuery('(min-width: 480px)');
@@ -16,8 +16,8 @@ export default function CardProduct(props) {
   };
 
   return (
-    <Card sx={{ width: "100%", '& a': {textDecoration: 'none'},  }}>
-      <Link sx={{position: 'relative'}} href={`/product/${product.slug}`} onClick={() => handleLoading(product)}>
+    <Card elevation={0} sx={{ width: "100%", '& a': {textDecoration: 'none'},  }}>
+      <Link sx={{position: 'relative'}} href={`/category/${product.category}`} onClick={() => handleLoading(product)}>
       {
         product._id === selected &&
         <CircularProgress sx={{position: 'absolute', left: '45%', top: '20%', zIndex: 1, transform: 'translateX(-50%)'}} size={50} />
@@ -29,7 +29,7 @@ export default function CardProduct(props) {
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 priority
-                src={product?.heroImage !== '' ? product?.heroImage : '/images/no-image.jpg'}
+                src={product.heroImage}
                 alt={product.title}
                 quality={100}
               />

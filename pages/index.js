@@ -9,28 +9,45 @@ import axios from 'axios';
 
 export async function getStaticProps() {
   await db.connect();
-  const hero_products = await Product.find({inWidget: "hero"}).lean();
-  const top_products = await Product.find({inWidget: "top-product"}).lean();
-  const best_seller = await Product.find({inWidget: "best-seller"}).lean();
-  await db.disconnect();
 
-  if (!hero_products || !top_products || !best_seller) {
-    return {
-      notFound: true,
-    };
-  }
+  const hero_products = await Product.find({ heroImage: { $ne: '' } })
+  .select('heroImage category _id slug')
+  .lean({ virtuals: false });
+
+
+  hero_products.map(product => {
+    product._id = product._id.toString();
+    return product
+  });
+
+  const filtered_hero_products = hero_products.filter(product => product.heroImage);
+
+  const top_products = await Product.find({ 'inWidget.widget': 'top-product' })
+  .select('_id category inWidget images title shortDescription rating price oldPrice slug')
+  .lean();
+  // Izbacujemo _id polja iz rezultata top proizvoda
+  const top_products_cleaned = top_products.map(product => {
+    const { _id, inWidget, images, ...rest } = product;
+    const cleanedWidget = inWidget.map(({ _id, createdAt, updatedAt, ...widgetRest }) => widgetRest);
+    const cleanedImages = images.map(({ _id, createdAt, updatedAt, ...imagesRest }) => imagesRest);
+    return { ...rest, inWidget: cleanedWidget, images: cleanedImages };
+  });
+  
+  console.log('Hero products:', filtered_hero_products);
+  console.log('Top products:', top_products_cleaned);
+  
+  await db.disconnect();
 
   return {
     props: {
-      hero_products: hero_products.map(db.convertDocToObject),
-      topProducts: top_products.map(db.convertDocToObject),
-      bestSeller: best_seller.map(db.convertDocToObject)
+      hero_products: filtered_hero_products,
+      topProducts: top_products_cleaned
     },
   };
 }
 
 export default function Index(props) {
-  const { hero_products, topProducts, bestSeller } = props;
+  const { hero_products, topProducts } = props;
   const [visitPerUser, setVisitPerUser] = useState('')
 
   function generateUniqueToken() {
@@ -82,7 +99,7 @@ export default function Index(props) {
         <HeroCarousel hero_products={hero_products && hero_products} />
       </Box>
       <WidgetCarousels title="Top Products" widgetProducts={topProducts && topProducts} />
-      <WidgetCarousels title="Best Seller" widgetProducts={bestSeller && bestSeller} />
+      {/* <WidgetCarousels title="Best Seller" widgetProducts={bestSeller && bestSeller} /> */}
     </Box>
   );
 }

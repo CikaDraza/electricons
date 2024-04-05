@@ -72,7 +72,6 @@ export default function CategoryCreate(props) {
   };
 
   const handleChange2 = (event, index, i) => {
-    console.log(event, index, i);
     const newChecked = [...checked];
     newChecked[index] = event.target.checked;
     setChecked(newChecked);

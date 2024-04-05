@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Typography from '@mui/material/Typography';
 import Title from './Title';
 import theme from '../theme';
+import { Box } from '@mui/material';
 
 export default function Deposits(props) {
   const { total } = props;
@@ -25,11 +26,13 @@ export default function Deposits(props) {
       <Typography color="text.secondary" sx={{ flex: 1 }}>
         {convertDate()}
       </Typography>
-      <div>
-        <Link color="primary" href="#">
-          View balance
+      <Box>
+        <Link href="#">
+          <Typography variant='span' color="primary">
+            View balance
+          </Typography>
         </Link>
-      </div>
+      </Box>
     </React.Fragment>
   );
 }

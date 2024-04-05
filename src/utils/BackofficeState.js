@@ -3,6 +3,9 @@ import { createContext, useReducer } from 'react';
 
 export const BackofficeStateContext = createContext();
 
+const savedProduct = Cookies.get('product');
+const parsedProduct = savedProduct ? JSON.parse(savedProduct) : {};
+
 const initialState = {
   cart: {
     cartItems: Cookies.get('cartItems') ? JSON.parse(Cookies.get('cartItems')) : [],
@@ -27,28 +30,38 @@ const initialState = {
     orderId: null
   },
   product: {
-    title: Cookies.get('title') ? JSON.parse(Cookies.get('title')) : '',
-    slug: Cookies.get('slug') ? JSON.parse(Cookies.get('slug')) : '',
-    shortDescription: Cookies.get('short_description') ? JSON.parse(Cookies.get('short_description')) : '',
-    description: Cookies.get('description') ? JSON.parse(Cookies.get('description')) : '',
-    details: Cookies.get('details') ? JSON.parse(Cookies.get('details')) : [],
-    images: Cookies.get('images') ? JSON.parse(Cookies.get('images')) : [],
-    widgetImages: Cookies.get('images') ? JSON.parse(Cookies.get('images')) : [],
-    brand: Cookies.get('brand') ? JSON.parse(Cookies.get('brand')) : '',
-    brandSlug: Cookies.get('brandSlug') ? JSON.parse(Cookies.get('brandSlug')) : '',
-    brandImg: Cookies.get('brandImg') ? JSON.parse(Cookies.get('brandImg')) : '',
-    brandUrl: Cookies.get('brandUrl') ? JSON.parse(Cookies.get('brandUrl')) : '',
-    price: 0,
-    oldPrice: 0
+    title: parsedProduct.title || '',
+    slug: parsedProduct.slug || '',
+    shortDescription: parsedProduct.shortDescription || '',
+    description: parsedProduct.description || '',
+    details: parsedProduct.details || [],
+    images: parsedProduct.images || [],
+    heroImages: parsedProduct.heroImages || '',
+    brand: parsedProduct.brand || '',
+    brandSlug: parsedProduct.brandSlug || '',
+    brandImg: parsedProduct.brandImg || '',
+    brandUrl: parsedProduct.brandUrl || '',
+    category: parsedProduct.category || '',
+    categoryUrl: parsedProduct.categoryUrl || '',
+    subCategory: parsedProduct.subCategory || '',
+    subCategoryUrl: parsedProduct.subCategoryUrl || '',
+    price: parsedProduct.price || 0,
+    oldPrice: parsedProduct.oldPrice || 0,
+    currency: parsedProduct.currency || '',
+    inStock: parsedProduct.inStock || 0,
+    sku: parsedProduct.sku || '',
+    stockStatus: parsedProduct.stockStatus || '',
+    stores: parsedProduct.stores || [],
+    shipping: parsedProduct.shipping || {}
   }
 };
 
 function reducer(state_office, action) {
   switch(action.type) {
     case 'CREATE_PRODUCT': {
-      const newItem = action.payload;
-      Cookies.set('product', JSON.stringify(action.payload));
-      return { ...state_office, product: newItem };
+      const createProduct = { ...state_office.product, ...action.payload };
+      Cookies.set('product', JSON.stringify(createProduct));
+      return { ...state_office, product: createProduct };
     }
     default:
       return { ...state_office };

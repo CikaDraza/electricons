@@ -393,14 +393,14 @@ export default function Header() {
                   userInf0 ?
                   (
                     <Box>
-                      <MenuItem sx={{ '& a': {textDecoration: 'none' } }} onClick={handleCloseUserMenu}>
+                      <MenuItem sx={{ '& a': {textDecoration: 'none', color: 'primary.main' } }} onClick={handleCloseUserMenu}>
                         <Link href={`/profile/info`} passHref>
                           {loged[0]}
                         </Link>
                       </MenuItem>
                       {
                         userInf0.isAdmin &&
-                        <MenuItem sx={{ '& a': {textDecoration: 'none' } }} onClick={handleCloseUserMenu}>
+                        <MenuItem sx={{ '& a': {textDecoration: 'none', color: 'primary.main' } }} onClick={handleCloseUserMenu}>
                           <Link sx={{ textDecoration: 'none' }} href={`/backoffice`} passHref>
                             {loged[1]}
                           </Link>
@@ -413,7 +413,7 @@ export default function Header() {
 
                   ) : (
                     <Box>
-                      <MenuItem sx={{ '& a': {textDecoration: 'none'}}} onClick={handleCloseUserMenu}>
+                      <MenuItem sx={{ '& a': {textDecoration: 'none', color: 'primary.main' }}} onClick={handleCloseUserMenu}>
                         <Link href="/login" passHref>
                           {logedout[0]}
                         </Link>
@@ -476,7 +476,7 @@ export default function Header() {
                           userInf0 ?
                           (
                             <Box>
-                              <MenuItem sx={{ '& a': {textDecoration: 'none' } }} onClick={handleCloseUserMenu}>
+                              <MenuItem sx={{ '& a': {textDecoration: 'none', color: 'primary.main' } }} onClick={handleCloseUserMenu}>
                                 <Link href="/profile/info">
                                   {loged[0]}
                                 </Link>

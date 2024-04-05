@@ -84,7 +84,7 @@ export default function DropdownMenu(props) {
             }
           >
           {
-            (allCategories ? allCategories : categories).map((item, index) => (
+            allCategories?.map((item, index) => (
               item?.subCategory?.some(sub => sub.url !== "none") ? (
                   <Accordion
                     elevation={0}
@@ -95,56 +95,64 @@ export default function DropdownMenu(props) {
                     onChange={handleChange(item.categoryName)}
                     sx={{position: 'relative'}}
                     >
-                    <AccordionSummary
-                      expandIcon={<ExpandMore color={expanded === item.categoryName ? "primary" : 'secondary'} />}
-                      aria-controls={`${item.categoryName} controls`}
-                      id={`${item.categoryName} panel`}
-                      sx={{ '& a': {textDecoration: 'none', width: "100%" }, '&:hover a': {textDecoration: 'none' } }}
+                      {
+                        item.categoryPublished === true &&
+                        <AccordionSummary
+                          expandIcon={<ExpandMore color={expanded === item.categoryName ? "primary" : 'secondary'} />}
+                          aria-controls={`${item.categoryName} controls`}
+                          id={`${item.categoryName} panel`}
+                          sx={{ '& a': {textDecoration: 'none', width: "100%" }, '&:hover a': {textDecoration: 'none' } }}
 
-                    >
-                    <Link href={`/category/${item.slug}`}>
-                      <Box sx={{display: 'flex'}}>
-                        <Avatar variant="square" component="span" sx={{ bgcolor: theme.palette.primary.white, position: 'relative', width: 24, height: 24, '& img': {objectFit: 'contain'} }} onClick={handleCloseDropdown}>
-                          <Image
-                            fill
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                            priority
-                            src={item?.avatar !== '' ? item?.avatar : '/images/no-image.jpg'}
-                            alt={item?.categoryName}
-                            quality={100}
-                          />
-                        </Avatar>
-                        <Typography onClick={handleCloseDropdown} color="secondary" sx={{ width: '100%', flexShrink: 0, display: 'flex', alignItems: 'center', '&:hover': {color: theme.palette.primary.main} }}>
-                          {item.categoryName}
-                        </Typography>
-                      </Box>
-                    </Link>
-                    </AccordionSummary>
-                    <AccordionDetails onClick={handleCloseDropdown} sx={{position: 'fixed', left: '100%', top: 0, backgroundColor: theme.palette.primary.contrastText, width: '500px', height: 'auto', py: 5, px: 3, marginLeft: '8px'}}>
-                      <Grid container spacing={2}>
-                    {
-                      item.subCategory.map((sub, index) => (
-                          <Grid sx={{ '& a': {textDecoration: 'none' }, '&:hover a': {textDecoration: 'none' } }} key={index} item xs={4}>
-                            <Link href={`/category/${item.slug}/${sub.url}`} passHref>
-                              <Typography sx={{pb: 2, '&:hover': {color: theme.palette.primary.main}}} color="secondary" component="h5" variant="p">
-                              {sub.subCategoryName}
-                              </Typography>
-                            </Link>
-                            {
-                              products.map((prod, i) => (
-                                prod.subCategoryUrl === sub.url &&
-                                <Link key={prod.slug + i} href={`/product/${prod.slug}`} underline="hover" sx={{display: 'flex', pb: 1}}>
-                                  <Typography sx={{'&:hover': {color: theme.palette.primary.main}}} color="secondary.lightGrey" component="h6" variant="p">
-                                  {prod.title}
+                        >
+                        <Link href={`/category/${item.slug}`}>
+                          <Box sx={{display: 'flex'}}>
+                            <Avatar variant="square" component="span" sx={{ bgcolor: theme.palette.primary.white, position: 'relative', width: 24, height: 24, '& img': {objectFit: 'contain'} }} onClick={handleCloseDropdown}>
+                              <Image
+                                fill
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                priority
+                                src={item?.avatar !== '' ? item?.avatar : '/images/no-image.jpg'}
+                                alt={item?.categoryName}
+                                quality={100}
+                              />
+                            </Avatar>
+                            <Typography onClick={handleCloseDropdown} color="secondary" sx={{ width: '100%', flexShrink: 0, display: 'flex', alignItems: 'center', '&:hover': {color: theme.palette.primary.main} }}>
+                              {item.categoryName}
+                            </Typography>
+                          </Box>
+                        </Link>
+                        </AccordionSummary>
+                      }
+                      {
+                        item.categoryPublished === true ?
+                        <AccordionDetails onClick={handleCloseDropdown} sx={{position: 'fixed', left: '100%', top: 0, backgroundColor: theme.palette.primary.contrastText, width: '500px', height: 'auto', py: 5, px: 3, marginLeft: '8px'}}>
+                          <Grid container spacing={2}>
+                        {
+                          item.subCategory.map((sub, index) => (
+                              <Grid sx={{ '& a': {textDecoration: 'none' }, '&:hover a': {textDecoration: 'none' } }} key={index} item xs={4}>
+                                <Link href={`/category/${item.slug}/${sub.url}`} passHref>
+                                  <Typography sx={{pb: 2, '&:hover': {color: theme.palette.primary.main}}} color="secondary" component="h5" variant="p">
+                                  {sub.subCategoryName}
                                   </Typography>
                                 </Link>
-                              ))
-                            }
+                                {
+                                  products.map((prod, i) => (
+                                    prod.subCategoryUrl === sub.url &&
+                                    <Link key={prod.slug + i} href={`/product/${prod.slug}`} underline="hover" sx={{display: 'flex', pb: 1}}>
+                                      <Typography sx={{'&:hover': {color: theme.palette.primary.main}}} color="secondary.lightGrey" component="h6" variant="p">
+                                      {prod.title}
+                                      </Typography>
+                                    </Link>
+                                  ))
+                                }
+                              </Grid>
+                          ))
+                        }
                           </Grid>
-                      ))
-                    }
-                      </Grid>
-                    </AccordionDetails>                  
+                        </AccordionDetails>
+                        : 
+                        <AccordionDetails sx={{position: 'fixed', left: '100%', top: 0, backgroundColor: theme.palette.primary.contrastText, width: '500px', height: 'auto', py: 5, px: 3, marginLeft: '8px', display: 'none'}}></AccordionDetails>
+                      }
                   </Accordion>
               ) : (
                 <Accordion

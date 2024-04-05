@@ -5,7 +5,7 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import { BackofficeStateContext } from '../utils/BackofficeState';
-import { Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
 const currencies = [
   {
@@ -33,16 +33,22 @@ const currencies = [
 export default function ProductPrice() {
   const [value, setValue] = React.useState(0);
   const [oldValue, setOldValue] = React.useState(0);
-  const { state_office, dispatch_office } = React.useContext(BackofficeStateContext);
+  const [currency, setCurrency] = React.useState('');
+  const { dispatch_office } = React.useContext(BackofficeStateContext);
 
   const handleChange = (event) => {
     setValue(event.target.value);
-    dispatch_office({ type: 'CREATE_PRODUCT', payload: { ...state_office.product, price: event.target.value} });
+    dispatch_office({ type: 'CREATE_PRODUCT', payload: { price: event.target.value} });
   };
 
   const handleChangeOld = (event) => {
     setOldValue(event.target.value);
-    dispatch_office({ type: 'CREATE_PRODUCT', payload: { ...state_office.product, oldPrice: event.target.value} });
+    dispatch_office({ type: 'CREATE_PRODUCT', payload: { oldPrice: event.target.value} });
+  };
+
+  const handleChangeCurrency = (event) => {
+    setCurrency(event.target.value);
+    dispatch_office({ type: 'CREATE_PRODUCT', payload: { currency: event.target.value} });
   };
   
   return (
@@ -56,14 +62,16 @@ export default function ProductPrice() {
             sx={{width: '5ch', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}
             id="standard-select-currency-native"
             select
-            defaultValue="EUR"
+            defaultValue="USD"
             SelectProps={{
               native: true,
             }}
             variant="standard"
+            value={currency}
+            onChange={handleChangeCurrency}
           >
             {currencies.map((option) => (
-              <option key={option.value} value={option.value}>
+              <option key={option.value} label={option.label} value={option.label}>
                 {option.label}
               </option>
             ))}
@@ -81,15 +89,16 @@ export default function ProductPrice() {
           <TextField
             sx={{width: '5ch', display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}
             id="select-currency-old"
-            select
-            defaultValue="EUR"
+            defaultValue="USD"
             SelectProps={{
               native: true,
             }}
             variant="standard"
+            value={currency}
+            handleChange={handleChangeCurrency}
           >
             {currencies.map((option) => (
-              <option key={option.value} value={option.value}>
+              <option key={option.value} label={option.label} value={option.label}>
                 {option.label}
               </option>
             ))}

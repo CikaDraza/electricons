@@ -17,7 +17,8 @@ const categorySchema = new mongoose.Schema(
     categoryName: {type: String, required: true},
     avatar: {type: String, required: true},
     slug: {type: String, required: true},
-    subCategory: [subCategorySchema]
+    subCategory: [subCategorySchema],
+    categoryPublished: {type: Boolean, required: true}, 
   },
   {
     timestamps: true
