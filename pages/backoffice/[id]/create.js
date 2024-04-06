@@ -99,7 +99,7 @@ function CreateNewItems() {
   const [description, setDescription] = React.useState('');
   const [error, setError] = React.useState('');
   const [imgFile, setImgFile] = React.useState([]);
-  const [imgHeroFile, setImgHeroFile] = React.useState({});
+  const [imgHeroFile, setImgHeroFile] = React.useState([]);
   const [specifications, setSpecifications] = React.useState([{ attribute: '', detail: '' }]);
   const [open, setOpen] = React.useState(false);
   const [openBrand, setOpenBrand] = React.useState(false);
@@ -148,6 +148,7 @@ function CreateNewItems() {
             imageUrl: reader.result
           }
         );
+        dispatch_office({ type: 'CREATE_PRODUCT', payload: { heroImage:  [...imgHeroFile, {image: file, imageUrl: reader.result}] } });
         e.target.value = ''
     }
     reader.readAsDataURL(file);
@@ -249,7 +250,7 @@ function CreateNewItems() {
     setOpenBrand(true);
   };
 
-console.log(state_office);
+// console.log(state_office);
 
   return (
     <Box>

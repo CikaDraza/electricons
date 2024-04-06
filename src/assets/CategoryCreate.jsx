@@ -13,6 +13,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Image from 'next/image';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import MenuItem from '@mui/material/MenuItem';
+import { BackofficeStateContext } from '../utils/BackofficeState';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -27,17 +28,19 @@ const MenuProps = {
 
 export default function CategoryCreate(props) {
   const { open, setOpen } = props;
-  const [checked, setChecked] = React.useState([]);
-  const [children, setChildren] = React.useState([]);
   const [category, setCategory] = React.useState([]);
+  const [checkedCategoryIndex, setCheckedCategoryIndex] = React.useState(null);
+  const [checkedSubcategoryIndex, setCheckedSubcategoryIndex] = React.useState(null);
   const [childCategory, setChildCategory] = React.useState([]);
+  const { dispatch_office } = React.useContext(BackofficeStateContext);
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const [imgAvatarFile, setImgAvatarFile] = React.useState([]);
   const [chipData, setChipData] = React.useState([]);
   const [parentCatName, setParentCatName] = React.useState("New Category");
   const [subCatName, setSubCatName] = React.useState("New Sub Category");
   const [error, setError] = React.useState('');
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
+  
 
   React.useEffect(() => {
     setChipData(imgAvatarFile);
@@ -54,10 +57,14 @@ export default function CategoryCreate(props) {
   }, [loading]);
 
   const fetchCategories = async ()=> {
+    try {
     const { data } = await axios.get('/api/category');
     setCategory(data);
     setLoading(false);
     handleClose();
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
   }
   
   const handleClose = () => {
@@ -65,17 +72,18 @@ export default function CategoryCreate(props) {
     setError('');
   };
 
-  const handleChange1 = (event, index) => {
-    const newChecked = [...checked];
-    newChecked[index] = event.target.checked;
-    setChecked(newChecked);
+  const handleCategoryChange = (index, catName, slug) => {
+    setCheckedCategoryIndex(index);
+    setCheckedSubcategoryIndex(null);
+    dispatch_office({ type: 'CREATE_PRODUCT', payload: { category: catName, categoryUrl: slug } });
   };
 
-  const handleChange2 = (event, index, i) => {
-    const newChecked = [...checked];
-    newChecked[index] = event.target.checked;
-    setChecked(newChecked);
-    setChildren(index ? i : false);
+  const handleSubCategoryChange = (parentIndex, subIndex, subName, subUrl) => {
+    if (parentIndex !== checkedCategoryIndex) {
+      setCheckedCategoryIndex(parentIndex);
+    }
+    setCheckedSubcategoryIndex(subIndex);
+    dispatch_office({ type: 'CREATE_PRODUCT', payload: { subCategory: subName, subCategoryUrl: subUrl } });
   };
 
   function handleAvatarChoose(e) {
@@ -234,24 +242,29 @@ export default function CategoryCreate(props) {
   return (
     <Box>
       {
-        category?.map((item, index) => (
+        category?.map((item, parentIndex) => (
           <Box key={item._id}>
             <FormControlLabel
               label={item?.categoryName}
               control={
                 <Checkbox
-                  checked={index === children ? true : checked[0]}
-                  indeterminate={index === children ? true : checked[0]}
-                  onChange={handleChange1}
+                checked={parentIndex === checkedCategoryIndex}
+                onChange={() => handleCategoryChange(parentIndex, item?.categoryName, item?.slug)}
                 />
               }
             />
             {
-             item?.subCategory && item?.subCategory?.map(subItem => (
-                <Box key={subItem._id} sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
+             item?.subCategory?.map((subCategory, subIndex) => (
+                <Box key={subCategory._id} sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
                   <FormControlLabel
-                    label={subItem?.subCategoryName}
-                    control={<Checkbox checked={checked[0]} onChange={(e, i)=> handleChange2(e, i, index)} />}
+                    label={subCategory?.subCategoryName}
+                    control={
+                    <Checkbox
+                    checked={parentIndex === checkedCategoryIndex && subIndex === checkedSubcategoryIndex}
+                    disabled={parentIndex === 0 && checkedCategoryIndex === 0 ? checkedCategoryIndex : !checkedCategoryIndex || (checkedCategoryIndex !== parentIndex)}
+                    onChange={() => handleSubCategoryChange(parentIndex, subIndex, subCategory?.subCategoryName, subCategory?.url)}
+                    />
+                  }
                   />
                 </Box>
               ))

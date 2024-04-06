@@ -11,7 +11,6 @@ export default function ShipingProduct() {
   const handleShipping = (index, field, value) => {
     const updatedShipping = [...shipping];
     updatedShipping[index][field] = value;
-    console.log(updatedShipping);
     setShipping(updatedShipping);
     dispatch_office({ type: 'CREATE_PRODUCT', payload: { shipping: updatedShipping} });
   };
