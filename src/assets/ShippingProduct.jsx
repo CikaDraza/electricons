@@ -5,7 +5,7 @@ import { InputAdornment, Typography } from '@mui/material';
 import { BackofficeStateContext } from '../utils/BackofficeState';
 
 export default function ShipingProduct() {
-  const { dispatch_office } = React.useContext(BackofficeStateContext);
+  const { state_office, dispatch_office } = React.useContext(BackofficeStateContext);
   const [shipping, setShipping] = React.useState([{ weight: '', lenght: '', width: '' }]);
 
   const handleShipping = (index, field, value) => {
@@ -31,13 +31,13 @@ export default function ShipingProduct() {
       >
         <TextField id="weight" label="Weight" variant="outlined" InputProps={{
             endAdornment: <InputAdornment position="end">kg</InputAdornment>,
-          }} onChange={(e) => handleShipping(0, 'weight', e.target.value)} />
+          }} value={state_office.product?.shipping[0]?.weight ? state_office?.product?.shipping[0]?.weight : ''} onChange={(e) => handleShipping(0, 'weight', e.target.value)} />
         <TextField id="lenght" label="Lenght" variant="outlined" InputProps={{
             endAdornment: <InputAdornment position="end">cm</InputAdornment>,
-          }} onChange={(e) => handleShipping(0, 'lenght', e.target.value)} />
+          }} value={state_office?.product?.shipping[0]?.lenght ? state_office?.product?.shipping[0]?.lenght : ''} onChange={(e) => handleShipping(0, 'lenght', e.target.value)} />
         <TextField id="width" label="Width" variant="outlined" InputProps={{
           endAdornment: <InputAdornment position="end">cm</InputAdornment>,
-        }} onChange={(e) => handleShipping(0, 'width', e.target.value)} />
+        }} value={state_office?.product?.shipping[0]?.width ? state_office?.product?.shipping[0]?.width : ''} onChange={(e) => handleShipping(0, 'width', e.target.value)} />
       </Box>
     </Box>
   );

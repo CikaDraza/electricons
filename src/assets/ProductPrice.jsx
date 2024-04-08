@@ -34,7 +34,7 @@ export default function ProductPrice() {
   const [value, setValue] = React.useState(0);
   const [oldValue, setOldValue] = React.useState(0);
   const [currency, setCurrency] = React.useState('');
-  const { dispatch_office } = React.useContext(BackofficeStateContext);
+  const { state_office, dispatch_office } = React.useContext(BackofficeStateContext);
 
   const handleChange = (event) => {
     setValue(event.target.value);
@@ -80,7 +80,7 @@ export default function ProductPrice() {
             <InputLabel htmlFor="price-amount">Price</InputLabel>
             <Input
               id="price-amount"
-              value={value}
+              value={state_office.product.price ? state_office.product.price : value}
               onChange={handleChange}
             />
           </FormControl>
@@ -107,7 +107,7 @@ export default function ProductPrice() {
             <InputLabel htmlFor="old-price-amount">Old Price</InputLabel>
             <Input
               id="old-price-amount"
-              value={oldValue}
+              value={state_office.product.oldPrice ? state_office.product.oldPrice : oldValue}
               onChange={handleChangeOld}
             />
           </FormControl>

@@ -231,6 +231,10 @@ function CreateNewItems() {
     dispatch_office({ type: 'CREATE_PRODUCT', payload: { description: descriptionRef.current } });
   }
 
+  React.useEffect(() => {
+    setSpecifications(state_office.product.details || []);
+  }, []);
+
   const handleAddSpecification = () => {
     setSpecifications([...specifications, { attribute: '', detail: '' }]);
   };
@@ -239,7 +243,7 @@ function CreateNewItems() {
     const updatedSpecifications = [...specifications];
     updatedSpecifications[index][field] = value;
     setSpecifications(updatedSpecifications);
-    dispatch_office({ type: 'CREATE_PRODUCT', payload: { details: specifications } });
+    dispatch_office({ type: 'CREATE_PRODUCT', payload: { details: updatedSpecifications } });
   };
 
   const handleClickOpen = () => {
@@ -250,7 +254,7 @@ function CreateNewItems() {
     setOpenBrand(true);
   };
 
-// console.log(state_office);
+console.log(state_office.product);
 
   return (
     <Box>
@@ -294,6 +298,7 @@ function CreateNewItems() {
                       name="title"
                       id="title"
                       label="Product title here..."
+                      value={state_office.product.title ? state_office.product.title : ''}
                       sx={{mb: 1, pb: 3, width: '100%'}}
                       onChange={handleTitle}
                     />
@@ -301,6 +306,7 @@ function CreateNewItems() {
                       name="slug"
                       id="slug"
                       label="Product slug here..."
+                      value={state_office.product.slug ? state_office.product.slug : ''}
                       sx={{mb: 1, pb: 3, width: '100%'}}
                       onChange={handleSlug}
                     />
@@ -310,6 +316,7 @@ function CreateNewItems() {
                       required
                       id="short"
                       placeholder="Short description here..."
+                      value={state_office.product.shortDescription ? state_office.product.shortDescription : ''}
                       maxRows={10}
                       minRows={4}
                       aria-label="empty textarea"
@@ -324,7 +331,7 @@ function CreateNewItems() {
                           theme="snow"
                           modules={modules}
                           formats={formats}
-                          value={description}
+                          value={state_office.product.description ? state_office.product.description : description}
                           onChange={handleDescription}
                         />
                       }
@@ -341,7 +348,7 @@ function CreateNewItems() {
                               <InputLabel htmlFor={`attribute-${index}`}>*</InputLabel>
                               <Input
                                 id={`attribute-${index}`}
-                                value={specifications.attribute}
+                                value={item.attribute}
                                 onChange={(e) => handleSpecificationChange(index, 'attribute', e.target.value)}
                                 startAdornment={<InputAdornment position="start">Attribute:</InputAdornment>}
                               />
@@ -350,7 +357,7 @@ function CreateNewItems() {
                               <InputLabel htmlFor={`detail-${index}`}>*</InputLabel>
                               <Input
                                 id={`detail-${index}`}
-                                value={specifications.detail}
+                                value={item.detail}
                                 onChange={(e) => handleSpecificationChange(index, 'detail', e.target.value)}
                                 startAdornment={<InputAdornment position="start">Detail:</InputAdornment>}
                               />

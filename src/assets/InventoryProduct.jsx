@@ -12,7 +12,7 @@ export default function InventoryProduct() {
   const [stockStatus, setStockStatus] = React.useState('');
   const [sku, setSku] = React.useState('');
   const [quantity, setQuantity] = React.useState(0);
-  const { dispatch_office } = React.useContext(BackofficeStateContext);
+  const { state_office, dispatch_office } = React.useContext(BackofficeStateContext);
 
   const handleChangeQty = (event) => {
     setQuantity(event.target.value);
@@ -43,14 +43,14 @@ export default function InventoryProduct() {
         noValidate
         autoComplete="off"
       >
-        <TextField id="quantity" type='number' label="Quantity" variant="outlined" onChange={handleChangeQty} />
-        <TextField id="outlined-sku" label="SKU" variant="outlined" onChange={handleChangeSku} />
+        <TextField id="quantity" type='number' label="Quantity" variant="outlined" value={state_office.product.inStock ? state_office.product.inStock : ""} onChange={handleChangeQty} />
+        <TextField id="outlined-sku" value={state_office.product.sku ? state_office.product.sku : ""} label="SKU" variant="outlined" onChange={handleChangeSku} />
         <FormControl sx={{ m: 1, minWidth: 80 }}>
           <InputLabel id="select-autowidth-label">Stock Status</InputLabel>
           <Select
             labelId="select-autowidth-label"
             id="demo-simple-select-autowidth"
-            value={stockStatus}
+            value={state_office.product.stockStatus ? state_office.product.stockStatus : stockStatus}
             onChange={handleChangeStatus}
             autoWidth
             label="Stock Status"

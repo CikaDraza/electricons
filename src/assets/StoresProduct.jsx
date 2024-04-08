@@ -11,14 +11,18 @@ import { BackofficeStateContext } from '../utils/BackofficeState';
 export default function StoresProduct() {
   const [storeInfo, setStoreInfo] = React.useState([]);
   const [stores, setStores] = React.useState([{ city: '', address: '' }]);
-  const { dispatch_office } = React.useContext(BackofficeStateContext);
+  const { state_office, dispatch_office } = React.useContext(BackofficeStateContext);
 
   const handleStoresChange = (index, field, value) => {
     const updatedStores = [...stores];
     updatedStores[index][field] = value;
-    setStores(updatedStores);
+    setStores([...state_office?.product?.stores, updatedStores]);
     dispatch_office({ type: 'CREATE_PRODUCT', payload: { stores: updatedStores} });
   };
+
+  React.useEffect(() => {
+    setStores(state_office.product.stores || []);
+  }, []);
 
   React.useEffect(() => {
     let active = true;
@@ -36,7 +40,8 @@ export default function StoresProduct() {
   }, []);
 
   const handleAddStores = () => {
-    setStores([...stores, { city: '', address: '' }]);
+    const newStore = { city: '', address: '' };
+    setStores([...stores, newStore]);
   };
 
   return (
@@ -53,7 +58,9 @@ export default function StoresProduct() {
               <Select
                 labelId={`city-${index}`}
                 id={`city-${index}`}
-                value={store.city}
+                value={
+                  store.city
+                }
                 onChange={(e) => handleStoresChange(index, 'city', e.target.value)}
                 autoWidth
                 label="Cities"
