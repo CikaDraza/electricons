@@ -111,6 +111,15 @@ export default function ProductTabs({ product, slug, comments, setComments }) {
     }
   }, [hasReview]);
 
+  const formatText = () => {
+    // Formatiranje teksta prema potrebama
+    // Na primer, zamenjivanje novih redova sa <br> tagom
+    const formattedText = product?.description.replace(/\n/g, '<p style="margin: 0; padding: 3px 0" />');
+
+    // Prikazivanje formatiranog teksta
+    return <div dangerouslySetInnerHTML={{ __html: formattedText }} />;
+  };
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -347,9 +356,9 @@ export default function ProductTabs({ product, slug, comments, setComments }) {
         index={value}
       >
         <TabPanel value={value} index={0} dir={theme.direction}>
-          <Typography gutterBottom variant="p" component="p" align="left" color="secondary.lightGray" sx={{marginRight: 1}}>
-          {product.description}
-          </Typography>
+          <Box gutterBottom color="secondary.lightGray" sx={{marginRight: 1}}>
+          <div dangerouslySetInnerHTML={{ __html: product?.description }} />
+          </Box>
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
           {

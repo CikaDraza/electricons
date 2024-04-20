@@ -75,10 +75,10 @@ export default function MyApp(props) {
   const [loading, setLoading] = React.useState(false);
   const [slideOut, setSlideOut] = React.useState(false);
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
-  const exceptRouter = router.pathname !== '/blog' && router.pathname !== '/blog/post/[slug]' && router.pathname !== '/blog/category/[[...slug]]' && router.pathname !== '/search' && router.pathname !== '/login';
+  const exceptRouter = router.pathname !== '/blog' && router.pathname !== '/blog/post/[slug]' && router.pathname !== '/blog/category/[[...slug]]' && router.pathname !== '/search';
 
-  const isBackoffice = router.pathname.replace(/\/\w+$/,'/') === '/backoffice/[id]/' || router.pathname === '/backoffice';
-  const isBackofficeProfile = router.pathname === '/backoffice/profile/[id]'
+  const isBackoffice = router.pathname.replace(/\/\w+$/,'/') === '/backoffice/[id]/' || router.pathname === '/backoffice' && router.pathname !== '/login' || router.pathname !== '/backoffice/[id]/preview';
+  const isBackofficeProfile = router.pathname === '/backoffice/profile/[id]';
 
   React.useEffect(() => {
     let loadingTimeout;

@@ -25,16 +25,13 @@ export async function getStaticProps() {
   const top_products = await Product.find({ 'inWidget.widget': 'top-product' })
   .select('_id category inWidget images title shortDescription rating price oldPrice slug')
   .lean();
-  // Izbacujemo _id polja iz rezultata top proizvoda
+
   const top_products_cleaned = top_products.map(product => {
     const { _id, inWidget, images, ...rest } = product;
     const cleanedWidget = inWidget.map(({ _id, createdAt, updatedAt, ...widgetRest }) => widgetRest);
     const cleanedImages = images.map(({ _id, createdAt, updatedAt, ...imagesRest }) => imagesRest);
     return { ...rest, inWidget: cleanedWidget, images: cleanedImages };
   });
-  
-  console.log('Hero products:', filtered_hero_products);
-  console.log('Top products:', top_products_cleaned);
   
   await db.disconnect();
 
@@ -48,7 +45,6 @@ export async function getStaticProps() {
 
 export default function Index(props) {
   const { hero_products, topProducts } = props;
-  const [visitPerUser, setVisitPerUser] = useState('')
 
   function generateUniqueToken() {
     const timestamp = new Date().getTime();

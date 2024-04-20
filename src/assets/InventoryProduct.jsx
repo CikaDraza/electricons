@@ -29,6 +29,12 @@ export default function InventoryProduct() {
     dispatch_office({ type: 'CREATE_PRODUCT', payload: { stockStatus: event.target.value} });
   };
 
+  React.useEffect(() => {
+    setStockStatus(state_office?.product?.stockStatus || '' );
+    setSku(state_office?.product?.sku || '');
+    setQuantity(state_office?.product?.inStock || 0)
+  }, []);
+
   return (
     <Box>
       <Box sx={{pb: 3}}>
@@ -43,14 +49,14 @@ export default function InventoryProduct() {
         noValidate
         autoComplete="off"
       >
-        <TextField id="quantity" type='number' label="Quantity" variant="outlined" value={state_office.product.inStock ? state_office.product.inStock : ""} onChange={handleChangeQty} />
-        <TextField id="outlined-sku" value={state_office.product.sku ? state_office.product.sku : ""} label="SKU" variant="outlined" onChange={handleChangeSku} />
+        <TextField id="quantity" type='number' label="Quantity" variant="outlined" value={quantity} onChange={handleChangeQty} />
+        <TextField id="outlined-sku" value={sku} label="SKU" variant="outlined" onChange={handleChangeSku} />
         <FormControl sx={{ m: 1, minWidth: 80 }}>
           <InputLabel id="select-autowidth-label">Stock Status</InputLabel>
           <Select
             labelId="select-autowidth-label"
             id="demo-simple-select-autowidth"
-            value={state_office.product.stockStatus ? state_office.product.stockStatus : stockStatus}
+            value={stockStatus}
             onChange={handleChangeStatus}
             autoWidth
             label="Stock Status"

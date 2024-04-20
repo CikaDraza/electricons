@@ -27,12 +27,11 @@ const MenuProps = {
 };
 
 export default function BrandCreate(props) {
-  const { open, setOpen } = props;
+  const { open, setOpen, brands } = props;
   const { state_office, dispatch_office } = React.useContext(BackofficeStateContext);
   const [checked, setChecked] = React.useState([]);
   const [children, setChildren] = React.useState([]);
   const [category, setCategory] = React.useState([]);
-  const [brands, setBrands] = React.useState([]);
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const [imgAvatarFile, setImgAvatarFile] = React.useState([]);
   const [chipData, setChipData] = React.useState([]);
@@ -43,28 +42,34 @@ export default function BrandCreate(props) {
   const handleDelete = (chipToDelete) => () => {
     setImgAvatarFile((prevImgFile) => prevImgFile.filter((item) => item?.image?.name !== chipToDelete?.image?.name));
   };
-
-  React.useEffect(() => {
-    fetchCategories();
-  }, [loading]);
-
-  const fetchCategories = async ()=> {
-    const { data } = await axios.get('/api/products/fetchByCategories');
-    setBrands(data?.brands)
-    setLoading(false);
-    handleClose();
-  }
   
   const handleClose = () => {
     setOpen(false);
     setError('');
   };
 
-  const handleChange1 = (event, index) => {
+  const handleChange1 = (event, index, item) => {
     const newChecked = [...checked];
     newChecked[index] = event.target.checked;
     setChecked(newChecked);
+    if (newChecked.true) {
+      handleBrandInfo(item);
+    }else {
+      handleBrandInfo(
+        {
+          brandImg: '',
+          brandName: '',
+          brandPublish: '',
+          brandSlug: '',
+          brandUrl: ''
+        }
+      );
+    }
   };
+
+  function handleBrandInfo(brandInfo) {
+    dispatch_office({ type: 'SET_BRAND', payload: brandInfo });
+  }
 
   function handleAvatarChoose(e) {
     const file = e.target.files[0];
@@ -82,31 +87,17 @@ export default function BrandCreate(props) {
     reader.readAsDataURL(file);
   }
 
-  const handleAvatarSubmit = async (e) => {
-    e.preventDefault();
-
-    const formData = {
-      images: imgAvatarFile?.map(item => item),
-    }
-    try {
-    console.log(formData);
-      
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   const handleSubmit = (e) => {
     e.preventDefault();
     const formOutput = new FormData(e.currentTarget);
     const formData = {
-      brand: formOutput.get('brand'),
+      brandName: formOutput.get('brand'),
       brandSlug: formOutput.get('brand-slug'),
       brandImg: imgAvatarFile[0].image.name,
-      brandUrl: imgAvatarFile[0].imageUrl,
+      brandUrl: imgAvatarFile[0].imageUrl
     }
 
-    if (formData.brand === '') {
+    if (formData.brandName === '') {
       return setError('please enter brand name');
     }
     if (formData.brandSlug === '') {
@@ -117,31 +108,25 @@ export default function BrandCreate(props) {
     }
     
     try {
-      // const { data } = axios.post('/api/brand/upload_brand_image', formData);
-      setBrands((prev)=> [
-        ...prev,
-        formData?.brand
-      ]);
-      dispatch_office({ type: 'CREATE_PRODUCT', payload: formData });
+      const { data } = axios.post('/api/brand/create_brand', formData);
       handleClose();
     } catch (error) {
       console.log('error to upload', error);
     }
-    
   }
 
   return (
     <Box>
       {
         brands?.map((item, index) => (
-          <Box key={item}>
+          <Box key={item._id}>
             <FormControlLabel
-              label={item}
+              label={item.brandName}
               control={
                 <Checkbox
                   checked={checked[0]}
                   indeterminate={checked[0]}
-                  onChange={handleChange1}
+                  onChange={(e, i) => handleChange1(e, i, item)}
                 />
               }
             />
@@ -197,13 +182,13 @@ export default function BrandCreate(props) {
             <Grid item xs={12} md={4}>
               <Box sx={{px: 3, py: 0, display: 'flex', justifyContent: 'flex-end'}}>  
                 {
-                  <Box sx={{width: '200px'}} component="form" method='POST' onSubmit={handleAvatarSubmit}>
+                  <Box sx={{width: '200px'}} component="form" method='POST'>
                     <InputLabel sx={{textAlign: 'center', mb: 1}} htmlFor="category">Brand Icon:</InputLabel>
                     <Stack sx={{display: imgAvatarFile.length > 0 && 'none'}} direction="row" justifyContent="center" alignItems="center" spacing={2}>
                       <Box sx={{width: '100%', p: 2}}>
                         <Button component="label" onChange={handleAvatarChoose} htmlFor="file-avatar" sx={{border: 'thin dashed grey', width: '100%', height: '100px', display: 'flex', justifyContent: 'center', px: 3}} startIcon={<CloudUploadIcon />}>
                           Upload
-                        <Box sx={{display: 'none'}} accept="image/jpg image/png image/jpeg" component="input" type="file" name="file-avatar" id="file-avatar"/>
+                        <Box sx={{display: 'none'}} accept="image/jpg image/png image/jpeg image/svg" component="input" type="file" name="file-avatar" id="file-avatar"/>
                         </Button>
                       </Box>
                     </Stack>

@@ -83,7 +83,7 @@ export default function DashboardLayout({ children }) {
   const segments = pathname.split('/');
   const tabName = segments[segments.length - 1];
   const [open, setOpen] = React.useState(false);
-
+  
   function capitalizeFirstLetter(str) {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   }
@@ -147,7 +147,7 @@ export default function DashboardLayout({ children }) {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              {pathname === '/backoffice/profile/[id]' ? `${userInf0?.email}` : capitalizeFirstLetter(tabName)}
+              {pathname === '/backoffice/profile/[id]' ? `${userInf0?.email}` : pathname === '/backoffice/preview/[slug]' ? router.query.slug : capitalizeFirstLetter(tabName)}
             </Typography>
             <Link color={theme.palette.primary.contrastText} href="/">
               <IconButton color="white">                

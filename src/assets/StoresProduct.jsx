@@ -16,12 +16,12 @@ export default function StoresProduct() {
   const handleStoresChange = (index, field, value) => {
     const updatedStores = [...stores];
     updatedStores[index][field] = value;
-    setStores([...state_office?.product?.stores, updatedStores]);
+    setStores(updatedStores);
     dispatch_office({ type: 'CREATE_PRODUCT', payload: { stores: updatedStores} });
   };
 
   React.useEffect(() => {
-    setStores(state_office.product.stores || []);
+    setStores(state_office?.product?.stores || [{ city: '', address: '' }]);
   }, []);
 
   React.useEffect(() => {

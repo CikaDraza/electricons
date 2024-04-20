@@ -6,12 +6,13 @@ import Box from '@mui/material/Box';
 import theme from '../theme';
 import SwipeableViews from 'react-swipeable-views';
 import { useMediaQuery } from '@mui/material';
+import { useRouter } from 'next/router';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
-    <div
+    <Box
       role="tabpanel"
       hidden={value !== index}
       id={`vertical-tabpanel-${index}`}
@@ -23,7 +24,7 @@ function TabPanel(props) {
           {children}
         </Box>
       )}
-    </div>
+    </Box>
   );
 }
 
@@ -40,11 +41,12 @@ function a11yProps(index) {
   };
 }
 
-export default function VerticalTabs({productData}) {
+export default function VerticalTabs({ productData }) {
   const [value, setValue] = React.useState(0);
   const [swipeValue, setSwipeValue] = React.useState(0);
   const [isSwipe, setIsSwipe] = React.useState(false);
   const matches = useMediaQuery('(min-width: 600px)');
+  const router = useRouter();
 
   const handleChange = (event, newValue) => {
     setIsSwipe(false)
@@ -59,7 +61,7 @@ export default function VerticalTabs({productData}) {
 
   return (
     <Box
-      sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: 240,  width: '100%', flexWrap: {xs: 'wrap', sm: 'nowrap'}}}
+      sx={{ flexGrow: 1, bgcolor: router.pathname === '/backoffice/preview/[slug]' ? 'transparent' : 'background.paper', display: 'flex', height: 240,  width: '100%', flexWrap: {xs: 'wrap', sm: 'nowrap'}}}
     >
       <Tabs
         orientation={matches && "vertical"}
@@ -70,8 +72,8 @@ export default function VerticalTabs({productData}) {
         sx={{ borderRight: {xs: 0, sm: `thin solid ${theme.palette.secondary.borderColor}`}, minWidth: '80px' }}
       >
       {
-        productData.images.slice(1, productData.images.lenght).map((img, index) => (
-          <Tab key={img.image + index} label="" {...a11yProps(index)} sx={{ backgroundImage: img.image ? `url(${img.image})` : '/images/no-image.jpg', backgroundPosition: 'center center', backgroundRepeat: 'no-repeat', backgroundSize: 'contain', my: 1, minWidth: '70px', maxWidth: '70px'}}>
+        productData?.images?.slice(0, productData.images.lenght).map((img, index) => (
+          <Tab key={img.image + index} label="" {...a11yProps(index)} sx={{ backgroundImage: img.imageUrl ? `url(${img.imageUrl})` : '/images/no-image.jpg', backgroundPosition: 'center center', backgroundRepeat: 'no-repeat', backgroundSize: 'contain', my: 1, minWidth: '70px', maxWidth: '70px'}}>
           </Tab>
         ))
       }
@@ -84,21 +86,21 @@ export default function VerticalTabs({productData}) {
       enableMouseEvents
       >
       {
-        productData.images.slice(1, productData.images.lenght).map((img, index) => (
+        productData?.images?.slice(0, productData.images.lenght).map((img, index) => (
           <TabPanel key={img.image} value={index} index={index}>
-              <Box
-                component="img"
-                sx={{
-                  height: {xs: 140, sm: 200},
-                  display: 'block',
-                  maxWidth: 400,
-                  overflow: 'hidden',
-                  width: 'auto',
-                  margin: 'auto'
-                }}
-                src={img.image ? img.image : '/images/no-image.jpg'}
-                alt={productData.title}
-              />
+            <Box
+              component="img"
+              sx={{
+                height: {xs: 140, sm: 200},
+                display: 'block',
+                maxWidth: 400,
+                overflow: 'hidden',
+                width: 'auto',
+                margin: 'auto'
+              }}
+              src={img.imageUrl ? img.imageUrl : '/images/no-image.jpg'}
+              alt={productData.title}
+            />
           </TabPanel>
           ))
       }

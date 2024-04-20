@@ -33,7 +33,7 @@ const currencies = [
 export default function ProductPrice() {
   const [value, setValue] = React.useState(0);
   const [oldValue, setOldValue] = React.useState(0);
-  const [currency, setCurrency] = React.useState('');
+  const [currency, setCurrency] = React.useState('$');
   const { state_office, dispatch_office } = React.useContext(BackofficeStateContext);
 
   const handleChange = (event) => {
@@ -48,8 +48,14 @@ export default function ProductPrice() {
 
   const handleChangeCurrency = (event) => {
     setCurrency(event.target.value);
-    dispatch_office({ type: 'CREATE_PRODUCT', payload: { currency: event.target.value} });
+    dispatch_office({ type: 'CREATE_PRODUCT', payload: { currency: event.target.value || '$'} });
   };
+
+  React.useEffect(() => {
+    setValue(state_office?.product?.price || '' );
+    setOldValue(state_office?.product?.oldPrice || '' );
+    setCurrency(state_office?.product?.currency || '$' );
+  }, []);
   
   return (
     <Box>
@@ -62,7 +68,7 @@ export default function ProductPrice() {
             sx={{width: '5ch', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}
             id="standard-select-currency-native"
             select
-            defaultValue="USD"
+            defaultValue="$"
             SelectProps={{
               native: true,
             }}
@@ -89,7 +95,7 @@ export default function ProductPrice() {
           <TextField
             sx={{width: '5ch', display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}
             id="select-currency-old"
-            defaultValue="USD"
+            defaultValue="$"
             SelectProps={{
               native: true,
             }}

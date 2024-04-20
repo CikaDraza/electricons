@@ -26,6 +26,7 @@ import InventoryProduct from '../../../src/assets/InventoryProduct';
 import ShipingProduct from '../../../src/assets/ShippingProduct';
 import ChipsHeroImage from '../../../src/components/ChipsHeroImage';
 import StoresProduct from '../../../src/assets/StoresProduct';
+import axios from 'axios';
 
 const Quill = dynamic(() => import('react-quill'), { ssr: false });
 
@@ -39,12 +40,13 @@ const modules = {
     [{ 'align': [] }],
     [{ 'color': [] }, { 'background': [] }],
     ['clean'],
+    ['image', 'video']
   ]
 };
 
 const formats = [
   'header', 'bold', 'italic', 'underline', 'strike',
-  'list', 'bullet', 'link', 'blockquote', 'align', 'color', 'background'
+  'list', 'bullet', 'link', 'blockquote', 'align', 'color', 'background', 'image', 'imageBlot'
 ];
 
 const QuillStyled = styled(Quill)(({ theme }) => ({
@@ -103,55 +105,73 @@ function CreateNewItems() {
   const [specifications, setSpecifications] = React.useState([{ attribute: '', detail: '' }]);
   const [open, setOpen] = React.useState(false);
   const [openBrand, setOpenBrand] = React.useState(false);
+  const [brands, setBrands] = React.useState([]);
   const [checkedCategory, setCheckedCategory] = React.useState(true);
+  const [product, setProduct] = React.useState({});
+  const [loading, setLoading] = React.useState(false);
 
   const handleChange = (event) => {
     const newSelectedItems = cartItems.map((n) => n);
     setCheckedCategory(event.target.checked);
   };
 
+  React.useEffect(() => {
+    fetchBrends();
+  }, [loading]);
+
+  const fetchBrends = async ()=> {
+    setLoading(true);
+    const { data } = await axios.get('/api/brand/fetch_brands');
+    setBrands(data)
+    setLoading(false);
+  }
+
   const isQuill = typeof window !== 'undefined' ? require('quill') : null;
-
-  const formatText = () => {
-    // Formatiranje teksta prema potrebama
-    // Na primer, zamenjivanje novih redova sa <br> tagom
-    const formattedText = description.replace(/\n/g, '<p style="margin: 0; padding: 3px 0" />');
-
-    // Prikazivanje formatiranog teksta
-    return <div dangerouslySetInnerHTML={{ __html: formattedText }} />;
-  };
 
   function handleImageChoose(e) {
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.onload = () => {
-        setImgFile([
-          ...imgFile,
-          {            
-            image: file,
-            imageUrl: reader.result
-          }
-        ]);
-        dispatch_office({ type: 'CREATE_PRODUCT', payload: { images:  [...imgFile, {image: file, imageUrl: reader.result}] } });
-        e.target.value = ''
+      const newImgFile = [...imgFile, { image: file, imageUrl: reader.result }];
+      setImgFile(newImgFile);
+      handleImages(newImgFile)
+      e.target.value = '';
     }
     reader.readAsDataURL(file);
+    console.log(imgFile);
+    if (!file) {
+      setImgFile(
+        {
+          image: '',
+          imageUrl: ''
+        }
+      )
+    console.log(imgFile);
+
+    }
   }
+
+  function handleImages(imagesInfo) {
+    dispatch_office({ type: 'SET_IMAGES', payload: imagesInfo });
+  }
+
+  console.log(state_office?.product);
+  console.log(imgHeroFile);
 
   function handleHeroImageChoose(e) {
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.onload = () => {
-      setImgHeroFile(
-          {            
-            image: file,
-            imageUrl: reader.result
-          }
-        );
-        dispatch_office({ type: 'CREATE_PRODUCT', payload: { heroImage:  [...imgHeroFile, {image: file, imageUrl: reader.result}] } });
-        e.target.value = ''
+      const newHeroImage = { image: file, imageUrl: reader.result };
+      setImgHeroFile([newHeroImage]);
+      handleHeroImages(newHeroImage)
+      e.target.value = '';
     }
     reader.readAsDataURL(file);
+  }
+
+  function handleHeroImages(heroImageInfo) {
+    dispatch_office({ type: 'SET_HERO_IMAGES', payload: heroImageInfo });
   }
 
   const handleSubmit = async (e) => {
@@ -231,10 +251,6 @@ function CreateNewItems() {
     dispatch_office({ type: 'CREATE_PRODUCT', payload: { description: descriptionRef.current } });
   }
 
-  React.useEffect(() => {
-    setSpecifications(state_office.product.details || []);
-  }, []);
-
   const handleAddSpecification = () => {
     setSpecifications([...specifications, { attribute: '', detail: '' }]);
   };
@@ -246,6 +262,18 @@ function CreateNewItems() {
     dispatch_office({ type: 'CREATE_PRODUCT', payload: { details: updatedSpecifications } });
   };
 
+  React.useEffect(() => {
+    setSpecifications(state_office?.product?.details || '' );
+  }, []);
+
+  React.useEffect(() => {
+    setImgFile(state_office?.product?.images || '' );
+  }, []);
+
+  React.useEffect(() => {
+    setImgHeroFile([state_office?.product?.heroImage] || '' );
+  }, []);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -253,8 +281,6 @@ function CreateNewItems() {
   const handleClickOpenBrand = () => {
     setOpenBrand(true);
   };
-
-console.log(state_office.product);
 
   return (
     <Box>
@@ -271,13 +297,13 @@ console.log(state_office.product);
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Box sx={{display: 'flex', flexWrap: 'wrap', py: 3}}>
-                  <Box sx={{flex: 1, order: {xs: 2, md: 1}}}>
+                  <Box sx={{flex: 1, order: {xs: 2, md: 1}, width: {xs: '100%', md: '50%'}}}>
                     <Typography component="h2" variant='h6'>Add new product</Typography>
                     <Typography variant='caption'>
                       Fill in the fields below to create a new product
                     </Typography>
                   </Box>
-                  <Box sx={{order: {xs: 1, md: 2}, mb: {xs: 3, md: 0}}}>
+                  <Box sx={{mb: {xs: 3, md: 0}, order: {xs: 1, md: 2},width: {xs: '100%', md: 'auto'}}}>
                     <Link href={`/backoffice/${userInf0?._id}/list`}>
                       <Button variant="outlined" startIcon={<KeyboardBackspaceIcon />}>
                         go to All Products
@@ -298,7 +324,7 @@ console.log(state_office.product);
                       name="title"
                       id="title"
                       label="Product title here..."
-                      value={state_office.product.title ? state_office.product.title : ''}
+                      value={state_office?.product?.title}
                       sx={{mb: 1, pb: 3, width: '100%'}}
                       onChange={handleTitle}
                     />
@@ -306,7 +332,7 @@ console.log(state_office.product);
                       name="slug"
                       id="slug"
                       label="Product slug here..."
-                      value={state_office.product.slug ? state_office.product.slug : ''}
+                      value={state_office?.product?.slug}
                       sx={{mb: 1, pb: 3, width: '100%'}}
                       onChange={handleSlug}
                     />
@@ -316,7 +342,7 @@ console.log(state_office.product);
                       required
                       id="short"
                       placeholder="Short description here..."
-                      value={state_office.product.shortDescription ? state_office.product.shortDescription : ''}
+                      value={state_office?.product?.shortDescription}
                       maxRows={10}
                       minRows={4}
                       aria-label="empty textarea"
@@ -331,7 +357,7 @@ console.log(state_office.product);
                           theme="snow"
                           modules={modules}
                           formats={formats}
-                          value={state_office.product.description ? state_office.product.description : description}
+                          value={state_office?.product?.description}
                           onChange={handleDescription}
                         />
                       }
@@ -421,9 +447,11 @@ console.log(state_office.product);
                   <Divider />
                   <Box sx={{p: 2}}>
                     <Box sx={{display: 'flex', justifyContent: 'space-between', pb: 2}}>
-                      <Button sx={{mr: 1}} variant='outlined'>
-                        Preview
-                      </Button>
+                      <Link href={`/backoffice/preview/${state_office?.product?.slug}`}>
+                        <Button sx={{mr: 1}} variant='outlined'>
+                          Preview
+                        </Button>
+                      </Link>
                       <Button sx={{ml: 1, color: 'whitesmoke'}} color='dashboard' variant='contained'>
                         Save Draft
                       </Button>
@@ -495,7 +523,7 @@ console.log(state_office.product);
                   </Box>
                   <Divider />
                   <Box sx={{p: 3}}>
-                    <BrandCreate open={openBrand} setOpen={setOpenBrand} />
+                    <BrandCreate open={openBrand} setOpen={setOpenBrand} brands={brands} />
                   </Box>
                 </Paper>
               </Grid>
