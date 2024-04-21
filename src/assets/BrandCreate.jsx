@@ -124,8 +124,6 @@ export default function BrandCreate(props) {
               label={item.brandName}
               control={
                 <Checkbox
-                  checked={checked[0]}
-                  indeterminate={checked[0]}
                   onChange={(e, i) => handleChange1(e, i, item)}
                 />
               }

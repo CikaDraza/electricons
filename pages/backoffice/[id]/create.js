@@ -106,14 +106,7 @@ function CreateNewItems() {
   const [open, setOpen] = React.useState(false);
   const [openBrand, setOpenBrand] = React.useState(false);
   const [brands, setBrands] = React.useState([]);
-  const [checkedCategory, setCheckedCategory] = React.useState(true);
-  const [product, setProduct] = React.useState({});
   const [loading, setLoading] = React.useState(false);
-
-  const handleChange = (event) => {
-    const newSelectedItems = cartItems.map((n) => n);
-    setCheckedCategory(event.target.checked);
-  };
 
   React.useEffect(() => {
     fetchBrends();
@@ -134,20 +127,18 @@ function CreateNewItems() {
     reader.onload = () => {
       const newImgFile = [...imgFile, { image: file, imageUrl: reader.result }];
       setImgFile(newImgFile);
+      console.log(newImgFile);
       handleImages(newImgFile)
       e.target.value = '';
     }
     reader.readAsDataURL(file);
-    console.log(imgFile);
     if (!file) {
-      setImgFile(
+      setImgFile([
         {
           image: '',
           imageUrl: ''
         }
-      )
-    console.log(imgFile);
-
+      ])
     }
   }
 
@@ -156,18 +147,26 @@ function CreateNewItems() {
   }
 
   console.log(state_office?.product);
-  console.log(imgHeroFile);
 
   function handleHeroImageChoose(e) {
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.onload = () => {
       const newHeroImage = { image: file, imageUrl: reader.result };
-      setImgHeroFile([newHeroImage]);
+      console.log(newHeroImage);
+      setImgHeroFile(newHeroImage);
       handleHeroImages(newHeroImage)
       e.target.value = '';
     }
     reader.readAsDataURL(file);
+    if (!file) {
+      setImgHeroFile(
+        {
+          image: '',
+          imageUrl: ''
+        }
+      )
+    }
   }
 
   function handleHeroImages(heroImageInfo) {
@@ -271,7 +270,7 @@ function CreateNewItems() {
   }, []);
 
   React.useEffect(() => {
-    setImgHeroFile([state_office?.product?.heroImage] || '' );
+    setImgHeroFile(state_office?.product?.heroImage || '' );
   }, []);
 
   const handleClickOpen = () => {

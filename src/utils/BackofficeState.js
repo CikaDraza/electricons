@@ -16,7 +16,7 @@ const initialState = {
     details: parsedProduct?.product?.details || [],
     price: parsedProduct?.product?.price || 0,
     oldPrice: parsedProduct?.product?.oldPrice || 0,
-    currency: parsedProduct?.product?.currency || '',
+    currency: parsedProduct?.product?.currency || '$',
     inStock: parsedProduct?.product?.inStock || 0,
     sku: parsedProduct?.product?.sku || '',
     stockStatus: parsedProduct?.product?.stockStatus || '',
@@ -29,14 +29,11 @@ const initialState = {
       brandSlug: '',
       brandUrl: ''
     },
-    images: [{
-      image: '',
-      imageUrl: ''
-    }],
-    heroImage: [{
+    images: [],
+    heroImage: {
       image: '',
       iamgeUrl: ''
-    }]
+    }
   }
 };
 
@@ -52,7 +49,8 @@ function reducer(state_office, action) {
       return { ...state_office, product: { ...state_office.product, brand: action.payload } };
     }
     case 'SET_IMAGES': {
-      return { ...state_office, product: { ...state_office.product, images: action.payload } };
+      return { ...state_office, product: { ...state_office.product, images: action.payload }
+      };
     }
     case 'SET_HERO_IMAGES': {
       return { ...state_office, product: { ...state_office.product, heroImage: action.payload } };

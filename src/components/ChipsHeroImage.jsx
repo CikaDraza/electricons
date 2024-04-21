@@ -20,8 +20,16 @@ export default function ChipsHeroImage({ selectedFile, setImgFile }) {
   
 
   const handleDelete = (chipToDelete) => () => {
-    setChipData((chips) => chips.filter((chip) => chip?.image?.name !== chipToDelete?.image?.name));
-    setImgFile((prevImgFile) => prevImgFile.filter((item) => item?.image?.name !== chipToDelete?.image?.name));
+    setChipData({
+      image: '',
+      imageUrl: ''
+    });
+    setImgFile(
+      {
+        image: '',
+        imageUrl: ''
+      } 
+    );
   };
 
   return (
@@ -38,19 +46,17 @@ export default function ChipsHeroImage({ selectedFile, setImgFile }) {
       component="ul"
     >
       {
-        chipData.map(item => (
-          item.image === null ?
-          null
-          :
-          <ListItem key={item?.image?.lastModified} sx={{display: 'flex', flexWrap: 'wrap', alignItems: 'center'}}>
-            <Chip
-              avatar={<Avatar alt={item?.image?.name} src={item?.imageUrl} />}
-              label={item?.image?.name.slice(0, 15)}
-              onDelete={handleDelete(item)}
-            />
-            <Typography sx={{width: '100%'}}>{`veličina slike: ${item && Math.ceil(item?.image?.size/1000) + "kb"}`}</Typography>
-          </ListItem>
-        ))
+        chipData.image === '' ?
+        null
+        :
+        <ListItem sx={{display: 'flex', flexWrap: 'wrap', alignItems: 'center'}}>
+          <Chip
+            avatar={<Avatar alt={chipData?.image?.name} src={chipData?.imageUrl} />}
+            label={chipData?.image?.name.slice(0, 15)}
+            onDelete={handleDelete(chipData)}
+          />
+          <Typography sx={{width: '100%'}}>{`veličina slike: ${chipData && Math.ceil(chipData?.image?.size/1000) + "kb"}`}</Typography>
+        </ListItem>
       }
     </Paper>
   );

@@ -21,7 +21,7 @@ export default function ChipsImages({ selectedFile, setImgFile }) {
   const handleDelete = (chipToDelete) => () => {
     setChipData((chips) => chips.filter((chip) => chip?.image?.name !== chipToDelete?.image?.name));
     setImgFile((prevImgFile) => prevImgFile.filter((item) => item?.image?.name !== chipToDelete?.image?.name));
-};
+  };
 
   return (
     <Paper
@@ -36,10 +36,9 @@ export default function ChipsImages({ selectedFile, setImgFile }) {
       }}
       component="ul"
     >
-
         {
           chipData.map(item => (
-            item.image === null ?
+            item.image === '' ?
             null
             :
             <ListItem key={item?.image?.lastModified} sx={{display: 'flex', flexWrap: 'wrap', alignItems: 'center'}}>

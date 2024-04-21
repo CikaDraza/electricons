@@ -77,8 +77,9 @@ export default function MyApp(props) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   const exceptRouter = router.pathname !== '/blog' && router.pathname !== '/blog/post/[slug]' && router.pathname !== '/blog/category/[[...slug]]' && router.pathname !== '/search';
 
-  const isBackoffice = router.pathname.replace(/\/\w+$/,'/') === '/backoffice/[id]/' || router.pathname === '/backoffice' && router.pathname !== '/login' || router.pathname !== '/backoffice/[id]/preview';
+  const isBackoffice = router.pathname.replace(/\/\w+$/,'/') === '/backoffice/[id]/' || router.pathname === '/backoffice' && router.pathname !== '/login';
   const isBackofficeProfile = router.pathname === '/backoffice/profile/[id]';
+  const isBackofficePreview = router.pathname === '/backoffice/preview/[slug]';
 
   React.useEffect(() => {
     let loadingTimeout;
@@ -108,7 +109,7 @@ export default function MyApp(props) {
     router.events.on('routeChangeError', handleError);
 
     return () => {
-      clearTimeout(loadingTimeout); // Očisti timeout prilikom unmounting-a
+      clearTimeout(loadingTimeout);
       router.events.off('routeChangeStart', handleStart);
       router.events.off('routeChangeComplete', handleComplete);
       router.events.off('routeChangeError', handleError);
@@ -132,7 +133,7 @@ export default function MyApp(props) {
           <StoreProvider>
             <PayPalScriptProvider deferLoading={true}>
               {
-                isBackoffice || isBackofficeProfile ?
+                isBackoffice || isBackofficeProfile || isBackofficePreview ?
                 <BackofficeProvider>
                   <DashboardLayout>
                     <Component {...pageProps} />
