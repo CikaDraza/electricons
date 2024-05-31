@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -19,7 +18,7 @@ export default function ProfileLayout({ children }) {
   return (
     <Grid container spacing={3}>
       <Grid item xs={12} md={3}>
-        <List sx={{'& a': {textDecoration: 'none'}}} component="nav" aria-label="main mailbox folders">
+        <List component="nav" aria-label="main mailbox folders">
           <Link href="/profile/info" passHref>
             <ListItemButton
               selected={router.pathname === "/profile/info"}
@@ -27,7 +26,7 @@ export default function ProfileLayout({ children }) {
               <ListItemIcon>
                 <InfoIcon />
               </ListItemIcon>
-              <ListItemText primary="Info" />
+              <ListItemText primary="Info siso" />
             </ListItemButton>
           </Link>
           <Divider />

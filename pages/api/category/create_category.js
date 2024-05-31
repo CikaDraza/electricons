@@ -10,7 +10,7 @@ router.post(async (req, res) => {
   try {
     await db.connect();
     const { categoryName, avatar, slug, subCategory, categoryPublished } = req.body;
-
+console.log(categoryName, avatar, slug, subCategory, categoryPublished);
     const category = await Category.findOne({slug: slug});
 
     if (category?.categoryName === categoryName) {
@@ -18,9 +18,9 @@ router.post(async (req, res) => {
       return res.status(404).json({ error: 'Category already exist' });
     }
 
-    const base64Data = avatar.imageUrl[0].replace(/^data:image\/\w+;base64,/, '');
+    const base64Data = avatar[0].imageUrl.replace(/^data:image\/\w+;base64,/, '');
     const buffer = Buffer.from(base64Data, 'base64');
-    const filePath = path.join(process.cwd(), 'public/images/category', `${avatar.image[0]}`);
+    const filePath = path.join(process.cwd(), 'public/images/category', `${avatar[0].image.name}`);
     fs.writeFileSync(filePath, buffer);
 
     const subCetegoryIndex = subCategory.findIndex((item) => item.topCategoryUrl === slug);
@@ -32,7 +32,7 @@ router.post(async (req, res) => {
 
     const newCat = new Category({
       categoryName: categoryName,
-      avatar: avatar.imageUrl[0].toString(),
+      avatar: avatar[0].imageUrl,
       slug: slug,
       subCategory: subCategory,
       categoryPublished: categoryPublished

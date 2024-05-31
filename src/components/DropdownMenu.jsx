@@ -8,9 +8,6 @@ import data from '../utils/data';
 import { Accordion, AccordionDetails, AccordionSummary, Box, Grid, Typography } from '@mui/material';
 import Link from 'next/link';
 import theme from '../theme';
-import PersonalVideoIcon from '@mui/icons-material/PersonalVideo';
-import ComputerIcon from '@mui/icons-material/Computer';
-import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import axios from 'axios';
 import Image from 'next/image';
@@ -20,6 +17,7 @@ export default function DropdownMenu(props) {
   const { products } = data;
   const [expanded, setExpanded] = React.useState(false);
   const [allCategories, setAllCategories] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -29,9 +27,11 @@ export default function DropdownMenu(props) {
     async function fetchCategories() {
       const { data } = await axios.get('/api/category');
       setAllCategories(data);
+      setLoading(false);
     }
+    
     fetchCategories();
-  }, [])
+  }, [loading])
 
   const defaultTop = '50px!important';
 

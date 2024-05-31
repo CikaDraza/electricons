@@ -21,7 +21,7 @@ export default function StoresProduct() {
   };
 
   React.useEffect(() => {
-    setStores(state_office?.product?.stores || [{ city: '', address: '' }]);
+    setStores(state_office?.product?.stores.map(store => store) || [{ city: '', address: '' }]);
   }, []);
 
   React.useEffect(() => {

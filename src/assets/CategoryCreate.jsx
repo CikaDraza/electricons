@@ -121,8 +121,9 @@ export default function CategoryCreate(props) {
     const formOutput = new FormData(e.currentTarget);
     const formData = {
       categoryName: formOutput.get('category'),
-      avatar: {image: imgAvatarFile?.map(item => item.image.name), imageUrl: imgAvatarFile?.map(item => item.imageUrl)},
+      avatar: imgAvatarFile,
       slug: formOutput.get('slug'),
+      categoryPublished: false,
       subCategory: [
         {
           url: formOutput.get('subcategory-slug'),
@@ -144,7 +145,7 @@ export default function CategoryCreate(props) {
     if (parentCatName.toString() !== "New Category" && formData.subCategory[0].url === '') {
       return setError('please enter sub category url');
     }
-    if (formData.avatar.image.length === 0) {
+    if (formData.avatar[0].image === '') {
       return setError('please upload category icon');
     }
     try {

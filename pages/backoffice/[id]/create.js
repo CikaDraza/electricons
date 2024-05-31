@@ -146,7 +146,6 @@ function CreateNewItems() {
     dispatch_office({ type: 'SET_IMAGES', payload: imagesInfo });
   }
 
-  console.log(state_office?.product);
 
   function handleHeroImageChoose(e) {
     const file = e.target.files[0];
@@ -262,7 +261,7 @@ function CreateNewItems() {
   };
 
   React.useEffect(() => {
-    setSpecifications(state_office?.product?.details || '' );
+    setSpecifications(state_office?.product?.details || [{ attribute: '', detail: '' }] );
   }, []);
 
   React.useEffect(() => {
@@ -280,6 +279,8 @@ function CreateNewItems() {
   const handleClickOpenBrand = () => {
     setOpenBrand(true);
   };
+console.log(specifications);
+console.log(state_office?.product);
 
   return (
     <Box>

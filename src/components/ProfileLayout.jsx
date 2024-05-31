@@ -19,16 +19,15 @@ export default function ProfileLayout({ children }) {
   return (
     <Grid container spacing={3}>
       <Grid item xs={12} md={3}>
-        <List sx={{'& a': {textDecoration: 'none'}}} component="nav" aria-label="main mailbox folders">
+        <List sx={{'& a': {textDecoration: 'none', color: 'primary.main'}}} component="nav" aria-label="main mailbox folders">
           <Link href="/profile/info" passHref>
             <ListItemButton
               selected={router.pathname === "/profile/info"}
             >
-      
-                <ListItemIcon>
-                  <InfoIcon />
-                </ListItemIcon>
-                <ListItemText primary="Info" />
+              <ListItemIcon>
+                <InfoIcon />
+              </ListItemIcon>
+              <ListItemText primary="Info" />
             </ListItemButton>
           </Link>
           <Divider />

@@ -125,7 +125,7 @@ export default function DashboardLayout({ children }) {
         <AppBar sx={{bgcolor: theme.palette.dashboard.main}} position="absolute" open={open}>
           <Toolbar
             sx={{
-              pr: '24px', // keep right padding when drawer closed
+              pr: '24px',
             }}
           >
             <IconButton
@@ -184,14 +184,14 @@ export default function DashboardLayout({ children }) {
                 userInf0 ?
                 (
                   <Box>
-                    <MenuItem sx={{ '& a': {textDecoration: 'none' } }} onClick={handleCloseUserMenu}>
+                    <MenuItem sx={{ '& a': {textDecoration: 'none', color: 'primary.main' } }} onClick={handleCloseUserMenu}>
                       <Link href={`/backoffice/profile/${userInf0.email}`} passHref>
                         {loged[0]}
                       </Link>
                     </MenuItem>
                     {
                       userInf0.isAdmin &&
-                      <MenuItem sx={{ '& a': {textDecoration: 'none' } }} onClick={handleCloseUserMenu}>
+                      <MenuItem sx={{ '& a': {textDecoration: 'none', color: 'primary.main' } }} onClick={handleCloseUserMenu}>
                         <Link sx={{ textDecoration: 'none' }} href={`/backoffice`} passHref>
                           {loged[1]}
                         </Link>
@@ -204,7 +204,7 @@ export default function DashboardLayout({ children }) {
 
                 ) : (
                   <Box>
-                    <MenuItem sx={{ '& a': {textDecoration: 'none'}}} onClick={handleCloseUserMenu}>
+                    <MenuItem sx={{ '& a': {textDecoration: 'none', color: 'primary.main'}}} onClick={handleCloseUserMenu}>
                       <Link href="/login" passHref>
                         {logedout[0]}
                       </Link>

@@ -46,8 +46,8 @@ export default function Orders(props) {
           ))}
         </TableBody>
       </Table>
-      <TableFooter sx={{ mt: 3 }}>
-        <Link color="primary" href={`/backoffice/${id}/orders`} >
+      <TableFooter sx={{ mt: 3, '& a': {color: 'primary.main'} }}>
+        <Link href={`/backoffice/${id}/orders`} >
           See more orders
         </Link>
       </TableFooter>

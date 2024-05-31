@@ -23,19 +23,19 @@ import axios from 'axios';
 function Copyright() {
   return (
     <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', width: '100%'}}>
-      <Typography sx={{width: {xs: '100%', sm: 'auto'}, p: 2}} align="center" variant="body2" color="primary.contrastText">
+      <Typography sx={{width: {xs: '100%', sm: 'auto'}, '& > a': {color: 'primary.main'}, p: 2}} align="center" variant="body2" color="primary.contrastText">
         {'Copyright © '}
-        <Link color="primary.main" href="https://electricons.vercel.app/">
+        <Link href="https://electricons.vercel.app/">
           Electricons
         </Link>{' '}{' 2022 - '}
         {new Date().getFullYear()}
         {'.'}
       </Typography>
-      <Typography sx={{width: {xs: '100%', sm: 'auto'}, p: {xs: 0, sm: 2}}} align="center" variant="body2" color="primary.contrastText">
+      <Typography sx={{width: {xs: '100%', sm: 'auto'}, '& > a': {color: 'primary.main'}, p: {xs: 0, sm: 2}}} align="center" variant="body2" color="primary.contrastText">
         Ecommerce Software By{' '}
-      <Link color="primary.main" href="https://explodemarket.com/">
-        ExplodeMarket™
-      </Link>
+        <Link href="https://explodemarket.com/">
+          ExplodeMarket™
+        </Link>
       </Typography>
     </Box>
   );

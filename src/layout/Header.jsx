@@ -652,14 +652,14 @@ export default function Header() {
                                   alt={option?.title}
                                 />
                               </Box>
-                              <Typography component="span" variant='caption' sx={{ p: 0, mr: .25, felxGrow: 1 }} color="primary">
+                              <Typography component="span" variant='caption' sx={{ p: 0, mr: .25, felxGrow: 1, '& > a': {color: 'primary.main'} }} color="primary.main">
                                 <Link href={`product/${option?.slug}`} passHref> {option.title}</Link>
                               </Typography>      
                               <Typography sx={{ p: 0, mr: .25, felxGrow: 1 }} color="secondary" component="span" variant='caption'>
                               | brand:
                                 <Typography color="primary" component="span" variant='caption'>{option?.brand}</Typography>
                               </Typography>
-                              <Typography sx={{ p: 0, mr: .25 }} color="secondary" component="span" variant='caption'>
+                              <Typography sx={{ p: 0, mr: .25, '& > a': {color: 'primary.main'} }} color="secondary" component="span" variant='caption'>
                               | category: 
                                 <Link href={`category/${option?.categoryUrl}`} passHref> {option?.category}</Link>
                                 /
