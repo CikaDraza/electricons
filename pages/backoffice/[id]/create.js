@@ -174,53 +174,10 @@ function CreateNewItems() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formOutput = new FormData(e.currentTarget);
-    const formData = {
-      title: formOutput.get('title'),
-      slug: formOutput.get('slug'),
-      shortDescription: formOutput.get('short-description'),
-      description: description,
-      details: specifications,
-      images: [
-        { image: imgFile.map((item) => item?.imageUrl)}
-      ],
-      widgetImages: { image: imgWidgetFile?.imageUrl },
-      category: '',
-      categoryUrl: '',
-      subCategory: '',
-      subCategoryUrl: '',
-      brand: '',
-      brandImg: '',
-      brandPublished: false,
-      price: 0,
-      oldPrice: 0,
-      rating: 0,
-      reviews: 0,
-      inStock: 0,
-      inWidget: '',
-      online: false,
-      shipping: {
-        weight: formOutput.get('weight'),
-        length: formOutput.get('length'),
-        width: formOutput.get('width'),
-      },
-      stores: [
-        { store: formOutput.get('short-description')}
-      ]
-    }
+    const formData = state_office?.product;
 
-    if (formOutput.get('title') === '') {
-      console.log('please add title');
-      dispatch({ type: 'SNACK_MESSAGE', payload: { ...snack, message: 'please add title', severity: 'warning'} });
-      return;
-    }
-    if (formData.price === 0) {
-      console.log('please add price');
-      dispatch({ type: 'SNACK_MESSAGE', payload: { ...snack, message: 'please add price', severity: 'warning'} });
-      return;
-    }
     try {
-    dispatch_office({ type: 'CREATE_PRODUCT', payload: formData }); 
+      console.log(formData);
     dispatch({ type: 'SNACK_MESSAGE', payload: { ...snack, message: 'product added successfuly', severity: 'success'} });
     } catch (error) {
       console.log(error);
@@ -279,8 +236,6 @@ function CreateNewItems() {
   const handleClickOpenBrand = () => {
     setOpenBrand(true);
   };
-console.log(specifications);
-console.log(state_office?.product);
 
   return (
     <Box>
@@ -448,15 +403,15 @@ console.log(state_office?.product);
                   <Box sx={{p: 2}}>
                     <Box sx={{display: 'flex', justifyContent: 'space-between', pb: 2}}>
                       <Link href={`/backoffice/preview/${state_office?.product?.slug}`}>
-                        <Button sx={{mr: 1}} variant='outlined'>
+                        <Button disabled={state_office?.product.slug === ''} sx={{mr: 1}} variant='outlined'>
                           Preview
                         </Button>
                       </Link>
-                      <Button sx={{ml: 1, color: 'whitesmoke'}} color='dashboard' variant='contained'>
+                      <Button disabled={state_office?.product.slug === ''} sx={{ml: 1, color: 'whitesmoke'}} color='dashboard' variant='contained'>
                         Save Draft
                       </Button>
                     </Box>
-                    <Button sx={{width: '100%'}} variant='contained'>Publish</Button>
+                    <Button disabled={state_office?.product.slug === ''} onClick={handleSubmit} sx={{width: '100%'}} variant='contained'>Publish</Button>
                   </Box>
                 </Paper>
               </Grid>
