@@ -680,7 +680,7 @@ export default function Header() {
                                   loading="lazy"
                                   fill
                                   sizes="(max-width: 768px) 80vw, (max-width: 1200px) 50vw, 33vw"
-                                  src={option?.images[1].image ? option?.images[1].image : '/images/no-image.jpg'}
+                                  src={option?.images[0].image ? option?.images[0].image : '/images/no-image.jpg'}
                                   alt={option?.title}
                                 />
                               </Box>
