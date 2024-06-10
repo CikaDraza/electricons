@@ -10,7 +10,7 @@ import { BackofficeStateContext } from '../utils/BackofficeState';
 
 export default function StoresProduct() {
   const [storeInfo, setStoreInfo] = React.useState([]);
-  const [stores, setStores] = React.useState([{ city: '', address: '' }]);
+  const [stores, setStores] = React.useState([{ name: '' }]);
   const { state_office, dispatch_office } = React.useContext(BackofficeStateContext);
 
   const handleStoresChange = (index, field, value) => {
@@ -21,7 +21,7 @@ export default function StoresProduct() {
   };
 
   React.useEffect(() => {
-    setStores(state_office?.product?.stores.map(store => store) || [{ city: '', address: '' }]);
+    setStores(state_office?.product?.stores.map(store => store) || [{ name: '' }]);
   }, []);
 
   React.useEffect(() => {
@@ -40,7 +40,7 @@ export default function StoresProduct() {
   }, []);
 
   const handleAddStores = () => {
-    const newStore = { city: '', address: '' };
+    const newStore = { name: '' };
     setStores([...stores, newStore]);
   };
 
@@ -52,28 +52,31 @@ export default function StoresProduct() {
       </Box>
       {
         stores.map((store, index) => (
-          <Box key={index} component="form" sx={{display: 'flex', '& > :not(style)': { m: 1, width: {xs: '100%', md: '50%'} }}}>
+          <Box key={index} component="form" sx={{display: 'flex', '& > :not(style)': { m: 1, width: {xs: '100%'} }}}>
             <FormControl sx={{ m: 1 }}>
-              <InputLabel id={`city-${index}`}>Cities</InputLabel>
+              <InputLabel id={`store-${index}`}>Store</InputLabel>
               <Select
-                labelId={`city-${index}`}
-                id={`city-${index}`}
+                labelId={`store-${index}`}
+                id={`store-${index}`}
                 value={
-                  store.city
+                  store.name
                 }
-                onChange={(e) => handleStoresChange(index, 'city', e.target.value)}
+                onChange={(e) => handleStoresChange(index, 'name', e.target.value)}
                 autoWidth
-                label="Cities"
+                label="Store"
               >
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
                 {storeInfo.map(item => (
-                  <MenuItem key={item._id} value={item.city}>{item.city}</MenuItem>
+                  <MenuItem key={item._id} value={item.name}>
+                    {item.name}{' - '}
+                    <small>{item.city}{' , '}{item.address}</small>
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 80 }}>
+            {/* <FormControl sx={{ m: 1, minWidth: 80 }}>
               <InputLabel id={`address-${index}`}>Stores</InputLabel>
               <Select
                 labelId={`address-${index}`}
@@ -88,7 +91,7 @@ export default function StoresProduct() {
                   <MenuItem key={item._id} value={item.address}>{item.address}</MenuItem>
                 ))}
               </Select>
-            </FormControl>
+            </FormControl> */}
           </Box>
         ))
       }

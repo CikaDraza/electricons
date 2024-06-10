@@ -30,6 +30,59 @@ import Image from 'next/image';
 import Link from 'next/link';
 import AddIcon from '@mui/icons-material/Add';
 import Cookies from 'js-cookie';
+import Switch from '@mui/material/Switch';
+import { Store } from '../../../src/utils/Store';
+
+const IOSSwitch = styled((props) => (
+  <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
+))(({ theme }) => ({
+  width: 42,
+  height: 26,
+  padding: 0,
+  '& .MuiSwitch-switchBase': {
+    padding: 0,
+    margin: 2,
+    transitionDuration: '300ms',
+    '&.Mui-checked': {
+      transform: 'translateX(16px)',
+      color: '#fff',
+      '& + .MuiSwitch-track': {
+        backgroundColor: theme.palette.mode === 'dark' ? '#9c27b0' : theme.palette.primary,
+        opacity: 1,
+        border: 0,
+      },
+      '&.Mui-disabled + .MuiSwitch-track': {
+        opacity: 0.5,
+      },
+    },
+    '&.Mui-focusVisible .MuiSwitch-thumb': {
+      color: '#33cf4d',
+      border: '6px solid #fff',
+    },
+    '&.Mui-disabled .MuiSwitch-thumb': {
+      color:
+        theme.palette.mode === 'light'
+          ? theme.palette.grey[100]
+          : theme.palette.grey[600],
+    },
+    '&.Mui-disabled + .MuiSwitch-track': {
+      opacity: theme.palette.mode === 'light' ? 0.7 : 0.3,
+    },
+  },
+  '& .MuiSwitch-thumb': {
+    boxSizing: 'border-box',
+    width: 22,
+    height: 22,
+  },
+  '& .MuiSwitch-track': {
+    borderRadius: 26 / 2,
+    backgroundColor: theme.palette.mode === 'light' ? '#9c27b0' : '#9c27b0',
+    opacity: 1,
+    transition: theme.transitions.create(['background-color'], {
+      duration: 500,
+    }),
+  },
+}));
 
 const Search = styled(Box)(({ theme }) => ({
   position: 'relative',
@@ -111,6 +164,12 @@ const headCells = [
     numeric: false,
     disablePadding: true,
     label: 'ID',
+  },
+  {
+    id: 'published',
+    numeric: false,
+    disablePadding: true,
+    label: 'Published',
   },
   {
     id: 'img',
@@ -289,6 +348,8 @@ EnhancedTableToolbar.propTypes = {
 
 export default function ProductsListTable() {
   const userInf0 = Cookies.get('userInfo') ? JSON.parse(Cookies.get('userInfo')) : {};
+  const { state, dispatch } = React.useContext(Store);
+  const { snack } = state;
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('title');
   const [selected, setSelected] = React.useState([]);
@@ -300,13 +361,17 @@ export default function ProductsListTable() {
   const matches = useMediaQuery('(min-width: 560px)');
   const [search, setSearch] = React.useState('');
   const [rows, setRows] = React.useState([]);
-  const [totalProducts, setTotalProducts] = React.useState([]);
+  const [totalProducts, setTotalProducts] = React.useState(0);
 
   React.useEffect(() => {
     async function fetchProductsData() {
-      const { data } = await axios.get('/api/products/fetch_all_products');
-      setRows(data);
-      setTotalProducts(data?.lenght);
+      try {
+        const { data } = await axios.get('/api/products/fetch_all_products');
+        setRows(data);
+        setTotalProducts(data?.lenght);
+      } catch (error) {
+        console.error('Error fetching products', error);
+      }
     };
     fetchProductsData();
   }, [])
@@ -375,6 +440,54 @@ export default function ProductsListTable() {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const publishProduct = async (e, slug, brandSlug, categorySlug) => {
+    try {
+      const isOnline = e.target.checked;
+      console.log(isOnline, slug);
+
+      const { data } = await axios.put('/api/products/publish', { publish: { slug, online: isOnline } });
+      dispatch({ type: 'SNACK_MESSAGE', payload: { ...snack, message: 'product publish successfuly', severity: 'success'} });
+      if (!isOnline) {
+        dispatch({ type: 'SNACK_MESSAGE', payload: { ...snack, message: 'product hidden successfuly', severity: 'success'} });
+      }
+      setRows(rows.map(product => product.slug === slug ? { ...product, online: isOnline } : product));
+      await Promise.all([publishBrand(isOnline, brandSlug), publishCategory(isOnline, categorySlug)]);
+    } catch (error) {
+      console.error('Error publishing product', error);
+      dispatch({ type: 'SNACK_MESSAGE', payload: { ...snack, message: 'error publish new product', severity: 'error'} });
+    }
+  };
+
+  const publishBrand = async (check, slug) => {
+    try {
+      console.log(check, slug);
+
+      const { data } = await axios.put('/api/brand/publish', { publish: { slug, online: check } });
+      dispatch({ type: 'SNACK_MESSAGE', payload: { ...snack, message: 'brand publish successfuly', severity: 'success'} });
+      if (!check) {
+        dispatch({ type: 'SNACK_MESSAGE', payload: { ...snack, message: 'brand hidden successfuly', severity: 'success'} });
+      }
+    } catch (error) {
+      console.error('Error publishing brand', error);
+      dispatch({ type: 'SNACK_MESSAGE', payload: { ...snack, message: 'error publish brand', severity: 'error'} });
+    }
+  };
+
+  const publishCategory = async (check, slug) => {
+    try {
+      console.log(check, slug);
+
+      const { data } = await axios.put('/api/category/publish', { publish: { slug, online: check } });
+      dispatch({ type: 'SNACK_MESSAGE', payload: { ...snack, message: 'category publish successfuly', severity: 'success'} });
+      if (!check) {
+        dispatch({ type: 'SNACK_MESSAGE', payload: { ...snack, message: 'category hidden successfuly', severity: 'success'} });
+      }
+    } catch (error) {
+      console.error('Error publishing category', error);
+      dispatch({ type: 'SNACK_MESSAGE', payload: { ...snack, message: 'error publish category', severity: 'error'} });
+    }
   };
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
@@ -488,13 +601,16 @@ export default function ProductsListTable() {
                     <TableCell sx={{minWidth: '10px', maxWidth: '100px', overflowX: 'scroll', '&::-webkit-scrollbar': {display: 'none'}}}>
                       {row._id}
                     </TableCell>
+                    <TableCell sx={{minWidth: '10px', maxWidth: '100px', overflowX: 'scroll', '&::-webkit-scrollbar': {display: 'none'}}}>
+                      <IOSSwitch onChange={(e) => publishProduct(e, row.slug, row.brandSlug, row.categoryUrl)} defaultChecked={row?.online} />
+                    </TableCell>
                     <TableCell>
                       <Box sx={{ width: 'auto', height: '50px', position: 'relative','& img': {objectFit: 'contain', width: 'auto!important', m: 'auto'}}}>
                         <Image
                           fill
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           priority
-                          src={row?.images[1]?.image}
+                          src={row?.images[0]?.image}
                           alt={row?.title}
                         />
                       </Box>

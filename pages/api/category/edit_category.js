@@ -10,7 +10,7 @@ router.put(async (req, res) => {
   try {
     await db.connect();
     const { categoryName, avatar, image_name, slug, subCategory } = req.body;
-    console.log('Before updating category in the database');
+
       const base64Data = avatar?.replace(/^data:image\/\w+;base64,/, '');
       const buffer = Buffer.from(base64Data, 'base64');
       const filePath = path.join(process.cwd(), 'public/images/category', `${image_name}`);
@@ -26,7 +26,6 @@ router.put(async (req, res) => {
       {
         new: true
       });
-      console.log('After updating category in the database');
 
       const responseData = {
         categoryName: updateCategory?.categoryName,

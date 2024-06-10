@@ -6,7 +6,7 @@ const router = createRouter();
 
 router.get(async (req, res) => {
   await db.connect();
-  const brands = await Brand.find({});
+  const brands = await Brand.find({ brandPublish: true });
   await db.disconnect();
   res.send(brands);
 });

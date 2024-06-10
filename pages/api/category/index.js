@@ -4,7 +4,7 @@ import Category from '../../../models/Category';
 
 const handler = async (req, res) => {
   await db.connect();
-  const category = await Category.find({});
+  const category = await Category.find({ categoryPublished: true });
   await db.disconnect();
   res.send(category);
 };

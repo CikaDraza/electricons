@@ -59,7 +59,7 @@ export default function BrandCreate(props) {
         {
           brandImg: '',
           brandName: '',
-          brandPublish: '',
+          brandPublished: '',
           brandSlug: '',
           brandUrl: ''
         }

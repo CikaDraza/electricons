@@ -37,7 +37,7 @@ router.get( async(req, res) => {
     ? { createdAt: -1 }
     : { _id: -1 };
 
-    const filter = {};
+    const filter = { online: true };
 
     if (categoryUrl) {
       filter.categoryUrl = categoryUrl;

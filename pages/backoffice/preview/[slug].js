@@ -17,6 +17,7 @@ import Cookies from 'js-cookie';
 import StoreIcon from '@mui/icons-material/Store';
 import ProductTabs from '../../../src/components/ProductTabs';
 import CartIcon from '@mui/icons-material/ShoppingCartOutlined';
+import Image from 'next/image';
 
 const LabelButton = styled(Button)(({ theme }) => ({
   color: theme.palette.secondary.main,
@@ -85,6 +86,7 @@ color: theme.palette.text.secondary,
 export default function ProductPreview() {
   const { state_office: { product }, state_office, dispatch_office } = React.useContext(BackofficeStateContext);
   const userInf0 = Cookies.get('userInfo') && JSON.parse(Cookies.get('userInfo'));
+  const [comments, setComments] = React.useState([]);
 
   if(!product.slug) {
     return (
@@ -121,19 +123,15 @@ export default function ProductPreview() {
               <Typography gutterBottom variant="h6" component="h1" align="left" color="secondary" sx={{flex: 1}}>
                 {state_office?.product?.title}
               </Typography>
-              <Box
-                component="img"
-                sx={{
-                  height: 22,
-                  display: 'block',
-                  maxWidth: 150,
-                  overflow: 'hidden',
-                  width: 'auto',
-                  margin: 'auto'
-                }}
-                src={state_office?.product?.brand?.brandImg ? state_office?.product?.brand?.brandUrl : '/images/no-image.jpg'}
-                alt={state_office?.product?.title}
-              />
+              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', '& img': {objectFit: 'contain', width: 'unset!important', height: '50px!important', position: 'relative!important' } }}>
+                <Image
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  priority
+                  src={state_office?.product?.brand?.brandImg ? state_office?.product?.brand?.brandUrl : '/images/no-image.jpg'}
+                  alt={state_office?.product?.title}
+                />
+              </Box>
             </Box>
             <Box sx={{ flexGrow: 1, my: 1, display: 'flex', alignItems: 'center', '& a': {textDecoration: 'none' }, '&:hover a': {textDecoration: 'none' }  }}>
               <Rating align="center" size="small" name="read-only" value={0} readOnly precision={0.5} />
@@ -231,7 +229,7 @@ export default function ProductPreview() {
           </Item>
         </Grid>
         <Grid id="reviews" item xs={12}>
-          <ProductTabs product={product} slug={product?.slug} />
+          <ProductTabs product={product} slug={product?.slug} comments={comments} setComments={setComments} />
         </Grid>
       </Grid>
     </Box>

@@ -572,7 +572,7 @@ export default function Search(props) {
                                 fill
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                 priority
-                                src={prod.images.length > 1 ? prod.images[1].image : '/images/no-image.jpg'}
+                                src={prod.images.length > 0 ? prod.images[0].image : '/images/no-image.jpg'}
                                 alt={prod.title}
                                 quality={35}
                               />
@@ -595,7 +595,7 @@ export default function Search(props) {
                             {prod.title}
                             </Typography>
                             <Typography align="center" variant="body2" color="text.secondary">
-                              {prod.shortDescription}
+                              {prod.shortDescription.slice(0, 180)}
                             </Typography>
                             <Box
                               sx={{
@@ -745,6 +745,8 @@ export async function getServerSideProps({ query }) {
     }
     : {};
 
+    const onlineFilter = { online: true };
+
     const order = 
     sort === 'availability'
     ? { isAvalable: -1 }
@@ -759,9 +761,9 @@ export async function getServerSideProps({ query }) {
     : { _id: -1 };
 
     await db.connect();
-    const categories = await Product.find().distinct('category');
-    const subCategories = await Product.find().distinct('subCategory');
-    const brands = await Product.find().distinct('brand');
+    const categories = await Product.find({ online: true }).distinct('category');
+    const subCategories = await Product.find({ online: true }).distinct('subCategory');
+    const brands = await Product.find({ online: true }).distinct('brand');
     const productDocs = await Product.find(
       {
         ...queryFilter,
@@ -769,6 +771,7 @@ export async function getServerSideProps({ query }) {
         ...subCategoryFilter,
         ...priceFilter,
         ...brandFilter,
+        ...onlineFilter,
       },
     ).sort(order).skip(pageSize * (page - 1)).limit(pageSize).lean();
 
@@ -777,7 +780,8 @@ export async function getServerSideProps({ query }) {
       ...categoryFilter,
       ...subCategoryFilter,
       ...priceFilter,
-      ...brandFilter
+      ...brandFilter,
+      ...onlineFilter,
     });
 
     await db.disconnect();

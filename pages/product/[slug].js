@@ -265,19 +265,21 @@ export default function SingleProduct(props) {
               <Typography gutterBottom variant="h6" component="h1" align="left" color="secondary" sx={{flex: 1}}>
                 {product.title}
               </Typography>
-              <Box
-                component="img"
-                sx={{
-                  height: 50,
-                  display: 'block',
-                  maxWidth: 400,
-                  overflow: 'hidden',
-                  width: 'auto',
-                  margin: 'auto'
-                }}
-                src={product.brandImg ? product.brandImg : '/images/no-image.jpg'}
-                alt={product.title}
-              />
+              <Link href={`/brand/${product?.brandSlug}`}>
+                <Box
+                  component="img"
+                  sx={{
+                    height: 50,
+                    display: 'block',
+                    maxWidth: 400,
+                    overflow: 'hidden',
+                    width: 'auto',
+                    margin: 'auto'
+                  }}
+                  src={product.brandImg ? product.brandImg : '/images/no-image.jpg'}
+                  alt={product.title}
+                />
+              </Link>
             </Box>
             <Box sx={{ flexGrow: 1, my: 1, display: 'flex', alignItems: 'center', '& a': {textDecoration: 'none' }, '&:hover a': {textDecoration: 'none' }  }}>
               <Rating align="center" size="small" name="read-only" value={sumReviews/numReviews} readOnly precision={0.5} />
@@ -298,7 +300,7 @@ export default function SingleProduct(props) {
           </Item>
           <Item elevation={0}>
             <Typography align="left" component="p" variant="p" color="secondary.lightGray">
-              {product.description}
+              {product.shortDescription}
             </Typography>
           </Item>
           <Item elevation={0}>

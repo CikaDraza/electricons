@@ -13,6 +13,7 @@ import theme from '../theme';
 import CommentIcon from '@mui/icons-material/Comment';
 import styled from '@emotion/styled';
 import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
 
 const LabelButton = styled(Button)(({ theme }) => ({
   color: theme.palette.secondary.main,
@@ -90,6 +91,7 @@ export default function ProductTabs({ product, slug, comments, setComments }) {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  const router = useRouter();
 
   React.useEffect(() => {
     async function fetchData() {
@@ -353,17 +355,37 @@ export default function ProductTabs({ product, slug, comments, setComments }) {
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
           {
-            product.details.map(detail => (
-              <Box key={detail._id} sx={{display: 'flex', alignItems: 'baseline'}}>
-                <Typography variant='h6' component="h6">{detail.attribute}{':'}</Typography>
-                <Typography sx={{pl: 3}}>{detail.detail}</Typography>
+            product.details.map(item => (
+              <Box key={item.detail} sx={{display: 'flex', alignItems: 'baseline'}}>
+                <Typography variant='h6' component="h6">{item.attribute}{':'}</Typography>
+                <Typography sx={{pl: 3}}>{item.detail}</Typography>
               </Box>
             ))
           }
+          {
+            Object.keys(product?.shipping).length !== 0 &&
+            <Box sx={{pt: 5}}>
+              <Typography variant='h6' component="h6">Shipping</Typography>
+                <Box sx={{display: 'flex', alignItems: 'baseline'}}>
+                  <Typography variant='h6' component="h6">{'Weight Gross'}{':'}</Typography>
+                  <Typography sx={{pl: 3}}>{product?.shipping?.weightGross}{'kg'}</Typography>
+                </Box>
+                <Box sx={{display: 'flex', alignItems: 'baseline'}}>
+                  <Typography variant='h6' component="h6">{'Weight Neto'}{':'}</Typography>
+                  <Typography sx={{pl: 3}}>{product?.shipping?.weightNeto}{'kg'}</Typography>
+                </Box>
+                <Box sx={{display: 'flex', alignItems: 'baseline'}}>
+                  <Typography variant='h6' component="h6">{'Length'}<small>{' x '}</small>{'Width'}<small>{' x '}</small>{'Height'}</Typography>
+                  <Typography sx={{pl: 3}}>{product?.shipping?.length}{'x'}{product?.shipping?.width}{'x'}{product?.shipping?.height}{'cm'}</Typography>
+                </Box>
+            </Box>
+          }
         </TabPanel>
         {
-          window.location.pathname === `/backoffice/preview/${slug}` ?
-          null
+          router.pathname === `/backoffice/preview/[slug]` ?
+          <Box sx={{p: 5}}>
+            <Typography>Reviews and Comments goes here</Typography>
+          </Box>
           :
           <TabPanel value={value} index={2} dir={theme.direction}>
             {

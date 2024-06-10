@@ -595,6 +595,8 @@ export async function getServerSideProps({ query, params }) {
       priceFilter
     };
 
+    const onlineFilter = { online: true };
+
     const order = 
     sort === 'availability'
     ? { isAvalable: -1 }
@@ -613,13 +615,15 @@ export async function getServerSideProps({ query, params }) {
     const totalProducts = await Product.countDocuments({
       ...categoryFilter,
       ...brandFilter,
-      ...priceFilter
+      ...priceFilter,
+      ...onlineFilter,
     });
     const totalPages = Math.ceil(totalProducts / pageSize);
     const productDocs = await Product.find({
       ...categoryFilter,
       ...brandFilter,
-      ...priceFilter
+      ...priceFilter,
+      ...onlineFilter,
     }).sort(order).skip((parseInt(page) - 1) * parseInt(pageSize)).limit(parseInt(pageSize)).lean();
 
     await db.disconnect();

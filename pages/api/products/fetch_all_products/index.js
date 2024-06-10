@@ -8,7 +8,7 @@ const router = createRouter();
 router.get(async (req, res) => {
   try {
     await db.connect();
-    const allProducts = await Product.find();
+    const allProducts = await Product.find({ online: true });
     if (!allProducts) {
       return res.status(404).json({ message: 'Products not found' });
     }

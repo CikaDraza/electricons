@@ -6,7 +6,7 @@ import { BackofficeStateContext } from '../utils/BackofficeState';
 
 export default function ShipingProduct() {
   const { state_office, dispatch_office } = React.useContext(BackofficeStateContext);
-  const [shipping, setShipping] = React.useState({ weightGross: '', weightNeto: '', lenght: '', width: '', height: '' });
+  const [shipping, setShipping] = React.useState({ weightGross: '', weightNeto: '', length: '', width: '', height: '' });
 
   const handleShipping = (field, value) => {
     const updatedShipping = shipping;
@@ -16,7 +16,7 @@ export default function ShipingProduct() {
   };
 
   React.useEffect(() => {
-    setShipping(state_office?.product?.shipping || {} );
+    setShipping(state_office?.product?.shipping || { weightGross: '', weightNeto: '', length: '', width: '', height: '' } );
   }, []);
 
   return (
@@ -43,9 +43,9 @@ export default function ShipingProduct() {
             }} value={shipping?.weightNeto} onChange={(e) => handleShipping('weightNeto', e.target.value)} />
         </Box>
         <Box sx={{width: '100%', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', '& > *': {width: {xs: '100%', md: '32%'}, mb: {xs: 1, md: 0}} }}>
-          <TextField id="lenght" label="Lenght" variant="outlined" InputProps={{
+          <TextField id="length" label="Length" variant="outlined" InputProps={{
               endAdornment: <InputAdornment position="end">cm</InputAdornment>,
-            }} value={shipping?.lenght} onChange={(e) => handleShipping('lenght', e.target.value)} />
+            }} value={shipping?.length} onChange={(e) => handleShipping('length', e.target.value)} />
           <TextField id="width" label="Width" variant="outlined" InputProps={{
             endAdornment: <InputAdornment position="end">cm</InputAdornment>,
           }} value={shipping?.width} onChange={(e) => handleShipping('width', e.target.value)} />

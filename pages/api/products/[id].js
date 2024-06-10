@@ -56,6 +56,7 @@ router.post(async (req, res) => {
     console.error('Error adding comment:', error);
     res.status(500).json({ message: 'Error adding comment', error: error.message });
   }
+  
 });
 
 

@@ -27,6 +27,7 @@ import ShipingProduct from '../../../src/assets/ShippingProduct';
 import ChipsHeroImage from '../../../src/components/ChipsHeroImage';
 import StoresProduct from '../../../src/assets/StoresProduct';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
 const Quill = dynamic(() => import('react-quill'), { ssr: false });
 
@@ -91,6 +92,7 @@ const customIcons = {
 
 function CreateNewItems() {
   const userInf0 = Cookies.get('userInfo') && JSON.parse(Cookies.get('userInfo'));
+  const router = useRouter();
   const { state_office, dispatch_office } = useContext(BackofficeStateContext);
   const { state, dispatch } = useContext(Store);
   const { snack } = state;
@@ -98,8 +100,7 @@ function CreateNewItems() {
   const slugRef = React.useRef('');
   const shortDescriptionRef = React.useRef('');
   const descriptionRef = React.useRef('');
-  const [description, setDescription] = React.useState('');
-  const [error, setError] = React.useState('');
+  const [message, setMessage] = React.useState('');
   const [imgFile, setImgFile] = React.useState([]);
   const [imgHeroFile, setImgHeroFile] = React.useState([]);
   const [specifications, setSpecifications] = React.useState([{ attribute: '', detail: '' }]);
@@ -107,6 +108,31 @@ function CreateNewItems() {
   const [openBrand, setOpenBrand] = React.useState(false);
   const [brands, setBrands] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+  const [draft, setDraft] = React.useState(false);
+  const [errors, setErrors] = React.useState({
+    title: false,
+    images: false,
+    shortDescription: false,
+    description: false,
+    price: false,
+    oldPrice: false,
+    currency: false,
+    slug: false,
+    category: false,
+    categoryUrl: false,
+    subCategory: false,
+    subCategoryUrl: false,
+    brand: false,
+    brandImg: false,
+    brandPublished: false,
+    reviews: false,
+    inStock: false,
+    inWidget: false,
+    sku: false,
+    stockStatus: false,
+    online: false,
+    stores: false
+  })
 
   React.useEffect(() => {
     fetchBrends();
@@ -127,7 +153,6 @@ function CreateNewItems() {
     reader.onload = () => {
       const newImgFile = [...imgFile, { image: file, imageUrl: reader.result }];
       setImgFile(newImgFile);
-      console.log(newImgFile);
       handleImages(newImgFile)
       e.target.value = '';
     }
@@ -135,7 +160,7 @@ function CreateNewItems() {
     if (!file) {
       setImgFile([
         {
-          image: '',
+          image: {},
           imageUrl: ''
         }
       ])
@@ -146,25 +171,23 @@ function CreateNewItems() {
     dispatch_office({ type: 'SET_IMAGES', payload: imagesInfo });
   }
 
-
   function handleHeroImageChoose(e) {
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.onload = () => {
-      const newHeroImage = { image: file, imageUrl: reader.result };
-      console.log(newHeroImage);
+      const newHeroImage = [...imgHeroFile, { image: file, imageUrl: reader.result }];
       setImgHeroFile(newHeroImage);
       handleHeroImages(newHeroImage)
       e.target.value = '';
     }
     reader.readAsDataURL(file);
     if (!file) {
-      setImgHeroFile(
+      setImgHeroFile([
         {
-          image: '',
+          image: {},
           imageUrl: ''
         }
-      )
+      ])
     }
   }
 
@@ -176,12 +199,70 @@ function CreateNewItems() {
     e.preventDefault();
     const formData = state_office?.product;
 
+    if (formData?.title === '') {
+      dispatch({ type: 'SNACK_MESSAGE', payload: { ...snack, message: 'please add title', severity: 'warning'} });
+      return;
+    }
+    if (formData?.slug === '') {
+      dispatch({ type: 'SNACK_MESSAGE', payload: { ...snack, message: 'please add slug', severity: 'warning'} });
+      return;
+    }
+
     try {
-      console.log(formData);
-    dispatch({ type: 'SNACK_MESSAGE', payload: { ...snack, message: 'product added successfuly', severity: 'success'} });
+      const sanitizedData = {
+        title: formData.title,
+        images: formData?.images?.map(image => ({image: image.imageUrl})),
+        heroImage: formData.heroImage?.map(img => img.imageUrl).toString(),
+        shortDescription: formData.shortDescription,
+        description: formData.description,
+        details: formData.details,
+        rating: 0,
+        price: Number(formData.price),
+        oldPrice: Number(formData.oldPrice),
+        currency: formData.currency,
+        slug: formData.slug,
+        category: formData?.category,
+        categoryUrl: formData?.categoryUrl,
+        subCategory: formData?.subCategory,
+        subCategoryUrl: formData?.subCategoryUrl,
+        brand: formData?.brand?.brandName,
+        brandImg: formData?.brand?.brandUrl,
+        brandSlug: formData?.brand?.brandSlug,
+        reviews: 0,
+        inStock: Number(formData.inStock),
+        inWidget: [{widget: ''}],
+        sku: Number(formData?.sku),
+        stockStatus: formData?.stockStatus,
+        shipping: formData.shipping,
+        online: formData.online,
+        stores: formData?.stores?.map(store => ({ store: store.name }))
+      };
+
+      const { data } = await axios.post('/api/products/create_new_product', sanitizedData);
+      dispatch({ type: 'SNACK_MESSAGE', payload: { ...snack, message: 'Product added successfully', severity: 'success' } });
+      setMessage('Product added successfully');
+      Cookies.remove('product');
+      setDraft(true);
     } catch (error) {
       console.log(error);
-      dispatch({ type: 'SNACK_MESSAGE', payload: { ...snack, message: 'please add all fields', severity: 'warning'} });
+      setMessage(error.data.message);
+      dispatch({ type: 'SNACK_MESSAGE', payload: { ...snack, message: 'Please add all fields', severity: 'warning' } });
+      setDraft(false);
+    }
+  }
+
+  const handlePublish = async () => {
+    try {
+      const formData = state_office?.product;
+      const publish = formData?.online;
+      const { data } = await axios.put('/api/products/publish', publish);
+      dispatch({ type: 'SNACK_MESSAGE', payload: { ...snack, message: 'product publish successfuly', severity: 'success'} });
+      setMessage('Product publish successfuly');
+      setDraft(false);
+    } catch (error) {
+      console.log('error publish new product', error);
+      setMessage(error.message);
+      dispatch({ type: 'SNACK_MESSAGE', payload: { ...snack, message: 'error publish new product', severity: 'error'} });
     }
   }
 
@@ -202,7 +283,6 @@ function CreateNewItems() {
 
   const handleDescription = (values) => {
     descriptionRef.current = values;
-    setDescription(descriptionRef.current)
     dispatch_office({ type: 'CREATE_PRODUCT', payload: { description: descriptionRef.current } });
   }
 
@@ -222,11 +302,11 @@ function CreateNewItems() {
   }, []);
 
   React.useEffect(() => {
-    setImgFile(state_office?.product?.images || '' );
+    setImgFile(state_office?.product?.images || {image: {}, imageUrl: ''} );
   }, []);
 
   React.useEffect(() => {
-    setImgHeroFile(state_office?.product?.heroImage || '' );
+    setImgHeroFile(state_office?.product?.heroImage || {image: {}, imageUrl: ''} );
   }, []);
 
   const handleClickOpen = () => {
@@ -237,15 +317,30 @@ function CreateNewItems() {
     setOpenBrand(true);
   };
 
+  function handlePreview() {
+    if (state_office?.product.slug === '') {
+      dispatch({ type: 'SNACK_MESSAGE', payload: { ...snack, message: 'please insert slug', severity: 'warning'} });
+      setErrors({...errors, slug: true});
+      return;
+    }
+    router.push(`/backoffice/preview/${state_office?.product?.slug}`);
+    setErrors({...errors, slug: false});
+  }
+console.log(state_office?.product);
   return (
     <Box>
       {
-        error ?
-          <LabelButton sx={{width: '100%', my: 5, p: 2}}>
-            <Typography sx={{m: 0, p: 1, fontSize: {xs: '.875rem', sm: '1.25rem'}}} variant="h5" component="h1" gutterBottom>
-            {error}
-            </Typography>
-          </LabelButton>
+        message ?
+          <Box>
+            <LabelButton sx={{width: '100%', my: 5, p: 2}}>
+              <Typography sx={{m: 0, p: 1, fontSize: {xs: '.875rem', sm: '1.25rem'}}} variant="h5" component="h1" gutterBottom>
+              {message}
+              </Typography>
+            </LabelButton>
+            <Button onClick={() => setMessage('')} variant="outlined" startIcon={<KeyboardBackspaceIcon />}>
+              go back
+            </Button>
+          </Box>
          : 
         <Grid container spacing={3}>
           <Grid item xs={12} md={8} lg={9}>
@@ -290,20 +385,22 @@ function CreateNewItems() {
                       value={state_office?.product?.slug}
                       sx={{mb: 1, pb: 3, width: '100%'}}
                       onChange={handleSlug}
+                      error={errors?.slug}
+                      helperText={errors?.slug && snack?.message}
                     />
                     <Typography component="label">Short Description</Typography>
-                    <TextareaAutosize
-                      name="short-description"
-                      required
-                      id="short"
-                      placeholder="Short description here..."
-                      value={state_office?.product?.shortDescription}
-                      maxRows={10}
-                      minRows={4}
-                      aria-label="empty textarea"
-                      style={{ width: '100%', resize: 'vertical', padding: '8px' }}
-                      onChange={handleShortDescription}
-                    />
+                      <TextareaAutosize
+                        name="short-description"
+                        required
+                        id="short"
+                        placeholder="Short description here..."
+                        value={state_office?.product?.shortDescription}
+                        maxRows={10}
+                        minRows={4}
+                        aria-label="empty textarea"
+                        style={{ width: '100%', resize: 'vertical', padding: '8px' }}
+                        onChange={handleShortDescription}
+                      />
                     <Box sx={{py: 3}}>
                       <Typography component="label">Description</Typography>
                       {
@@ -373,6 +470,7 @@ function CreateNewItems() {
               </Grid>
             </Grid>
           </Grid>
+{/******* Right side ***********************************/}
           <Grid item xs={12} md={4} lg={3}>
             <Grid container spacing={3}>
               {/* Publish Product */}
@@ -388,11 +486,11 @@ function CreateNewItems() {
                   <Divider />
                   <Box sx={{px: 2, pt: 2, display: 'flex', alignItems: 'center'}}>
                     <Typography sx={{display: 'flex', alignItems: 'center'}} component="span" color="secondary.lightGrey" variant='span'>Status</Typography>
-                    <Typography sx={{pl: 1}} component="span" variant='span'>Draft</Typography>
+                    <Typography sx={{pl: 1}} component="span" variant='span'>{draft ? 'Draft' : 'Create'}</Typography>
                   </Box>
                   <Box sx={{px: 2, pt: 2, display: 'flex', alignItems: 'center'}}>
                     <Typography sx={{display: 'flex', alignItems: 'center'}} component="span" color="secondary.lightGrey" variant='span'>Visibility</Typography>
-                    <Typography sx={{pl: 1}} component="span" variant='span'>Visible</Typography>
+                    <Typography sx={{pl: 1}} component="span" variant='span'>{!draft ? 'Hidden' : 'Visible'}</Typography>
                   </Box>
                   <Box sx={{p: 2, display: 'flex', alignItems: 'center'}}>
                     <Typography component="span" color="secondary.lightGrey" variant='span'>SEO score</Typography>
@@ -402,16 +500,14 @@ function CreateNewItems() {
                   <Divider />
                   <Box sx={{p: 2}}>
                     <Box sx={{display: 'flex', justifyContent: 'space-between', pb: 2}}>
-                      <Link href={`/backoffice/preview/${state_office?.product?.slug}`}>
-                        <Button disabled={state_office?.product.slug === ''} sx={{mr: 1}} variant='outlined'>
-                          Preview
-                        </Button>
-                      </Link>
-                      <Button disabled={state_office?.product.slug === ''} sx={{ml: 1, color: 'whitesmoke'}} color='dashboard' variant='contained'>
+                      <Button onClick={handlePreview} sx={{mr: 1}} variant='outlined'>
+                        Preview
+                      </Button>
+                      <Button onClick={handleSubmit} sx={{ml: 1, color: 'whitesmoke'}} color='dashboard' variant='contained'>
                         Save Draft
                       </Button>
                     </Box>
-                    <Button disabled={state_office?.product.slug === ''} onClick={handleSubmit} sx={{width: '100%'}} variant='contained'>Publish</Button>
+                    <Button disabled={!draft} onClick={handlePublish} sx={{width: '100%'}} variant='contained'>Publish</Button>
                   </Box>
                 </Paper>
               </Grid>

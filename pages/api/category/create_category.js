@@ -10,7 +10,7 @@ router.post(async (req, res) => {
   try {
     await db.connect();
     const { categoryName, avatar, slug, subCategory, categoryPublished } = req.body;
-console.log(categoryName, avatar, slug, subCategory, categoryPublished);
+
     const category = await Category.findOne({slug: slug});
 
     if (category?.categoryName === categoryName) {

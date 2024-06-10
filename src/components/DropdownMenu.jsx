@@ -31,7 +31,7 @@ export default function DropdownMenu(props) {
     }
     
     fetchCategories();
-  }, [loading])
+  }, [loading, openDropdown])
 
   const defaultTop = '50px!important';
 
@@ -96,7 +96,6 @@ export default function DropdownMenu(props) {
                     sx={{position: 'relative'}}
                     >
                       {
-                        item.categoryPublished === true &&
                         <AccordionSummary
                           expandIcon={<ExpandMore color={expanded === item.categoryName ? "primary" : 'secondary'} />}
                           aria-controls={`${item.categoryName} controls`}

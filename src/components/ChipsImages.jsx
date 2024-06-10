@@ -4,14 +4,12 @@ import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
 import { Typography } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
-import { BackofficeStateContext } from '../utils/BackofficeState';
 
 const ListItem = styled('li')(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
 
 export default function ChipsImages({ selectedFile, setImgFile }) {
-  const { state_office, dispatch_office } = React.useContext(BackofficeStateContext);
   const [chipData, setChipData] = React.useState(selectedFile);
 
   React.useEffect(() => {
