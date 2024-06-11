@@ -236,13 +236,13 @@ export default function LogIn() {
               Login
             </Button>
             <Grid sx={{display: 'flex', flexWrap: 'wrap'}} container spacing={2}>
-              <Grid item xs>
-                <Link sx={{textDecorationColor: theme.palette.primary.main}} href='/forgot-password' variant="body2">
+              <Grid item xs sx={{'& > a': {color: 'primary.main'}}}>
+                <Link href='/forgot-password' variant="body2">
                   Forgot password?
                 </Link>
               </Grid>
-              <Grid sx={{width: {xs: '100%', sm: 'auto'}}} item>
-                <Link sx={{textDecorationColor: theme.palette.primary.main}} href='/signin' variant="body2">
+              <Grid sx={{width: {xs: '100%', sm: 'auto', '& > a': {color: '#00bcd4'} }}} item>
+                <Link href='/signin' variant="body2">
                   Don't have an account? Sign Up
                 </Link>
               </Grid>

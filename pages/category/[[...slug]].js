@@ -551,7 +551,7 @@ export default function Categories(props) {
                   {
                     products.length > 0 &&
                     <Stack sx={{width: {xs: '100%', sm: 'auto'}, py: 2 }} spacing={2}>
-                      <Pagination sx={{mx: 'auto'}} count={totalPages} color="primary" showFirstButton showLastButton onChange={(e, value) => pageHandler(value)}  />
+                      <Pagination sx={{mx: 'auto', display: 'flex', justifyContent: 'center'}} count={totalPages} color="primary" showFirstButton showLastButton onChange={(e, value) => pageHandler(value)}  />
                     </Stack>
                   }
                 </Toolbar>

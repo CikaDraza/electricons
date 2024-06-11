@@ -16,7 +16,7 @@ router.put(async (req, res) => {
     const { slug, online } = publish;
 
     const product = await Product.findOne({ slug });
-console.log(slug, online, product);
+
     if (!product) {
       return res.status(404).json({ message: 'Product not found with the provided slug' });
     }

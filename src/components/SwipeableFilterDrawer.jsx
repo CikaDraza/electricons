@@ -131,7 +131,7 @@ export default function SwipeableFilterDrawer(props) {
         sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 300, flexGrow: 2 }}
         role="presentation"
       >
-      <Box sx={{display: 'flex', alignItems: 'center', p: 1}}>
+        <Box sx={{display: 'flex', alignItems: 'center', p: 1}}>
           <IconButton onClick={toggleDrawer(anchor, false)}>
             <CloseIcon />
           </IconButton>
@@ -140,7 +140,7 @@ export default function SwipeableFilterDrawer(props) {
           </Typography>
         </Box>
         <Divider />
-        <AppBar elevation={1} sx={{bgcolor: theme.palette.primary.white, mt: 3}} position="static">
+        <AppBar elevation={0} sx={{bgcolor: theme.palette.primary.white, mt: 3}} position="static">
           <Toolbar sx={{display: 'flex', flexWrap: 'wrap'}}>
             <PriceSlider value={value} minPrice={minPrice} maxPrice={maxPrice} handleInputMaxChange={handleInputMaxChange} handleInputMinChange={handleInputMinChange} handleChangePrice={handleChangePrice} />
             <Box>

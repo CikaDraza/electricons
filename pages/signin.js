@@ -327,8 +327,8 @@ export default function SignIn() {
               Sign in
             </Button>
             <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link sx={{textDecorationColor: theme.palette.primary.main}} href='/login' variant="body2">
+              <Grid item sx={{'& > a': {color: 'primary.main'}}}>
+                <Link href='/login' variant="body2">
                   Already have an account? Login
                 </Link>
               </Grid>

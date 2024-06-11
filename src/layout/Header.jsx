@@ -551,15 +551,15 @@ export default function Header() {
                           userInf0 ?
                           (
                             <Box>
-                              <MenuItem sx={{ '& a': {textDecoration: 'none' } }} onClick={handleCloseUserMenu}>
+                              <MenuItem sx={{ '& > a': {textDecoration: 'none', color: 'primary.main' } }} onClick={handleCloseUserMenu}>
                                 <Link href="/profile/info">
                                   {loged[0]}
                                 </Link>
                               </MenuItem>
                               {
                                 userInf0.isAdmin &&
-                                <MenuItem sx={{ '& a': {textDecoration: 'none' } }} onClick={handleCloseUserMenu}>
-                                  <Link sx={{ textDecoration: 'none' }} href={`/backoffice`} passHref>
+                                <MenuItem sx={{ '& > a': {textDecoration: 'none', color: 'primary.main' } }} onClick={handleCloseUserMenu}>
+                                  <Link href={`/backoffice`} passHref>
                                     {loged[1]}
                                   </Link>
                                 </MenuItem>
@@ -571,12 +571,12 @@ export default function Header() {
         
                           ) : (
                             <Box>
-                              <MenuItem sx={{ '& a': {textDecoration: 'none' } }} onClick={handleCloseUserMenu}>
+                              <MenuItem sx={{ '& > a': {textDecoration: 'none', color: 'primary.main' } }} onClick={handleCloseUserMenu}>
                                 <Link href="/login">
                                   {logedout[0]}
                                 </Link>
                               </MenuItem>
-                              <MenuItem sx={{ '& a': {textDecoration: 'none', color: theme.palette.secondary.main} }} onClick={handleCloseUserMenu}>
+                              <MenuItem sx={{ '& > a': {textDecoration: 'none', color: theme.palette.secondary.main} }} onClick={handleCloseUserMenu}>
                                 <Link href="/signin">
                                   {logedout[1]}
                                 </Link>
@@ -684,8 +684,8 @@ export default function Header() {
                                   alt={option?.title}
                                 />
                               </Box>
-                              <Typography sx={{px: 1, flex: 1, fontSize: '10px', overflow: 'hidden' }} color="primary" component="span">
-                                <Link sx={{overflow: 'hidden'}} href={`product/${option?.slug}`} passHref> {option.title}</Link>
+                              <Typography sx={{px: 1, flex: 1, fontSize: '10px', overflow: 'hidden', '& > a': {color: 'primary.main'} }} color="primary" component="span">
+                                <Link href={`product/${option?.slug}`} passHref> {option.title}</Link>
                               </Typography>
                               <Typography sx={{px: 1, fontSize: '12px', overflow: 'hidden' }} color="secondary" component="span">     {"$"}{option?.price}
                               </Typography>

@@ -403,8 +403,8 @@ export default function CategoryProducts(props) {
                   }
                   {
                     countProducts > 0 &&
-                    <Stack sx={{width: {xs: '100%', sm: 'auto'}, py: 2 }} spacing={2}>
-                      <Pagination sx={{mx: 'auto'}} count={pages} color="primary" showFirstButton showLastButton onChange={(e, value) => pageHandler(value)}  />
+                    <Stack id="pagination" sx={{width: {xs: '100%', sm: 'auto'}, py: 2}} spacing={2}>
+                      <Pagination sx={{mx: 'auto', display: 'flex', justifyContent: 'center'}} count={pages} color="primary" showFirstButton showLastButton onChange={(e, value) => pageHandler(value)}  />
                     </Stack>
                   }
                 </Toolbar>

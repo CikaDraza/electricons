@@ -28,7 +28,7 @@ function ListsItem(props) {
       setOpenSub(`open ${i}`);
     }
   }
-console.log(cat.subCategory.some(sub => sub.url === 'none'));
+
   return (
       <React.Fragment>
         <ListItem key={cat.categoryName} disablePadding>
@@ -78,8 +78,8 @@ console.log(cat.subCategory.some(sub => sub.url === 'none'));
             cat.subCategory.map((sub, i) => (
             <React.Fragment key={sub.url}>
               <ListItem disablePadding>
-                <ListItemButton tabIndex={i} onClick={(e) => collapseHeandler(e, i)} sx={{ pl: 4, justifyContent: 'space-between' }}>
-                  <Link href={`/category/${cat.slug}/${sub.url}`} sx={{display: 'flex', '&:hover': {color: theme.palette.primary.main} }} color="secondary">
+                <ListItemButton tabIndex={i} onClick={(e) => collapseHeandler(e, i)} sx={{ pl: 4, justifyContent: 'space-between', '& > a': {color: "primary.main"} }}>
+                  <Link href={`/category/${cat.slug}/${sub.url}`}>
                     <ListItemText  sx={{'& span': {fontSize: '14px', ml: 2} }} onClick={onClose} primary={sub.subCategoryName} />
                   </Link>
                   {openSub === `open ${i}` ? 
@@ -184,11 +184,10 @@ export default function SwipeableNavDrawer({ pagesTop }) {
                   {
                     pagesTop.map((page) => (
                       <Grid key={page.link} item xs={4}>
-                        <ListItem sx={{ '& a': {textDecoration: 'none'} }}>
+                        <ListItem sx={{ '& a': {textDecoration: 'none', color: 'secondary.main'} }}>
                         {page.icon}
                           <Link
                             href={page.link}
-                            sx={{ my: 2, color: theme.palette.secondary.main, display: 'block', m: 0 }}
                             passHref
                           >
                           {page.name}
