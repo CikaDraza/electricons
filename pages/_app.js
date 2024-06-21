@@ -91,7 +91,6 @@ export default function MyApp(props) {
     };
 
     const handleComplete = () => {
-      // Postavlja loading na false nakon kratkog kašnjenja (500 ms)
       loadingTimeout = setTimeout(() => {
         setLoading(false);
         setSlideOut(false);
@@ -99,9 +98,8 @@ export default function MyApp(props) {
     };
 
     const handleError = () => {
-      // Ako se pojavi greška, takođe postavlja loading na false
       setLoading(false);
-      setSlideOut(false);
+      setSlideOut(true);
     };
 
     router.events.on('routeChangeStart', handleStart);

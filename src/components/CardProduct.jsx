@@ -5,6 +5,7 @@ import { CardActionArea, useMediaQuery } from '@mui/material';
 import Link from 'next/link';
 import Image from 'next/image';
 import CircularProgress from '@mui/material/CircularProgress';
+import axios from 'axios';
 
 export default function CardProduct(props) {
   const { product, cardHeight, marginTop, imgHeight, imgWidth } = props;
@@ -15,8 +16,15 @@ export default function CardProduct(props) {
     setSelected(product._id);
   };
 
+  const handleClick = async () => {
+    await axios.post('/api/track_location', {
+      imageId: product?.images?._id,
+      productId: product?._id,
+    });
+  };
+
   return (
-    <Card sx={{ width: "100%", '& a': {textDecoration: 'none'},  }}>
+    <Card onClick={handleClick} sx={{ width: "100%", '& a': {textDecoration: 'none'},  }}>
       <Link sx={{position: 'relative'}} href={`/product/${product.slug}`} onClick={() => handleLoading(product)}>
       {
         product._id === selected &&

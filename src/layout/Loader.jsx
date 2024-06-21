@@ -1,10 +1,6 @@
-import { Box, useMediaQuery } from '@mui/material'
 import React from 'react'
-import Link from '../Link'
-import Image from 'next/image'
 
 export default function Loader() {
-  const matches = useMediaQuery('(min-width: 1200px)');
 
   return (
     <div style={{width: '100%', height: '100vh', display: 'flex'}}>

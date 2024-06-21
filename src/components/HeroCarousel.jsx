@@ -13,7 +13,6 @@ function HeroCarousel({ hero_products }) {
   const matches = useMediaQuery('(min-width: 1390px)');
   const [loading, setLoading] = React.useState(true);
 
-
   useEffect(() => {
     async function fetchData() {
       try {
@@ -35,8 +34,7 @@ function HeroCarousel({ hero_products }) {
     slidesToShow: 1,
     slidesToScroll: 1
   };
-console.log(carouselPoroduct
-  .filter(product => !['Desktop computers', 'Laptop computers'].includes(product.category)));
+
   return (
     <Grid sx={{height: !matches ? 'auto' : '500px', p: 0, mt: 0}} container spacing={3}>
       <Grid sx={{ position: 'relative', display: {xs: 'none', lg: 'block'}, height: '100%!important', boxSizing: 'border-box' }} className="grid-slider" item xs={12} sm={8}>

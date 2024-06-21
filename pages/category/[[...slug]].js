@@ -448,7 +448,7 @@ export default function Categories(props) {
                             {prod.title}
                             </Typography>
                             <Typography align="center" variant="body2" color="text.secondary">
-                              {prod.shortDescription}
+                              {prod.shortDescription.slice(0, 80)}{'...'}
                             </Typography>
                             <Box
                               sx={{
